@@ -20,4 +20,5 @@ export PLEX_DATA="/mnt/plex"
 export MYSQL_ROOT_PASSWORD=""
 
 #nextcloud
+export NC_DATA="/mnt/raid/home"
 export MYSQL_PASSWORD=""

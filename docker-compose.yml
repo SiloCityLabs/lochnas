@@ -61,7 +61,7 @@ services:
         container_name: nextcloud
         volumes:
             - "${PERSISTENT_ROOT}/nextcloud:/var/www/html"
-            - "${PERSISTENT_ROOT}/home:/raid"
+            - "${NC_DATA}:/raid"
         restart: unless-stopped
         networks:
             - backend
