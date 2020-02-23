@@ -1,0 +1,139 @@
+#https://composerize.com/
+version: '3.4'
+networks:
+    backend:
+        driver: bridge
+        driver_opts:
+            com.docker.network.bridge.enable_icc: "true"
+            com.docker.network.bridge.enable_ip_masquerade: "true"
+            com.docker.network.bridge.host_binding_ipv4: 0.0.0.0
+            com.docker.network.bridge.name: "backend"
+            com.docker.network.driver.mtu: 1500
+services:
+    transmission:
+        container_name: transmission
+        command: "'dumb-init' '/etc/openvpn/start.sh'"
+        networks:
+            - backend
+        volumes:
+            - '/etc/localtime:/etc/localtime:ro'
+            - "${PERSISTENT_ROOT}/transmission/scripts:/scripts"
+            - "${PERSISTENT_ROOT}/transmission/config:/config"
+            - "${PERSISTENT_ROOT}/transmission/data:/data"
+        restart: unless-stopped
+        cap_add:
+            - NET_ADMIN
+        environment:
+            - OPENVPN_PASSWORD
+            - OPENVPN_USERNAME
+            - OPENVPN_PROVIDER
+            - PUID
+            - PGID
+            - TRANSMISSION_BLOCKLIST_ENABLED=true
+            - 'TRANSMISSION_BLOCKLIST_URL=http://john.bitsurge.net/public/biglist.p2p.gz'
+            - TRANSMISSION_RPC_AUTHENTICATION_REQUIRED=true
+            - TRANSMISSION_RPC_ENABLED=true
+            - TRANSMISSION_RPC_PASSWORD
+            - TRANSMISSION_RPC_PORT=9091
+            - TRANSMISSION_RPC_URL=/
+            - TRANSMISSION_RPC_USERNAME=ldrrp
+            - TRANSMISSION_UMASK=2
+            - TRANSMISSION_WATCH_DIR=/data/watch
+            - TRANSMISSION_HOME=/data/transmission-home
+            - HEALTH_CHECK_HOST=google.com
+            - CREATE_TUN_DEVICE=true
+        image: 'haugene/transmission-openvpn:latest'
+    plex:
+        container_name: plex
+        volumes:
+            - "${PERSISTENT_ROOT}/plex:/config"
+            - '/tmp/transcode:/transcode'
+            - "${PLEX_DATA}:/data"
+        restart: unless-stopped
+        network_mode: host
+        environment:
+            - CHANGE_CONFIG_DIR_OWNERSHIP=true
+            - HOME=/config
+            - "PLEX_UID=${PUID}"
+            - "PLEX_GID=${PGID}"
+        image: 'plexinc/pms-docker:latest'
+    nextcloud:
+        container_name: nextcloud
+        volumes:
+            - "${PERSISTENT_ROOT}/nextcloud:/var/www/html"
+            - "${PERSISTENT_ROOT}/home:/raid"
+        restart: unless-stopped
+        networks:
+            - backend
+        image: 'nextcloud:latest'
+        depends_on:
+            - mariadb
+        healthcheck:
+            test: ["CMD", "curl", "-f", "https://cloud.${ROOT_DOMAIN}"]
+            interval: 1m
+            timeout: 10s
+            retries: 3
+            start_period: 15s
+    mariadb:
+        container_name: mariadb
+        command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+        volumes:
+            - "${PERSISTENT_ROOT}/mariadb:/var/lib/mysql"
+        restart: unless-stopped
+        networks:
+            - backend
+        environment:
+            - MYSQL_ROOT_PASSWORD
+            - MYSQL_PASSWORD
+            - MYSQL_DATABASE=nextcloud
+            - MYSQL_USER=nextcloud
+        image: 'mariadb:latest'
+    hass:
+        container_name: homeassistant
+        healthcheck:
+            test: ["CMD", "curl", "-f", "https://hass.${ROOT_DOMAIN}"]
+            interval: 1m
+            timeout: 10s
+            retries: 3
+            start_period: 15s
+        volumes:
+            - '/dev/bus/usb:/dev/bus/usb'
+            - "${PERSISTENT_ROOT}/homeassistant:/config"
+        networks:
+            - backend
+        restart: unless-stopped
+        image: 'homeassistant/home-assistant:stable'
+    portainer:
+        container_name: portainer
+        networks:
+            - backend
+        # healthcheck:
+        #     test: ["CMD", "curl", "-f", "https://portainer.${ROOT_DOMAIN}"]
+        #     interval: 1m
+        #     timeout: 10s
+        #     retries: 3
+        #     start_period: 15s
+        volumes:
+            - "${PERSISTENT_ROOT}/portainer:/data"
+            - '/var/run/docker.sock:/var/run/docker.sock'
+        restart: always
+        image: 'portainer/portainer:latest'
+    nginx:
+        container_name: nginx
+        volumes:
+            - "${PERSISTENT_ROOT}/nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
+            - "${PERSISTENT_ROOT}/letsencrypt:/etc/letsencrypt"
+            - "${PERSISTENT_ROOT}/certbot:/var/www/certbot"
+        networks:
+            - backend
+        ports:
+            - '443:443/tcp'
+            - '80:80/tcp'
+        restart: always
+        # healthcheck:
+        #     test: ["CMD", "curl", "-f", "http://127.0.0.1/ping"]
+        #     interval: 1m
+        #     timeout: 10s
+        #     retries: 3
+        #     start_period: 10s
+        image: 'nginx:latest'
