@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#root check
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 
+   exit 1
+fi
+
 #load env variables
 source ./env.sh
 
@@ -20,6 +26,6 @@ docker run --rm -i \
 -p 443:443 \
 certbot/certbot 'renew' '--standalone'
 
-if [ $DOCKER_STOPPED = true]; then
+if [ $DOCKER_STOPPED = true ]; then
     docker container start nginx
 fi

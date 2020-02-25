@@ -1,16 +1,20 @@
 #!/bin/bash
 
+#root check
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 
+   exit 1
+fi
+
 #load env variables
 source ./env.sh
 
 #check if nginx is running
 DOCKER_STOPPED=false
-if [ ! "$(docker ps -q -f name=nginx)" ]; then
-    if [ "$(docker ps -aq -f status=running -f name=nginx)" ]; then
-        #need to stop temp
-        docker container stop nginx
-        DOCKER_STOPPED=true
-    fi
+if [ "$(docker ps -aq -f status=running -f name=nginx)" ]; then
+    #need to stop temp
+    docker container stop nginx
+    DOCKER_STOPPED=true
 fi
 
 if [ -z "$1" ]
@@ -27,6 +31,6 @@ docker run --rm -i \
 certbot/certbot 'certonly' '--standalone' \
 "-d $1" '--agree-tos' "-m $LE_EMAIL"
 
-if [ $DOCKER_STOPPED = true]; then
+if [ $DOCKER_STOPPED = true ]; then
     docker container start nginx
 fi

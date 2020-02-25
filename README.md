@@ -8,8 +8,9 @@ Requires:
  - Static IP on Server, alternative is DHCP reservation on router.
 
 Includes:
- - Transmission (Torrents)
+ - Transmission + VPN (Torrents, Requires VPN)
  - Nextcloud (Private cloud)
+ - MariaDB MySQL (for Nextcloud)
  - Nginx + SSL (Web Proxy + SSL)
  - Home Assistant (Home Automation)
  - Portainer (Quickly add more docker containers)
@@ -35,6 +36,30 @@ sudo apt purge snapd
 #### Raid setup
 
 For my setup I followed an [online guide](https://www.digitalocean.com/community/tutorials/how-to-create-raid-arrays-with-mdadm-on-ubuntu-16-04) by digital ocean to setup raid. I have a raid 5 mounted to `/mnt/raid` and another raid 5 mounted to `/mnt/plex`
+
+#### Mount raid with fstab
+
+This will work with any existing raid for a migration as well. All you have to do is locate your raid with `mdadm --detail --scan`.
+
+Double check that the mdadm configuration file `/etc/mdadm/mdadm.conf` has the output of the scan in the file. If it does not you can add it like so
+
+```
+mdadm --detail --scan >> /etc/mdadm/mdadm.conf
+```
+
+Now that we have located out raid drive (/dev/md0) we can mount it on every startup to `/mnt/raid` by adding the following to `/etc/fstab`.
+
+`sudo nano /etc/fstab`
+```
+/dev/md0 /mnt/raid ext4 defaults,nofail,discard 0 0
+```
+
+Last and finally make the folder and mount the drive.
+
+```
+mkdir /mnt/raid
+mount -a
+```
 
 #### Install docker
 
@@ -62,11 +87,48 @@ If you dont have a provider with an update url I recommend searching the docker 
 
 ### Installing
 
+#### Create users and groups
+
+This plex user is created to share permission access between Transmission and Plex
+
+```
+useradd -M plex
+usermod -L plex
+id plex
+```
+Grab the id given by the last command to use in your configs.
+
+uid=`1001`(plex) gid=`1001`(plex) groups=1001(plex)
+
+If you would like to allow nextcloud to access a plex folder you will need to add `www-data` to the `plex` group with the following command:
+
+```
+usermod -aG plex www-data
+```
+
+If you need to access the local folder mounted in the compose file at `/raid` from nextcloud local storage plugin, you can run the following set of commands on a folder to grant permission:
+
+```
+usermod -aG <username> www-data
+chown -R <username>:<usergroup> path/to/local
+chmod -R 770 path/to/local
+```
+
+You also go ahead and give your user access to other groups to avoid permission issues
+
+```
+usermod -aG plex <username>
+usermod -aG www-data <username>
+```
+
 #### Edit config
 
 Modify the `env.sh` with your settings, Transmission on this setup is used with a vpn service.
 
-Modify nginx/nginx.conf and replace all instances of `domain.com` with your domain name.
+Modify `nginx/nginx.conf` and replace all instances of `domain.com` with your domain name.
+
+Modify `samba/smb.conf`.
+
 
 #### Create SSL Certificates
 
@@ -81,11 +143,13 @@ sudo ./add-domain.sh portainer.domain.com
 
 #### Setup plex token
 
-Go to https://plex.tv/link and run the command with your token to activate server.
+Go to https://www.plex.tv/claim/ and run the command with your token to activate server.
 
 ```
-sudo ./setup-plex.sh
+sudo ./setup-plex.sh <claimcode>
 ```
+
+Head over to your browser and type `http://serverip:32400/web` and if you have a response you should be all set. Finalize it by pressing `Ctrl + C`
 
 #### Start the services
 
@@ -95,11 +159,37 @@ Now that we have ssl lets get started with our services.
 sudo ./start.sh
 ```
 
+#### Setup portainer
+
+Navigate in a browser to configure nextcloud at `portainer.domain.com`. Create a username and password, then select local docker and hit next. You should be complete.
+
 #### Setup nextcloud
 
-You will need the credentials you created for the `env.sh` to configure nextcloud. Database name being nextcloud and user nextcloud.
+Navigate in a browser to configure nextcloud at `cloud.domain.com`
+
+You will need the credentials you created for the `env.sh` to configure nextcloud. Database name being nextcloud and user nextcloud, hostname will be `mariadb`.
 
 After you get to the welcome screen go to settings -> basic settings. Change the cron settings to webcron.
+
+You will need to make some tweaks to improve this nextcloud docker setup. Head over 
+
+ 1. Portainer
+ 2. Containers
+ 3. Click console icon for nextcloud under Quick column
+ 4. User: www-data
+ 5. Connect
+
+Type the following commands:
+
+```
+./occ db:add-missing-indices
+./occ db:convert-filecache-bigint
+```
+
+#### Setup Home Assistant
+
+Navigate in a browser to configure nextcloud at `hass.domain.com`. This should be pretty straight forward.
+
 
 #### Setup your cron jobs
 
@@ -112,8 +202,11 @@ The following crons will:
 0 0 * * 0 /path/to/start.sh
 0 0 * * 0 /path/to/renew-domain.sh
 */5 * * * * wget --output-document=/dev/null --quiet 'https://cloud.domain.com/cron.php'
-
 ```
+
+#### Optional GUI
+
+A friend of mine actually wanted a interface as he is not very good at linux. You can follow this [guide](https://linuxconfig.org/install-gui-on-ubuntu-server-18-04-bionic-beaver) to setup a small gui to use. I recommend Mate. I will not walk trhough installing this for my own server as I did not install it for myself. I preffer to keep the base OS as clean as possible.
 
 ## License
 
@@ -121,5 +214,5 @@ This project is licensed under the GPLv3 License - see the [LICENSE](LICENSE) fi
 
 ## Acknowledgments
 
-* Thanks to all the creators of the docker containers
+* Thanks to all the creators of the docker containers listed in the compose file.
  

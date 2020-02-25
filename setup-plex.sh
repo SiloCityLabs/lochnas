@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#root check
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 
+   exit 1
+fi
+
 #load env variables
 source ./env.sh
 
@@ -10,6 +16,7 @@ if [ -z "$1" ]
 fi
 
 docker run --rm -i \
+--name plextmp \
 -v /tmp/transcode:/transcode:rw \
 -v "${PLEX_DATA}:/data:rw" \
 -v "${PERSISTENT_ROOT}/plex:/config:rw" \
@@ -20,4 +27,3 @@ docker run --rm -i \
 -e 'CHANGE_CONFIG_DIR_OWNERSHIP=true' \
 -e PLEX_GID="${PGID}" \
 plexinc/pms-docker:latest
-
