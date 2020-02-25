@@ -109,8 +109,7 @@ usermod -aG plex www-data
 If you need to access the local folder mounted in the compose file at `/raid` from nextcloud local storage plugin, you can run the following set of commands on a folder to grant permission:
 
 ```
-usermod -aG <username> www-data
-chown -R <username>:<usergroup> path/to/local
+chown -R www-data:www-data path/to/local
 chmod -R 770 path/to/local
 ```
 
