@@ -104,6 +104,7 @@ If you would like to allow nextcloud to access a plex folder you will need to ad
 
 ```
 usermod -aG plex www-data
+usermod -aG www-data plex
 ```
 
 If you need to access the local folder mounted in the compose file at `/raid` from nextcloud local storage plugin, you can run the following set of commands on a folder to grant permission:
