@@ -18,6 +18,7 @@ Includes:
 
 Upcomming
  - Samba (Local file share)
+ - Auto Renew SSL with certbot
 
 ## Getting Started
 
@@ -89,22 +90,19 @@ If you dont have a provider with an update url I recommend searching the docker 
 
 #### Create users and groups
 
-This plex user is created to share permission access between Transmission and Plex
+We will be using the www-data user to share permissions between services. You can make seperate users and groups if you would like to but I found that this is easiest way to manage access accross the board.
 
 ```
-useradd -M plex
-usermod -L plex
-id plex
+id www-data
 ```
 Grab the id given by the last command to use in your configs.
 
-uid=`1001`(plex) gid=`1001`(plex) groups=1001(plex)
+uid=`33`(www-data) gid=`33`(www-data)
 
-If you would like to allow nextcloud to access a plex folder you will need to add `www-data` to the `plex` group with the following command:
+You can give your user access to any files of www-data with this command.
 
 ```
-usermod -aG plex www-data
-usermod -aG www-data plex
+usermod -aG www-data yourusername
 ```
 
 If you need to access the local folder mounted in the compose file at `/raid` from nextcloud local storage plugin, you can run the following set of commands on a folder to grant permission:
@@ -112,13 +110,6 @@ If you need to access the local folder mounted in the compose file at `/raid` fr
 ```
 chown -R www-data:www-data path/to/local
 chmod -R 770 path/to/local
-```
-
-You also go ahead and give your user access to other groups to avoid permission issues
-
-```
-usermod -aG plex <username>
-usermod -aG www-data <username>
 ```
 
 #### Edit config
@@ -204,9 +195,9 @@ The following crons will:
 */5 * * * * wget --output-document=/dev/null --quiet 'https://cloud.domain.com/cron.php'
 ```
 
-#### Optional GUI
+#### GUI (Optional)
 
-A friend of mine actually wanted a interface as he is not very good at linux. You can follow this [guide](https://linuxconfig.org/install-gui-on-ubuntu-server-18-04-bionic-beaver) to setup a small gui to use. I recommend Mate. I will not walk trhough installing this for my own server as I did not install it for myself. I preffer to keep the base OS as clean as possible.
+A friend of mine actually wanted a interface as he is not very good at linux. You can follow this [guide](https://linuxconfig.org/install-gui-on-ubuntu-server-18-04-bionic-beaver) to setup a small gui to use. I recommend Mate. I will not walk through installing this for my own server as I did not install it for myself. I preffer to keep the base OS as clean as possible.
 
 ## License
 
