@@ -11,8 +11,8 @@ export OPENVPN_PASSWORD=""
 export OPENVPN_USERNAME=""
 export OPENVPN_PROVIDER="NORDVPN"
 export NORDVPN_COUNTRY="153"
-export PUID=1001
-export PGID=1001
+export PUID=33
+export PGID=33
 export TRANSMISSION_RPC_PASSWORD=""
 
 #plex
