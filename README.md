@@ -34,7 +34,7 @@ We will not be using snap at all for this setup so lets kill it and speed up the
 sudo apt purge snapd
 ```
 
-Do everything as root user for easier setup `sudo su`. I dont wana have tobput sudo in front of literally every command.
+Do everything as root user for easier setup `sudo su`. I dont wana have to put sudo in front of literally every command.
 
 #### Raid setup
 
