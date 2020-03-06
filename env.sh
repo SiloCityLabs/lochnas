@@ -2,7 +2,8 @@
 export LE_EMAIL=""
 
 #Docker
-export PERSISTENT_ROOT="/mnt/path"
+#example /mnt/raid
+export PERSISTENT_ROOT=""
 export ROOT_DOMAIN="domain.com"
 
 #Transmission
@@ -21,5 +22,6 @@ export PLEX_DATA="/mnt/plex"
 export MYSQL_ROOT_PASSWORD=""
 
 #nextcloud
-export NC_DATA="/mnt/raid/home"
+#example /mnt/raid/home
+export NC_DATA=""
 export MYSQL_PASSWORD=""
