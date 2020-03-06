@@ -1,4 +1,4 @@
-#personal
+#personal email for letsencrypt ssl notifications
 export LE_EMAIL=""
 
 #Docker
