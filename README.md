@@ -34,6 +34,8 @@ We will not be using snap at all for this setup so lets kill it and speed up the
 sudo apt purge snapd
 ```
 
+Do everything as root user for easier setup `sudo su`. I dont wana have tobput sudo in front of literally every command.
+
 #### Raid setup
 
 For my setup I followed an [online guide](https://www.digitalocean.com/community/tutorials/how-to-create-raid-arrays-with-mdadm-on-ubuntu-16-04) by digital ocean to setup raid. I have a raid 5 mounted to `/mnt/raid` and another raid 5 mounted to `/mnt/plex`
@@ -50,7 +52,7 @@ mdadm --detail --scan >> /etc/mdadm/mdadm.conf
 
 Now that we have located out raid drive (/dev/md0) we can mount it on every startup to `/mnt/raid` by adding the following to `/etc/fstab`.
 
-`sudo nano /etc/fstab`
+`nano /etc/fstab`
 ```
 /dev/md0 /mnt/raid ext4 defaults,nofail,discard 0 0
 ```
@@ -67,11 +69,11 @@ mount -a
 If you have done so already you will need to install docker and docker compose to get this working. If you skip this the `start.sh` script will attempt to do this. However I suggest doing this first manually since you will need it for creating ssl certificates. This set of commands will ensure you have the latest docker directly from the official repo.
 
 ```
-sudo apt install apt-transport-https ca-certificates curl software-properties-common
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
-sudo apt update
-sudo apt install -y docker-ce docker-compose
+apt install apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
+apt update
+apt install -y docker-ce docker-compose
 ```
 
 #### DDNS setup
@@ -126,10 +128,10 @@ Modify `samba/smb.conf`.
 You will need to use the add-domain.sh script to create some SSL certificates for your nginx setup. This is highly recommended and uses letsencrypt for a valid certificate for free.
 
 ```
-sudo ./add-domain.sh cloud.domain.com
-sudo ./add-domain.sh transmission.domain.com
-sudo ./add-domain.sh hass.domain.com
-sudo ./add-domain.sh portainer.domain.com
+./add-domain.sh cloud.domain.com
+./add-domain.sh transmission.domain.com
+./add-domain.sh hass.domain.com
+./add-domain.sh portainer.domain.com
 ```
 
 #### Setup plex token
@@ -137,7 +139,7 @@ sudo ./add-domain.sh portainer.domain.com
 Go to https://www.plex.tv/claim/ and run the command with your token to activate server.
 
 ```
-sudo ./setup-plex.sh <claimcode>
+./setup-plex.sh <claimcode>
 ```
 
 Head over to your browser and type `http://serverip:32400/web` and if you have a response you should be all set. Finalize it by pressing `Ctrl + C`
@@ -147,7 +149,7 @@ Head over to your browser and type `http://serverip:32400/web` and if you have a
 Now that we have ssl lets get started with our services.
 
 ```
-sudo ./start.sh
+./start.sh
 ```
 
 #### Setup portainer
