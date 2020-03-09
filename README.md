@@ -160,7 +160,15 @@ Navigate in a browser to configure nextcloud at `portainer.domain.com`. Create a
 
 Navigate in a browser to configure nextcloud at `cloud.domain.com`
 
-You will need the credentials you created for the `env.sh` to configure nextcloud. Database name being nextcloud and user nextcloud, hostname will be `mariadb`.
+First enter a personal username and password to login to nextcloud. Then before hitting next hit the advanced option.
+
+ - Click `MySQL / MariaDB`
+ - Leave data path default
+ - Database User: `nextcloud`
+ - Database Password: password from env.sh `MYSQL_PASSWORD=`
+ - Database Name: nextcloud
+ - Change `localhost` to `mariadb`
+ - Click `Next`
 
 After you get to the welcome screen go to settings -> basic settings. Change the cron settings to webcron.
 
