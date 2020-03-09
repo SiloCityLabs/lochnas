@@ -166,7 +166,7 @@ First enter a personal username and password to login to nextcloud. Then before 
  - Leave data path default
  - Database User: `nextcloud`
  - Database Password: password from env.sh `MYSQL_PASSWORD=`
- - Database Name: nextcloud
+ - Database Name: `nextcloud`
  - Change `localhost` to `mariadb`
  - Click `Next`
 
