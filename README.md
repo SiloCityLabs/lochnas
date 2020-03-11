@@ -167,8 +167,10 @@ First enter a personal username and password to login to nextcloud. Then before 
  - Database User: `nextcloud`
  - Database Password: password from env.sh `MYSQL_PASSWORD=`
  - Database Name: `nextcloud`
- - Change `localhost` to `mariadb`
+ - Change `localhost` to `mariadb:3306`
  - Click `Next`
+ 
+Note: If you get the error `504 Gateway timeout`, edit the file and remove `:3306` from `dbhost` and add it to `dbport` as `3306`. This is an unfortunate bug in the nextcloud installer but shouldnt be an issue past this.
 
 After you get to the welcome screen go to settings -> basic settings. Change the cron settings to webcron.
 
@@ -191,6 +193,9 @@ Type the following commands:
 
 Navigate in a browser to configure nextcloud at `hass.domain.com`. This should be pretty straight forward.
 
+#### Setup Transmission
+
+This should pretty much work if you set the env.sh variables for it. You can access it via https://transmission.yourdomain.com/web/
 
 #### Setup your cron jobs
 
@@ -199,6 +204,7 @@ The following crons will:
  - Renew SSL Certificates
  - Nextcloud cron job
 
+`crontab -e`
 ```
 0 0 * * 0 /path/to/start.sh
 0 0 * * 0 /path/to/renew-domain.sh
