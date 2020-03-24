@@ -161,6 +161,7 @@ services:
         #     start_period: 10s
         image: 'nginx:latest'
     autoheal:
+        container_name: autoheal
         restart: always
         image: willfarrell/autoheal
         environment:
