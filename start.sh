@@ -42,3 +42,7 @@ docker-compose pull
 
 #run
 docker-compose up -d
+
+#remove old images
+docker image prune -f
+docker volume prune -f
