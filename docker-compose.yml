@@ -75,6 +75,12 @@ services:
             timeout: 10s
             retries: 3
             start_period: 15s
+    onlyoffice:
+        container_name: onlyoffice
+        restart: unless-stopped
+        networks:
+            - backend
+        image: 'onlyoffice/documentserver'
     mariadb:
         container_name: mariadb
         command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
@@ -154,3 +160,10 @@ services:
         #     retries: 3
         #     start_period: 10s
         image: 'nginx:latest'
+    autoheal:
+        restart: always
+        image: willfarrell/autoheal
+        environment:
+            - AUTOHEAL_CONTAINER_LABEL=all
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
