@@ -240,6 +240,8 @@ Inside portainer you can add your own rss feeds by making a new container like s
 
 #### Mounting SMB on remote machines
 
+This will not work outside of your network as the port is not forwarded. I recommend using a vpn server like the one built into Asus routers. Not recommended to port forward SMB in any scenario.
+
 Ubuntu - https://askubuntu.com/questions/157128/proper-fstab-entry-to-mount-a-samba-share-on-boot
 
 OSX - https://www.imore.com/how-automatically-mount-network-drives-macos
