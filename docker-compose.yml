@@ -106,6 +106,7 @@ services:
         image: 'mariadb:latest'
     hass:
         container_name: homeassistant
+        network_mode: host
         healthcheck:
             test: ["CMD", "curl", "-f", "https://hass.${ROOT_DOMAIN}"]
             interval: 1m
@@ -114,8 +115,6 @@ services:
             start_period: 15s
         volumes:
             - "${PERSISTENT_ROOT}/homeassistant:/config"
-        networks:
-            - backend
         restart: unless-stopped
         image: 'homeassistant/home-assistant:stable'
     portainer:
