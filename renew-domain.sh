@@ -11,7 +11,7 @@ source ./env.sh
 
 #check if nginx is running
 DOCKER_STOPPED=false
-if [ ! "$(docker ps -q -f name=nginx)" ]; then
+if [ "$(docker ps -q -f name=nginx)" ]; then
     if [ "$(docker ps -aq -f status=running -f name=nginx)" ]; then
         #need to stop temp
         docker container stop nginx

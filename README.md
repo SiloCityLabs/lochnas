@@ -15,8 +15,6 @@ Includes:
  - Home Assistant (Home Automation)
  - Portainer (Quickly add more docker containers)
  - Plex
-
-Upcomming
  - Samba (Local file share)
  - Auto Renew SSL with certbot
 
@@ -132,6 +130,12 @@ You will need to use the add-domain.sh script to create some SSL certificates fo
 ./add-domain.sh transmission.domain.com
 ./add-domain.sh hass.domain.com
 ./add-domain.sh portainer.domain.com
+```
+
+Enable autorenew `crontab -e`
+
+```
+0 0 * * 0 /path/to/renew-domain.sh
 ```
 
 #### Setup plex token
