@@ -238,6 +238,18 @@ Inside portainer you can add your own rss feeds by making a new container like s
     - RSS_URL=http://.../xxxxx.rss
 ```
 
+#### Mounting SMB on remote machines
+
+Ubuntu - https://askubuntu.com/questions/157128/proper-fstab-entry-to-mount-a-samba-share-on-boot
+
+OSX - https://www.imore.com/how-automatically-mount-network-drives-macos
+
+Windows - https://www.techrepublic.com/article/how-to-connect-to-linux-samba-shares-from-windows-10/
+
+Android - https://play.google.com/store/apps/details?id=pl.solidexplorer2
+
+
+
 ## License
 
 This project is licensed under the GPLv3 License - see the [LICENSE](LICENSE) file for details
