@@ -113,7 +113,6 @@ services:
             retries: 3
             start_period: 15s
         volumes:
-            - '/dev/bus/usb:/dev/bus/usb'
             - "${PERSISTENT_ROOT}/homeassistant:/config"
         networks:
             - backend
