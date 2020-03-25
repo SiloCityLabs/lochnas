@@ -144,6 +144,12 @@ Go to https://www.plex.tv/claim/ and run the command with your token to activate
 
 Head over to your browser and type `http://serverip:32400/web` and if you have a response you should be all set. Finalize it by pressing `Ctrl + C`
 
+#### Setup Samba
+
+Edit `init.sh` and add your username and password to the file, alternatively you can make multiple users by copying the two lines.
+
+Edit `samba/smb.conf` and change the paths, you can add as many shares as you would like.
+
 #### Start the services
 
 Now that we have ssl lets get started with our services.
@@ -214,6 +220,19 @@ The following crons will:
 #### GUI (Optional)
 
 A friend of mine actually wanted a interface as he is not very good at linux. You can follow this [guide](https://linuxconfig.org/install-gui-on-ubuntu-server-18-04-bionic-beaver) to setup a small gui to use. I recommend Mate. I will not walk through installing this for my own server as I did not install it for myself. I preffer to keep the base OS as clean as possible.
+
+#### Custom Transmission RSS
+
+Inside portainer you can add your own rss feeds by making a new container like so
+
+```
+ rss:
+  image: haugene/transmission-rss
+  links:
+    - transmission
+  environment:
+    - RSS_URL=http://.../xxxxx.rss
+```
 
 ## License
 

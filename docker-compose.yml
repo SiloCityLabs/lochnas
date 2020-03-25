@@ -23,6 +23,9 @@ services:
         restart: unless-stopped
         cap_add:
             - NET_ADMIN
+        dns:
+            - 8.8.8.8
+            - 9.9.9.9
         environment:
             - OPENVPN_PASSWORD
             - OPENVPN_USERNAME
@@ -62,7 +65,7 @@ services:
         container_name: nextcloud
         volumes:
             - "${PERSISTENT_ROOT}/nextcloud:/var/www/html"
-            - "${NC_DATA}:/raid"
+            - "${NC_DATA}:/localdisk"
         restart: unless-stopped
         networks:
             - backend
@@ -81,6 +84,12 @@ services:
         networks:
             - backend
         image: 'onlyoffice/documentserver'
+        healthcheck:
+            test: ["CMD", "wget", "https://office.${ROOT_DOMAIN}/welcome/", "-O", "/dev/null"]
+            interval: 1m
+            timeout: 10s
+            retries: 3
+            start_period: 10s
     mariadb:
         container_name: mariadb
         command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
@@ -114,33 +123,26 @@ services:
         container_name: portainer
         networks:
             - backend
-        # healthcheck:
-        #     test: ["CMD", "curl", "-f", "https://portainer.${ROOT_DOMAIN}"]
-        #     interval: 1m
-        #     timeout: 10s
-        #     retries: 3
-        #     start_period: 15s
         volumes:
             - "${PERSISTENT_ROOT}/portainer:/data"
             - '/var/run/docker.sock:/var/run/docker.sock'
         restart: always
         image: 'portainer/portainer:latest'
-#     samba:
-#         image: joebiellik/samba-server
-#         network_mode: host
-#         volumes:
-#         - ./smb.conf:/etc/samba/smb.conf
-#         - ~/projects:/mnt/projects
-#         ports:
-#         - "137:137/udp"
-#         - "138:138/udp"
-#         - "139:139/tcp"
-#         - "445:445/tcp"
-#         environment:
-#         - USERNAME=joe
-#         - PASSWORD=samba
-#         # - UID=1000
-#         # - GID=1000
+    samba:
+        container_name: samba
+        image: joebiellik/samba-server
+        network_mode: host
+        volumes:
+            - "${PERSISTENT_ROOT}/samba/smb.conf:/etc/samba/smb.conf"
+            - "${PERSISTENT_ROOT}/samba/init.sh:/s6/config.init"
+            - "${PERSISTENT_ROOT}:${PERSISTENT_ROOT}"
+        ports:
+            - "137:137/udp"
+            - "138:138/udp"
+            - "139:139/tcp"
+            - "445:445/tcp"
+        environment:
+            - "GID=${PGID}"
     nginx:
         container_name: nginx
         volumes:
@@ -153,12 +155,6 @@ services:
             - '443:443/tcp'
             - '80:80/tcp'
         restart: always
-        # healthcheck:
-        #     test: ["CMD", "curl", "-f", "http://127.0.0.1/ping"]
-        #     interval: 1m
-        #     timeout: 10s
-        #     retries: 3
-        #     start_period: 10s
         image: 'nginx:latest'
     autoheal:
         container_name: autoheal
