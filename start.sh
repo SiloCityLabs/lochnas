@@ -6,6 +6,8 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+cd "$(dirname "$0")"
+
 #load env variables
 source ./env.sh
 

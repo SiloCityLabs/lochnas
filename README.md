@@ -203,6 +203,8 @@ Type the following commands:
 
 Navigate in a browser to configure nextcloud at `hass.domain.com`. This should be pretty straight forward.
 
+If you get GATEWAY timeout, edit the `nginx/nginx.conf` file and change `http://hass:8123` to the gateway ip address you find inside portainer.domain.com under `network list -> raid_backend` like so `http://172.xx.0.1`.
+
 #### Setup Transmission
 
 This should pretty much work if you set the env.sh variables for it. You can access it via https://transmission.yourdomain.com/web/
