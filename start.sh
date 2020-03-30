@@ -48,3 +48,7 @@ docker-compose up -d
 #remove old images
 docker image prune -f
 docker volume prune -f
+
+#Fix a cache issue with nextcloud maintenance mode
+docker container restart nextcloud
+docker container restart nginx
