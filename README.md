@@ -197,6 +197,7 @@ Type the following commands:
 ```
 ./occ db:add-missing-indices
 ./occ db:convert-filecache-bigint
+./occ config:app:set text workspace_available --value=0
 ```
 
 #### Setup Home Assistant
