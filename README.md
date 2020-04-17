@@ -130,6 +130,7 @@ You will need to use the add-domain.sh script to create some SSL certificates fo
 ./add-domain.sh transmission.domain.com
 ./add-domain.sh hass.domain.com
 ./add-domain.sh portainer.domain.com
+./add-domain.sh office.domain.com
 ```
 
 Enable autorenew `crontab -e`
