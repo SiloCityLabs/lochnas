@@ -201,6 +201,15 @@ Type the following commands:
 ./occ config:app:set text workspace_available --value=0
 ```
 
+Make one last addition to the config file to fix a login redirect issue.
+
+`nano /path/to/nextcloud/config/config.php`
+```
+  'overwrite.cli.url' => 'https://cloud.yourdomain.com',
+  'overwritehost' => 'cloud.yourdomain.com',
+  'overwriteprotocol' => 'https',
+```
+
 #### Setup Home Assistant
 
 Navigate in a browser to configure nextcloud at `hass.domain.com`. This should be pretty straight forward.
