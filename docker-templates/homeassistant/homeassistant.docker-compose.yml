@@ -1,0 +1,17 @@
+#https://composerize.com/
+version: '3.4'
+
+services:
+    hass:
+        container_name: homeassistant
+        network_mode: host
+        healthcheck:
+            test: ["CMD", "curl", "-f", "https://hass.${ROOT_DOMAIN}"]
+            interval: 1m
+            timeout: 10s
+            retries: 3
+            start_period: 15s
+        volumes:
+            - "${PERSISTENT_ROOT}/docker-data/homeassistant:/config"
+        restart: unless-stopped
+        image: 'homeassistant/home-assistant:stable'

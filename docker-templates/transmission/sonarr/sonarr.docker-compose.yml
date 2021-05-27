@@ -1,0 +1,21 @@
+#https://composerize.com/
+version: '3.7'
+
+services:
+    sonarr:
+      image: linuxserver/sonarr
+      container_name: sonarr
+      networks:
+            - backend
+      environment:
+        - PUID
+        - PGID
+        - TZ=America/New_York
+        - UMASK_SET=022 #optional
+      volumes:
+        - "${PERSISTENT_ROOT}/docker-data/sonarr:/config"
+        - "${PLEX_DATA}/TV:/tv"
+        - "${PLEX_DATA}/docker-data/transmission/data:/data"
+      ports:
+        - 8989:8989
+      restart: unless-stopped

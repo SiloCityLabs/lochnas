@@ -1,0 +1,21 @@
+#https://composerize.com/
+version: '3.7'
+
+services:
+    samba:
+        container_name: samba
+        image: joebiellik/samba-server
+        network_mode: host
+        restart: unless-stopped
+        volumes:
+            - "${PERSISTENT_ROOT}/docker-data/samba/smb.conf:/etc/samba/smb.conf"
+            - "${PERSISTENT_ROOT}/docker-data/samba/init.sh:/etc/cont-init.d/00-config"
+            - "${PERSISTENT_ROOT}:${PERSISTENT_ROOT}"
+            - "/mnt/plex:/mnt/plex"
+        ports:
+            - "137:137/udp"
+            - "138:138/udp"
+            - "139:139/tcp"
+            - "445:445/tcp"
+        environment:
+            - "GID=${PGID}"

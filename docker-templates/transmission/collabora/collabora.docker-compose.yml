@@ -1,0 +1,25 @@
+#https://composerize.com/
+version: '3.7'
+
+services:
+    collabora:
+        container_name: collabora
+        image: collabora/code
+        environment:
+            - 'extra_params=--o:ssl.enable=false --o:ssl.termination=true'
+            - DONT_GEN_SSL_CERT=true
+            - server_name=office.${ROOT_DOMAIN}
+            - dictionaries=en_US
+        networks:
+            - backend
+        volumes:
+            - '/etc/localtime:/etc/localtime:ro'
+            - '/etc/timezone:/etc/timezone:ro'
+        restart: unless-stopped
+        healthcheck:
+            test: ["CMD", "wget", "https://office.${ROOT_DOMAIN}/", "-O", "/dev/null"]
+            interval: 1m
+            timeout: 10s
+            retries: 3
+            start_period: 5s
+

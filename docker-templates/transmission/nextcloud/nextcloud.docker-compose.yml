@@ -1,0 +1,43 @@
+#https://composerize.com/
+version: '3.7'
+
+services:
+    nextcloud:
+        container_name: nextcloud
+        hostname: cloud.${ROOT_DOMAIN}
+        volumes:
+            - "${PERSISTENT_ROOT}/docker-data/nextcloud/html:/var/www/html"
+            - "${PERSISTENT_ROOT}/docker-data/nextcloud/policy.xml:/etc/ImageMagick-6/policy.xml"
+            - "${NEXTCLOUD_DATA}:/raid"
+        restart: unless-stopped
+        networks:
+            - backend
+#        image: 'nextcloud:latest'
+        build: 
+          context: ./docker-templates/nextcloud_dockerfile/
+          dockerfile: Dockerfile
+        links:
+            - mariadb
+        depends_on:
+            - mariadb
+            - nginx
+        healthcheck:
+            test: ["CMD", "curl", "-f", "https://cloud.${ROOT_DOMAIN}"]
+            interval: 15m
+            timeout: 30s
+            retries: 3
+            start_period: 20s
+    mariadb:
+        container_name: mariadb
+        command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+        volumes:
+            - "${PERSISTENT_ROOT}/docker-data/mariadb:/var/lib/mysql"
+        restart: unless-stopped
+        networks:
+            - backend
+        environment:
+            - MYSQL_ROOT_PASSWORD
+            - MYSQL_PASSWORD
+            - MYSQL_DATABASE=nextcloud
+            - MYSQL_USER=nextcloud
+        image: 'mariadb:latest'
