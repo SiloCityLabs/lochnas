@@ -30,19 +30,6 @@ source docker-templates/enable-templates.sh
 # Stop if running
 docker-compose $DOCKER_FILES stop
 
-# Make all folders
-#mkdir -p plex
-#mkdir -p certbot
-#mkdir -p mariadb
-#mkdir -p homeassistant
-#mkdir -p nextcloud
-#mkdir -p homeassistant
-#mkdir -p portainer
-mkdir -p /tmp/transcode
-#mkdir -p transmission/scripts
-#mkdir -p transmission/config
-#mkdir -p transmission/data
-
 # Check for updates
 docker-compose pull
 
