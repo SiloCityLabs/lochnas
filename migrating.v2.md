@@ -34,6 +34,7 @@ mv nginx docker-data/
 mv certbot docker-data/
 mv letsencrypt docker-data/
 mkdir docker-data/nginx/logs
+mkdir docker-data/nginx/sites
 ```
 ### Delete uneeded scripts and files
 
