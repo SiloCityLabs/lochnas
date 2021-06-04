@@ -11,3 +11,5 @@ cd "$(dirname "$0")"
 apt-get update && apt -y dist-upgrade
 
 git pull
+
+apt autoremove
