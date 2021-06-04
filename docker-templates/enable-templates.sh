@@ -28,8 +28,18 @@ nginx_symlink_disable () {
    TPL_FILE=$1.conf.template
    [ -L $NGINX_DATA/$TPL_FILE ] && rm $NGINX_DATA/$TPL_FILE
 }
+nginx_cert_check () {
+   # Check for SSL cert
+   if [ ! -d docker-data/letsencrypt/live/$1.$ROOT_DOMAIN ]; then
+      echo "Certificate does exist for $1.$ROOT_DOMAIN"
+      echo "Run ./add-domain.sh $1.$ROOT_DOMAIN"
+      exit 1
+   fi
+}
 
+# ==========================
 # Samba
+# ==========================
 if [[ $SAMBA_ENABLED == "true" ]]; then
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/samba/samba.docker-compose.yml"
 
@@ -41,23 +51,25 @@ if [[ $SAMBA_ENABLED == "true" ]]; then
 
 fi
 
+# ==========================
 # PHPMyAdmin
+# ==========================
 if [[ $PHPMYADMIN_ENABLED == "true" ]]; then
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/phpmyadmin/phpmyadmin.docker-compose.yml"
    nginx_symlink_enable "phpmyadmin"
-#   if [ -d docker-data/letsencrypt/live/phpmyadmin.$ROOT_DOMAIN ]; then
-#       echo "Certificate does exist for phpmyadmin"
-#       (cd ../../ ; sh domain-add.sh phpmyadmin.$ROOT_DOMAIN)
-#   fi
+   nginx_cert_check "phpmyadmin"
 else
    nginx_symlink_disable "phpmyadmin"
 fi
 
+# ==========================
 # Transmission
+# ==========================
 if [[ $TRANSMISSION_ENABLED == "true" ]]; then
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/transmission/transmission.docker-compose.yml"
 
    nginx_symlink_enable "transmission"
+   nginx_cert_check "transmission"
 
    # Check if data folder exists
    [ ! -d $PERSISTENT_ROOT/docker-data/transmission ] && echo "Creating docker-data/transmission directory" && mkdir $PERSISTENT_ROOT/docker-data/transmission $PERSISTENT_ROOT/docker-data/transmission/scripts $PERSISTENT_ROOT/docker-data/transmission/config $PERSISTENT_ROOT/docker-data/transmission/data
@@ -65,11 +77,14 @@ else
    nginx_symlink_disable "transmission"
 fi
 
+# ==========================
 # Portainer
+# ==========================
 if [[ $PORTAINER_ENABLED == "true" ]]; then
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/portainer/portainer.docker-compose.yml"
 
    nginx_symlink_enable "portainer"
+   nginx_cert_check "portainer"
 
    # Check if data folder exists
    [ ! -d $PERSISTENT_ROOT/docker-data/portainer ] && echo "Creating docker-data/portainer directory" && mkdir $PERSISTENT_ROOT/docker-data/portainer
@@ -77,7 +92,9 @@ else
    nginx_symlink_disable "portainer"
 fi
 
+# ==========================
 # Minecraft
+# ==========================
 if [[ $MINECRAFT_ENABLED == "true" ]]; then
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/minecraft/minecraft.docker-compose.yml"
 
@@ -85,7 +102,9 @@ if [[ $MINECRAFT_ENABLED == "true" ]]; then
    [ ! -d $PERSISTENT_ROOT/docker-data/minecraft ] && echo "Creating docker-data/minecraft directory" && mkdir $PERSISTENT_ROOT/docker-data/minecraft
 fi
 
+# ==========================
 # Sonarr
+# ==========================
 if [[ $SONARR_ENABLED == "true" ]]; then
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/sonarr/sonarr.docker-compose.yml"
 
@@ -93,7 +112,9 @@ if [[ $SONARR_ENABLED == "true" ]]; then
    [ ! -d $PERSISTENT_ROOT/docker-data/sonarr ] && echo "Creating docker-data/sonarr directory" && mkdir $PERSISTENT_ROOT/docker-data/sonarr
 fi
 
+# ==========================
 # Plex
+# ==========================
 if [[ $PLEX_ENABLED == "true" ]]; then
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/plex/plex.docker-compose.yml"
 
@@ -104,11 +125,14 @@ if [[ $PLEX_ENABLED == "true" ]]; then
    [ ! -d /tmp/transcode ] && echo "Creating /tmp/transcode directory" && mkdir /tmp/transcode
 fi
 
+# ==========================
 # Nextcloud
+# ==========================
 if [[ $NEXTCLOUD_ENABLED == "true" ]]; then
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/nextcloud/nextcloud.docker-compose.yml"
 
    nginx_symlink_enable "cloud"
+   nginx_cert_check "cloud"
 
    # Check if data folder exists
    [ ! -d $PERSISTENT_ROOT/docker-data/nextcloud ] && echo "Creating docker-data/nextcloud directory" && mkdir $PERSISTENT_ROOT/docker-data/nextcloud
@@ -119,42 +143,63 @@ else
    nginx_symlink_disable "cloud"
 fi
 
+# ==========================
 # Collabora
+# ==========================
 if [[ $COLLABORA_ENABLED == "true" ]]; then
    nginx_symlink_enable "office"
+   nginx_cert_check "office"
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/collabora/collabora.docker-compose.yml"
 else
    nginx_symlink_disable "office"
 fi
 
+# ==========================
 # Octoprint
+# ==========================
 if [[ $OCTOPRINT_ENABLED == "true" ]]; then
    nginx_symlink_enable "octoprint"
+   nginx_cert_check "octoprint"
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/octoprint/octoprint.docker-compose.yml"
 else
    nginx_symlink_disable "octoprint"
 fi
 
+# ==========================
 # Router
+# ==========================
 if [[ $ROUTER_ENABLED == "true" ]]; then
    nginx_symlink_enable "router"
+   nginx_cert_check "router"
 else
    nginx_symlink_disable "router"
 fi
 
+# ==========================
 # Home Assistant
+# ==========================
+
+if [ $HOMEASSISTANT_ENABLED == "true" ] && [ $HOMEASSISTANT_LAN_ENABLED == "true" ]; then
+   echo "Both HOMEASSISTANT_ENABLED and HOMEASSISTANT_LAN_ENABLED cannot be enabled at the same time"
+   exit 1
+fi
+
 HOMEASSISTANT_URI=http://hass
 if [[ $HOMEASSISTANT_ENABLED == "true" ]]; then
    nginx_symlink_enable "hass"
+   nginx_cert_check "hass"
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/homeassistant/hass.docker-compose.yml"
 else
    nginx_symlink_disable "hass"
 fi
 
+# ==========================
 # Home Assistant LAN
+# ==========================
 if [[ $HOMEASSISTANT_LAN_ENABLED == "true" ]]; then
    export HOMEASSISTANT_URI=$HOMEASSISTANT_LAN_URI
    nginx_symlink_enable "hass"
+   nginx_cert_check "hass"
 else
    nginx_symlink_disable "hass"
 fi
