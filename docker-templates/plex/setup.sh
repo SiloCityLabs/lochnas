@@ -11,6 +11,9 @@ cd "$(dirname "$0")/../../"
 # Load env variables
 source .env
 
+# Load ip's
+source docker-templates/getip.sh
+
 if [ -z "$1" ]
   then
     echo "Please supply the plex claim token: 'setup.sh tokenhere'"
@@ -25,7 +28,7 @@ else
   exit 1
 fi
 
-echo "Now starting plex, check your server at port http://127.0.0.1:32400/web. Press CTRL + C once you confirm its up and running."
+echo "Now starting plex, check your server at port http://$hostname:32400/web. Press CTRL + C once you confirm its up and running."
 
 docker run --rm -i \
 --name plextmp \

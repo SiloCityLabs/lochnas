@@ -11,6 +11,9 @@ cd "$(dirname "$0")"
 # Load env variables
 source .env
 
+# Load ip's
+source docker-templates/getip.sh
+
 # Install docker
 if ! [ -x "$(command -v docker)" ]; then
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
