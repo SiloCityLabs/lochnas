@@ -13,8 +13,16 @@ source .env
 
 if [ -z "$1" ]
   then
-    echo "Please supply the plex claim token: 'setup-plex.sh tokenhere'"
+    echo "Please supply the plex claim token: 'setup.sh tokenhere'"
     exit 1
+fi
+
+# Check if data folder exists
+if [ ! -d $PERSISTENT_ROOT/docker-data/plex ]; then
+  echo "Creating docker-data/plex directory" && mkdir $PERSISTENT_ROOT/docker-data/plex
+else
+  echo "Plex folder already exists, exiting."
+  exit 1
 fi
 
 echo "Now starting plex, check your server at port http://127.0.0.1:32400/web. Press CTRL + C once you confirm its up and running."

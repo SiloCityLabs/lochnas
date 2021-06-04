@@ -119,7 +119,10 @@ if [[ $PLEX_ENABLED == "true" ]]; then
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/plex/plex.docker-compose.yml"
 
    # Check if data folder exists
-   [ ! -d $PERSISTENT_ROOT/docker-data/plex ] && echo "Creating docker-data/plex directory" && mkdir $PERSISTENT_ROOT/docker-data/plex
+   if [ ! -d $PERSISTENT_ROOT/docker-data/plex ]; then
+      echo "Looks like plex has not been setup, please run docker-templates/plex/setup.sh tokenhere"
+      exit 1
+   fi
 
    # Check if transcode tmp folder exists
    [ ! -d /tmp/transcode ] && echo "Creating /tmp/transcode directory" && mkdir /tmp/transcode
