@@ -16,7 +16,7 @@ server {
     proxy_buffering off;
 
     location / {
-        proxy_pass http://10.5.1.3:8123;
+        proxy_pass ${HOMEASSISTANT_URI};
         proxy_set_header Host $host;
         proxy_redirect http:// https://;
         proxy_http_version 1.1;
