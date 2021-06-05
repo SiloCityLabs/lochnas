@@ -37,7 +37,7 @@ docker-compose $DOCKER_FILES stop
 docker-compose pull
 
 # Run
-docker-compose $DOCKER_FILES up -d --build --remove-orphans
+docker-compose $DOCKER_FILES up -d --build --remove-orphans --force-recreate
 
 # Remove old images
 docker image prune -f
