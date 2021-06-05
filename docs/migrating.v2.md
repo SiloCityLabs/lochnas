@@ -73,8 +73,4 @@ cp .env.example .env
 
 Now edit and carry over env.sh configs
 
-### Copy over some other configs
-
-```
-cp docker-templates/nextcloud/policy.xml docker-data/nextcloud/
-```
+Delete your old env.sh with `rm -rf env.sh`
