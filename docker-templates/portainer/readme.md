@@ -2,6 +2,7 @@
 
 This is a template to add this container to your nas setup full functional with matching permissions and settings that of docker-nas repo.
 
+Original maintainer [portainer/portainer-ce](https://hub.docker.com/r/portainer/portainer-ce)
 
 ## How to enable
 

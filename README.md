@@ -57,6 +57,8 @@ Enable autorenew by adding a cron with `crontab -e`
  - [Portainer](docker-templates/portainer/readme.md) (Quickly add more docker containers)
  - [Plex](docker-templates/plex/readme.md)
  - [Samba](docker-templates/samba/readme.md) (Local file share)
+ - [Minecraft](docker-templates/minecraft/readme.md)
+ - [PHPMyAdmin](docker-templates/phpmyadmin/readme.md)
 
 #### Start the services
 

@@ -2,6 +2,7 @@
 
 This is a template to add this container to your nas setup full functional with matching permissions and settings that of docker-nas repo.
 
+Original maintainer [Nextcloud](https://hub.docker.com/_/nextcloud), [mariadb](https://hub.docker.com/_/mariadb)
 
 ## How to enable
 
