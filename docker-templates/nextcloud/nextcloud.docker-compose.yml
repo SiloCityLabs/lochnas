@@ -7,7 +7,6 @@ services:
         hostname: cloud.${ROOT_DOMAIN}
         volumes:
             - "${PERSISTENT_ROOT}/docker-data/nextcloud/html:/var/www/html"
-            - "${PERSISTENT_ROOT}/docker-data/nextcloud/policy.xml:/etc/ImageMagick-6/policy.xml"
             - "${NEXTCLOUD_DATA}:/raid"
         restart: unless-stopped
         networks:
