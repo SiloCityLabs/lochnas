@@ -147,12 +147,32 @@ else
 fi
 
 # ==========================
+# Collabora + Onlyoffice check
+# ==========================
+
+if [ $COLLABORA_ENABLED == "true" ] && [ $ONLYOFFICE_ENABLED == "true" ]; then
+   echo "Both COLLABORA_ENABLED and ONLYOFFICE_ENABLED cannot be enabled at the same time"
+   exit 1
+fi
+
+# ==========================
 # Collabora
 # ==========================
 if [[ $COLLABORA_ENABLED == "true" ]]; then
    nginx_symlink_enable "office"
    nginx_cert_check "office"
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/collabora/collabora.docker-compose.yml"
+else
+   nginx_symlink_disable "office"
+fi
+
+# ==========================
+# Onlyoffice
+# ==========================
+if [[ $ONLYOFFICE_ENABLED == "true" ]]; then
+   nginx_symlink_enable "office"
+   nginx_cert_check "office"
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/onlyoffice/onlyoffice.docker-compose.yml"
 else
    nginx_symlink_disable "office"
 fi
@@ -179,7 +199,7 @@ else
 fi
 
 # ==========================
-# Home Assistant
+# Home Assistant + Lan Check
 # ==========================
 
 if [ $HOMEASSISTANT_ENABLED == "true" ] && [ $HOMEASSISTANT_LAN_ENABLED == "true" ]; then
@@ -187,6 +207,9 @@ if [ $HOMEASSISTANT_ENABLED == "true" ] && [ $HOMEASSISTANT_LAN_ENABLED == "true
    exit 1
 fi
 
+# ==========================
+# Home Assistant
+# ==========================
 HOMEASSISTANT_URI=http://hass
 if [[ $HOMEASSISTANT_ENABLED == "true" ]]; then
    nginx_symlink_enable "hass"

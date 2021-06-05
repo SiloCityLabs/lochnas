@@ -1,0 +1,16 @@
+#https://composerize.com/
+version: '3.7'
+
+services:
+    onlyoffice:
+        container_name: onlyoffice
+        restart: unless-stopped
+        networks:
+            - backend
+        image: 'onlyoffice/documentserver'
+        healthcheck:
+            test: ["CMD", "wget", "https://office.${ROOT_DOMAIN}/welcome/", "-O", "/dev/null"]
+            interval: 1m
+            timeout: 10s
+            retries: 3
+            start_period: 10s

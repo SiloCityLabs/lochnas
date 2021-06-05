@@ -13,6 +13,7 @@ source .env
 
 # Load ip's
 source docker-templates/getip.sh
+exit 1
 
 # Install docker
 if ! [ -x "$(command -v docker)" ]; then

@@ -8,6 +8,9 @@ fi
 
 cd "$(dirname "$0")"
 
+# config updates
+source docker-templates/config-updates.sh
+
 apt-get update && apt -y dist-upgrade && apt autoremove
 
 git pull
