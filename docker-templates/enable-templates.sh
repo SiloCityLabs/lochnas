@@ -103,6 +103,16 @@ if [[ $MINECRAFT_ENABLED == "true" ]]; then
 fi
 
 # ==========================
+# Ark
+# ==========================
+if [[ $MINECRAFT_ENABLED == "true" ]]; then
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/ark/ark.docker-compose.yml"
+
+   # Check if data folder exists
+   [ ! -d $PERSISTENT_ROOT/docker-data/ark ] && echo "Creating docker-data/ark directory" && mkdir $PERSISTENT_ROOT/docker-data/ark
+fi
+
+# ==========================
 # Sonarr
 # ==========================
 if [[ $SONARR_ENABLED == "true" ]]; then
