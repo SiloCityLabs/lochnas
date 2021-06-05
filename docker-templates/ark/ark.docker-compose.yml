@@ -10,19 +10,19 @@ services:
         network_mode: host
         image: 'turzam/ark:latest'
         environment:
-            - SESSIONNAME=ARK_SESSIONNAME
-            - ADMINPASSWORD=ARK_ADMINPASSWORD
-            - AUTOUPDATE=ARK_AUTOUPDATE
-            - AUTOBACKUP=ARK_AUTOBACKUP
-            - WARNMINUTE=ARK_WARNMINUTE
-            - SERVERMAP=ARK_SERVERMAP
-            - NBPLAYERS=ARK_NBPLAYERS
-            - UPDATEONSTART=ARK_UPDATEONSTART
-            - BACKUPONSTART=ARK_BACKUPONSTART
-            - SERVERPORT=ARK_SERVERPORT
-            - STEAMPORT=ARK_STEAMPORT
-            - BACKUPONSTOP=ARK_BACKUPONSTOP
-            - WARNONSTOP=ARK_WARNONSTOP
-            - SERVERPASSWORD=ARK_SERVERPASSWORD
-            - UID=PUID
-            - GID=PGID
+            - "SESSIONNAME=${ARK_SESSIONNAME}"
+            - "ADMINPASSWORD=${ARK_ADMINPASSWORD}"
+            - "AUTOUPDATE=${ARK_AUTOUPDATE}"
+            - "AUTOBACKUP=${ARK_AUTOBACKUP}"
+            - "WARNMINUTE=${ARK_WARNMINUTE}"
+            - "SERVERMAP=${ARK_SERVERMAP}"
+            - "NBPLAYERS=$×ARK_NBPLAYERS}"
+            - "UPDATEONSTART=${ARK_UPDATEONSTART}"
+            - "BACKUPONSTART=${ARK_BACKUPONSTART}"
+            - "SERVERPORT=${ARK_SERVERPORT}"
+            - "STEAMPORT=${ARK_STEAMPORT}"
+            - "BACKUPONSTOP=${ARK_BACKUPONSTOP}"
+            - "WARNONSTOP=${ARK_WARNONSTOP}"
+            - "SERVERPASSWORD=${ARK_SERVERPASSWORD}"
+            - "UID=${PUID}"
+            - "GID=${PGID}"
