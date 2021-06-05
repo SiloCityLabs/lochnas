@@ -1,6 +1,6 @@
 # All-In-One Docker NAS Setup
 
-This is a docker nas setup used to quickly get going with a private nas and cloud setup. The purpose to keep it all dockerized is for super quick migrations in the long term future and to allow better long term updates even with an OS that is not updated as often. All containers are optional and most can easily be enabled with a boolean setting excluding nginx which is required. 
+This is a docker NAS setup used to quickly get going with a private NAS and cloud setup. The purpose to keep it all dockerized is for super quick migrations in the long term future and to allow better long term updates even with an OS that is not updated as often. All containers are optional and most can easily be enabled with a boolean setting excluding nginx which is required. 
 
 If you have v1 see this [migration guide](docs/migrating.v2.md)
 
@@ -12,11 +12,11 @@ If you have v1 see this [migration guide](docs/migrating.v2.md)
 
 ### Prerequisites
 
-Do everything as root user for easier setup `sudo su`. I dont wana have to put sudo in front of literally every command.
+Do everything as root user for easier setup `sudo su`. Or put sudo in front of every command.
 
 #### Create users and groups
 
-We will be using the www-data user to share permissions between services. You can make seperate users and groups if you would like to but I found that this is easiest way to manage access accross the board.
+We will be using the www-data user to share permissions between services. You can make seperate users and groups if you would like to but I found that this is the easiest way to manage access accross the board.
 
 You can give your user access to any files of www-data with this command.
 
@@ -37,7 +37,7 @@ Modify the `.env` with your settings.
 
 #### Create SSL Certificates
 
-You will need to use the add-domain.sh script to create some SSL certificates for your nginx setup. This is highly recommended and uses letsencrypt for a valid certificate for free.
+You need to use the add-domain.sh script to create SSL certificates for your nginx setup. This is highly recommended and uses Let's Encrypt for a valid certificate for free.
 
 ```
 ./add-domain.sh cloud.domain.com
