@@ -8,8 +8,8 @@ fi
 
 cd "$(dirname "$0")"
 
-apt-get update && apt -y dist-upgrade
+apt-get update && apt -y dist-upgrade && apt autoremove
 
 git pull
 
-apt autoremove
+./start.sh
