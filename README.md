@@ -50,7 +50,11 @@ Enable autorenew by adding a cron with `crontab -e`
 ```
 
 ### Container Docs
+
+Required containers:
  - Nginx + SSL + Auto Renew with certbot (Web Proxy + SSL)
+
+Optional containers:
  - [Transmission + VPN](docker-templates/transmission/readme.md) (Torrents, Requires VPN)
  - [Nextcloud + MariaDB](docker-templates/nextcloud/readme.md) (Private cloud)
  - [Home Assistant](docker-templates/homeassistant/readme.md) (Home Automation)
@@ -58,6 +62,7 @@ Enable autorenew by adding a cron with `crontab -e`
  - [Plex](docker-templates/plex/readme.md)
  - [Samba](docker-templates/samba/readme.md) (Local file share)
  - [Minecraft](docker-templates/minecraft/readme.md)
+ - [Ark](docker-templates/ark/readme.md)
  - [PHPMyAdmin](docker-templates/phpmyadmin/readme.md)
 
 #### Start the services
