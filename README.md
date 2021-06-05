@@ -1,6 +1,6 @@
 # All-In-One Docker NAS Setup
 
-This is a docker nas setup used to quickly get going with a private nas and cloud setup. The purpose to keep it all dockerized is for super quick migrations in the long term future and to allow better long term updates in the even that the OS is not updated as often. 
+This is a docker nas setup used to quickly get going with a private nas and cloud setup. The purpose to keep it all dockerized is for super quick migrations in the long term future and to allow better long term updates even with an OS that is not updated as often. All containers are optional and most can easily be enabled with a boolean setting excluding nginx which is required. 
 
 If you have v1 see this [migration guide](docs/migrating.v2.md)
 
