@@ -105,7 +105,7 @@ fi
 # ==========================
 # Ark
 # ==========================
-if [[ $MINECRAFT_ENABLED == "true" ]]; then
+if [[ $ARK_ENABLED == "true" ]]; then
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/ark/ark.docker-compose.yml"
 
    # Check if data folder exists
