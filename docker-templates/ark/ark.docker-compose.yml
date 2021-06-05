@@ -16,7 +16,7 @@ services:
             - "AUTOBACKUP=${ARK_AUTOBACKUP}"
             - "WARNMINUTE=${ARK_WARNMINUTE}"
             - "SERVERMAP=${ARK_SERVERMAP}"
-            - "NBPLAYERS=$×ARK_NBPLAYERS}"
+            - "NBPLAYERS=${ARK_NBPLAYERS}"
             - "UPDATEONSTART=${ARK_UPDATEONSTART}"
             - "BACKUPONSTART=${ARK_BACKUPONSTART}"
             - "SERVERPORT=${ARK_SERVERPORT}"
