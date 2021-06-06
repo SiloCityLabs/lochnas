@@ -7,7 +7,7 @@ server {
     ssl_session_timeout 1d;
     ssl_session_cache shared:MozSSL:10m;  # about 40000 sessions
     ssl_session_tickets off;
-    ssl_protocols TLSv1.3;
+    ssl_protocols TLSv1.2 TLSv1.3;
     ssl_prefer_server_ciphers off;
     add_header Strict-Transport-Security "max-age=63072000" always;
     ssl_stapling on;
@@ -28,10 +28,14 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_hide_header X-Powered-By;
         proxy_hide_header server;
+        proxy_pass_request_headers on;
         add_header Front-End-Https on;
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-        proxy_pass http://nextcloud;
         client_max_body_size 10G;
+        proxy_max_temp_file_size 4096m;
+        proxy_request_buffering off;
+        proxy_pass http://nextcloud;
+
     }
     location /.well-known/carddav {
         return 301 $scheme://$host:$server_port/remote.php/dav;

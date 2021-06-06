@@ -11,21 +11,21 @@ services:
         restart: unless-stopped
         networks:
             - backend
-#        image: 'nextcloud:latest'
         build: 
           context: ./docker-templates/nextcloud/dockerimage/
           dockerfile: Dockerfile
+        environment:
+            - MYSQL_HOST=mariadb
         links:
             - mariadb
         depends_on:
             - mariadb
-            - nginx
-        healthcheck:
-            test: ["CMD", "curl", "-f", "https://cloud.${ROOT_DOMAIN}"]
-            interval: 15m
-            timeout: 30s
-            retries: 3
-            start_period: 20s
+        # healthcheck:
+        #     test: ["CMD", "curl", "-f", "https://cloud.${ROOT_DOMAIN}"]
+        #     interval: 15m
+        #     timeout: 30s
+        #     retries: 3
+        #     start_period: 25s
     mariadb:
         container_name: mariadb
         command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
