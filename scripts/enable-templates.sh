@@ -151,9 +151,6 @@ if [[ $NEXTCLOUD_ENABLED == "true" ]]; then
    nginx_cert_check "cloud"
    checkdomain "cloud"
 
-   # Broken plugin
-   [ -d $PERSISTENT_ROOT/docker-data/nextcloud/html/apps/files_trashbin ] && echo "Deleting broken plugin 'Deleted Files' because it conflicts with External Storage" && rm -rf $PERSISTENT_ROOT/docker-data/nextcloud/html/apps/files_trashbin
-
    # Check if data folder exists
    [ ! -d $PERSISTENT_ROOT/docker-data/nextcloud ] && echo "Creating docker-data/nextcloud directory" && mkdir $PERSISTENT_ROOT/docker-data/nextcloud
 

@@ -47,5 +47,8 @@ docker image prune -f
 docker volume prune -f
 
 # bug in nginx cache http/s redirect infinit loop
-sleep 20s #time it takes for nextcloud to startup
+sleep 15s #time it takes for nextcloud to startup
 docker restart nginx
+
+# After start
+source scripts/after-start.sh
