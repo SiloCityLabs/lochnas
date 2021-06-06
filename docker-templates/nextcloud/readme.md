@@ -31,7 +31,11 @@ First enter a personal username and password to login to nextcloud. Then before 
  
 Note: If you get the error `504 Gateway timeout`, edit the file and remove `:3306` from `dbhost` and add it to `dbport` as `3306`. This is an unfortunate bug in the nextcloud installer but shouldnt be an issue past this.
 
-After you get to the welcome screen go to settings -> basic settings. Change the cron settings to webcron.
+After you get to the welcome screen go to settings -> basic settings. Change the cron settings to webcron. 
+
+Go to apps and disable the app called `Deleted Files`. This application causes issues with `External Storage` plugin.
+
+Go to External storage in settings and create a storage under /raid for your users.
 
 You will need to make some tweaks to improve this nextcloud docker setup. Type the following commands:
 
@@ -48,11 +52,4 @@ Make one last addition to the config file to fix a login redirect issue.
   'overwrite.cli.url' => 'https://cloud.yourdomain.com',
   'overwritehost' => 'cloud.yourdomain.com',
   'overwriteprotocol' => 'https',
-```
-
-#### Setup your cron jobs
-
-`crontab -e`
-```
-*/5 * * * * wget --output-document=/dev/null --quiet 'https://cloud.domain.com/cron.php'
 ```
