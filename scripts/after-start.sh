@@ -23,7 +23,10 @@ if [[ $NEXTCLOUD_ENABLED == "true" ]]; then
    if [[ ! -d $PERSISTENT_ROOT/docker-data/nextcloud/html/custom_apps/previewgenerator ]]; then
       echo "Installing preview cron plugin"
       # rm -rf $PERSISTENT_ROOT/docker-data/nextcloud/html/apps/files_trashbin
-      docker exec -u 33 -it nextcloud php occ app:install previewgenerator
+      docker exec -u $PUID -it nextcloud php occ app:install previewgenerator
+
+      echo "Run the following command once to pre-generate all thumbnails"
+      echo "docker exec -u $PUID -it nextcloud php occ preview:generate-all -vvv"
    fi
 
 fi
