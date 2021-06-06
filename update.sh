@@ -6,13 +6,15 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+export UPDATE_RUN="true"
+
 cd "$(dirname "$0")"
 
+git pull
+
 # config updates
-source docker-templates/config-updates.sh
+source scripts/config-updates.sh
 
 apt-get update && apt -y dist-upgrade && apt autoremove
-
-git pull
 
 ./start.sh

@@ -12,7 +12,7 @@ cd "$(dirname "$0")"
 source .env
 
 # Docker Path builder
-source docker-templates/enable-templates.sh
+source scripts/enable-templates.sh
 
 # Stop if already running
 docker-compose $DOCKER_FILES stop

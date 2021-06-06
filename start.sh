@@ -12,7 +12,7 @@ cd "$(dirname "$0")"
 source .env
 
 # Load ip's
-source docker-templates/getip.sh
+source scripts/getip.sh
 
 # Install docker
 if ! [ -x "$(command -v docker)" ]; then
@@ -28,10 +28,13 @@ if ! [ -x "$(command -v docker-compose)" ]; then
 fi
 
 # Docker Path builder
-source docker-templates/enable-templates.sh
+source scripts/enable-templates.sh
 
 # Stop if running
 docker-compose $DOCKER_FILES stop
+
+# Check ports
+source scripts/port-check.sh
 
 # Check for updates
 docker-compose pull

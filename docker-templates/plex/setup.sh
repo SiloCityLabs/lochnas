@@ -12,7 +12,7 @@ cd "$(dirname "$0")/../../"
 source .env
 
 # Load ip's
-source docker-templates/getip.sh
+source scripts/getip.sh
 
 if [ -z "$1" ]
   then
