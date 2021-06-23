@@ -26,7 +26,7 @@ docker run --rm -i \
 -v "${PERSISTENT_ROOT}/docker-data/certbot:/var/www/certbot" \
 -p 80:80 \
 -p 443:443 \
-certbot/certbot 'certonly' '--standalone' \
+certbot/certbot:arm64v8-latest 'certonly' '--standalone' \
 "-d $1" '--agree-tos' "-m $LE_EMAIL"
 
 if [ $DOCKER_STOPPED = true ]; then
