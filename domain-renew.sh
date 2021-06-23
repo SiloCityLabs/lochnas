@@ -20,7 +20,7 @@ docker run --rm -i \
 -v "${PERSISTENT_ROOT}/docker-data/certbot:/var/www/certbot" \
 -p 80:80 \
 -p 443:443 \
-certbot/certbot 'renew' '--standalone'
+certbot/certbot:arm64v8-latest 'renew' '--standalone'
 
 if [ $DOCKER_STOPPED = true ]; then
     docker container start nginx
