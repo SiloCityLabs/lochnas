@@ -126,6 +126,16 @@ if [[ $SONARR_ENABLED == "true" ]]; then
 fi
 
 # ==========================
+# Radarr
+# ==========================
+if [[ $RADARR_ENABLED == "true" ]]; then
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/radarr/radarr.docker-compose.yml"
+
+   # Check if data folder exists
+   [ ! -d $PERSISTENT_ROOT/docker-data/sonarr ] && echo "Creating docker-data/radarr directory" && mkdir $PERSISTENT_ROOT/docker-data/radarr
+fi
+
+# ==========================
 # Plex
 # ==========================
 if [[ $PLEX_ENABLED == "true" ]]; then

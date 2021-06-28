@@ -2,9 +2,9 @@
 version: '3.7'
 
 services:
-    sonarr:
-      image: linuxserver/sonarr
-      container_name: sonarr
+    radarr:
+      image: linuxserver/radarr
+      container_name: radarr
       networks:
             - backend
       environment:
@@ -13,9 +13,9 @@ services:
         - TZ=America/New_York
         - UMASK_SET=002
       volumes:
-        - "${PERSISTENT_ROOT}/docker-data/sonarr:/config"
-        - "${PLEX_DATA}/TV:/tv"
+        - "${PERSISTENT_ROOT}/docker-data/radarr:/config"
+        - "${PLEX_DATA}/Movies:/movies"
         - "${PLEX_DATA}/transmission:/data"
       ports:
-        - 8989:8989
+        - 7878:7878
       restart: unless-stopped
