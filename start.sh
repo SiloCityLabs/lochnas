@@ -16,10 +16,8 @@ source scripts/getip.sh
 
 # Install docker
 if ! [ -x "$(command -v docker)" ]; then
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
-    apt-get install apt-transport-https ca-certificates curl software-properties-common
-    apt install -y docker-ce
+    curl -fsSL https://get.docker.com -o get-docker.sh
+    sh get-docker.sh
 fi
 
 # Install docker-compose

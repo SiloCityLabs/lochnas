@@ -123,6 +123,8 @@ if [[ $SONARR_ENABLED == "true" ]]; then
 
    # Check if data folder exists
    [ ! -d $PERSISTENT_ROOT/docker-data/sonarr ] && echo "Creating docker-data/sonarr directory" && mkdir $PERSISTENT_ROOT/docker-data/sonarr
+
+   echo "Access Sonarr at http://$hostname:8989"
 fi
 
 # ==========================
@@ -133,6 +135,8 @@ if [[ $RADARR_ENABLED == "true" ]]; then
 
    # Check if data folder exists
    [ ! -d $PERSISTENT_ROOT/docker-data/sonarr ] && echo "Creating docker-data/radarr directory" && mkdir $PERSISTENT_ROOT/docker-data/radarr
+
+   echo "Access Radarr at http://$hostname:7878"
 fi
 
 # ==========================

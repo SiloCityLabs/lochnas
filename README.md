@@ -10,9 +10,25 @@ If you have v1 see this [migration guide](docs/migrating.v2.md)
  - Port forwarding 80 + 443
  - Static IP on Server, alternative is DHCP reservation on router.
 
+### Install
+
+Just clone the repo and your all set. Afterwards run `./start.sh`
+```
+git clone https://github.com/SiloCityLabs/docker-nas.git
+./start.sh
+```
+
+### Updates
+
+So long as you dont tamper with commited files and keep your changes inside docker-data and home you should be all set. If you need additional paths to ignore I recommend you add a local git ignore.
+
+```
+./update.sh
+```
+
 ### Prerequisites
 
-Do everything as root user for easier setup `sudo su`. Or put sudo in front of every command.
+Do everything as root user for easier setup `sudo su`. Or put sudo in front of every command. 
 
 #### Create users and groups
 
@@ -64,6 +80,8 @@ Optional containers:
  - [Minecraft](docker-templates/minecraft/readme.md)
  - [Ark](docker-templates/ark/readme.md)
  - [PHPMyAdmin](docker-templates/phpmyadmin/readme.md)
+ - [Sonarr](docker-templates/sonarr/readme.md)
+ - [Radarr](docker-templates/radarr/readme.md)
 
 #### Start the services
 
