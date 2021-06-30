@@ -29,4 +29,21 @@ if [[ $NEXTCLOUD_ENABLED == "true" ]]; then
       echo "docker exec -u $PUID -it nextcloud php occ preview:generate-all -vvv"
    fi
 
+   # bug in nginx cache http/s redirect infinit loop
+   sleep 15s #time it takes for nextcloud to startup
+   docker restart nginx
+fi
+
+# ==========================
+# Sonarr
+# ==========================
+if [[ $SONARR_ENABLED == "true" ]]; then
+   echo "Access Sonarr at http://$hostname:8989"
+fi
+
+# ==========================
+# Radarr
+# ==========================
+if [[ $RADARR_ENABLED == "true" ]]; then
+   echo "Access Radarr at http://$hostname:7878"
 fi

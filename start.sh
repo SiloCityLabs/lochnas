@@ -44,9 +44,5 @@ docker-compose $DOCKER_FILES up -d --build --remove-orphans --force-recreate
 docker image prune -f
 docker volume prune -f
 
-# bug in nginx cache http/s redirect infinit loop
-sleep 15s #time it takes for nextcloud to startup
-docker restart nginx
-
 # After start
 source scripts/after-start.sh
