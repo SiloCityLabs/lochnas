@@ -61,10 +61,7 @@ if [[ $NGINX_ENABLED == "true" ]]; then
    data_dir_exists "nginx"
 
    #Generate htpasswd
-   echo $NGINX_USERNAME
-   echo $NGINX_PASSWORD
    NGINX_PASSWORD="$(openssl passwd -1 $NGINX_PASSWORD)"
-   echo $NGINX_PASSWORD
    echo "$NGINX_USERNAME:$NGINX_PASSWORD" > $PERSISTENT_ROOT/docker-data/nginx/.htpasswd
 fi
 
