@@ -4,9 +4,9 @@ This is a template to add this container to your nas setup full functional with 
 
 ## How to enable
 
-Edit your `.env` file and enable this container with `SONARR_ENABLED=true` and other variables. You can access it via http://yourserverip:8989/
+Edit your `.env` file and enable this container with `SONARR_ENABLED=true` and other variables. You can access it via https://sonarr.yourdomain.com
 
-You can add a subdomain for easier web access but you will have to create a nginx config in docker-data/nginx/sites/sonarr.conf.template. Additionally you should enable auth in sonarr settings from the web ui.
+To use web access you must have nginx auth password set
 
 ### Additional Configuration
 

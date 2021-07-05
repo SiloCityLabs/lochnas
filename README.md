@@ -51,26 +51,10 @@ chmod -R 770 path/to/local
 
 Modify the `.env` with your settings.
 
-#### Create SSL Certificates
-
-You need to use the add-domain.sh script to create SSL certificates for your nginx setup. This is highly recommended and uses Let's Encrypt for a valid certificate for free.
-
-```
-./add-domain.sh cloud.domain.com
-```
-
-Enable autorenew by adding a cron with `crontab -e`
-
-```
-0 0 * * 0 /path/to/renew-domain.sh
-```
-
 ### Container Docs
 
-Required containers:
- - Nginx + SSL + Auto Renew with certbot (Web Proxy + SSL)
-
-Optional containers:
+Containers:
+ - [Nginx + SSL + Auto Renew with certbot](docker-templates/nginx/readme.md) (web proxy + ssl)
  - [Transmission + VPN](docker-templates/transmission/readme.md) (Torrents, Requires VPN)
  - [Nextcloud + MariaDB](docker-templates/nextcloud/readme.md) (Private cloud)
  - [Home Assistant](docker-templates/homeassistant/readme.md) (Home Automation)
@@ -82,20 +66,7 @@ Optional containers:
  - [PHPMyAdmin](docker-templates/phpmyadmin/readme.md)
  - [Sonarr](docker-templates/sonarr/readme.md)
  - [Radarr](docker-templates/radarr/readme.md)
-
-#### Start the services
-
-```
-./start.sh
-```
-#### Setup your cron jobs
-
-Create a Renew SSL Certificates cron
-
-`crontab -e`
-```
-0 0 * * 0 /path/to/renew-domain.sh
-```
+ - [Prowlarr](docker-templates/prowlarr/readme.md)
 
 ## License
 

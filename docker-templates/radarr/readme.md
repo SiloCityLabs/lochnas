@@ -4,9 +4,9 @@ This is a template to add this container to your nas setup full functional with 
 
 ## How to enable
 
-Edit your `.env` file and enable this container with `RADARR_ENABLED=true` and other variables. You can access it via http://yourserverip:7878/
+Edit your `.env` file and enable this container with `RADARR_ENABLED=true` and other variables. You can access it via https://radarr.yourdomain.com
 
-You can add a subdomain for easier web access but you will have to create a nginx config in docker-data/nginx/sites/radarr.conf.template. Additionally you should enable auth in radarr settings from the web ui.
+To use web access you must have nginx auth password set
 
 ### Additional Configuration
 
