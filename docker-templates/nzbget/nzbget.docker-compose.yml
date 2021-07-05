@@ -1,0 +1,34 @@
+#https://composerize.com/
+version: '3.7'
+
+services:
+    phpmyadmin:
+        container_name: phpmyadmin
+        networks:
+            - backend
+        environment:
+            - PMA_HOST=mariadb
+        image: 'phpmyadmin/phpmyadmin:latest'
+        ports:
+            - '8080:80/tcp'
+#        healthcheck:
+#            test: ["CMD", "curl", "-f", "http://127.0.0.1:8080"]
+#            interval: 1m
+#            timeout: 10s
+#            retries: 3
+#            start_period: 15s
+
+
+nzbget:
+    image: linuxserver/nzbget
+    container_name: nzbget
+    volumes:
+        - ${CONFIG}/nzbget:/config
+        - ${DATA}/Downloads/complete:/complete
+        - ${DATA}/Downloads:/downloads
+        - ${DATA}/data:/data
+        #    - 6789:6789
+    environment:
+        - PUID=${PUID}
+        - PGID=${PGID}
+    restart: unless-stopped

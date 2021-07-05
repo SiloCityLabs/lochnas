@@ -1,0 +1,26 @@
+#https://composerize.com/
+version: '3.7'
+
+services:
+    nginx:
+        container_name: nginx
+        volumes:
+            - "${PERSISTENT_ROOT}/docker-templates/nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
+            - "${PERSISTENT_ROOT}/docker-templates/nginx/sites:${PERSISTENT_ROOT}/docker-templates/nginx/sites:ro"
+            - "${PERSISTENT_ROOT}/docker-data/nginx/.htpasswd:/etc/nginx/.htpasswd:ro"
+            - "${PERSISTENT_ROOT}/docker-data/nginx/sites:/etc/nginx/templates:ro"
+            - "${PERSISTENT_ROOT}/docker-data/nginx/logs:/etc/nginx/logs"
+            - "${PERSISTENT_ROOT}/docker-data/letsencrypt:/etc/letsencrypt"
+            - "${PERSISTENT_ROOT}/docker-data/certbot:/var/www/certbot"
+        networks:
+            - backend
+        environment:
+            - ROOT_DOMAIN
+            - OCTOPRINT_PATH
+            - HOMEASSISTANT_URI
+        ports:
+            - '443:443/tcp'
+            - '80:80/tcp'
+
+        restart: always
+        image: 'nginx:latest'

@@ -16,6 +16,6 @@ services:
         - "${PERSISTENT_ROOT}/docker-data/radarr:/config"
         - "${PLEX_DATA}/Movies:/movies"
         - "${PLEX_DATA}/transmission:/data"
-      ports:
-        - 7878:7878
+      # ports:
+      #   - 7878:7878
       restart: unless-stopped

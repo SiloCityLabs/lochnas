@@ -8,9 +8,23 @@ services:
         networks:
             - backend
         image: 'onlyoffice/documentserver'
-        healthcheck:
-            test: ["CMD", "wget", "https://office.${ROOT_DOMAIN}/welcome/", "-O", "/dev/null"]
-            interval: 1m
-            timeout: 10s
-            retries: 3
-            start_period: 10s
+        volumes:
+            - "${PERSISTENT_ROOT}/docker-data/onlyoffice/CommunityServer/data:/var/www/onlyoffice/Data"
+            - "${PERSISTENT_ROOT}/docker-data/onlyoffice/CommunityServer/logs:/var/log/onlyoffice"
+        ports:
+            # - '80:80/tcp'
+            # - '443:443/tcp'
+            - '5222:5222/tcp'
+            # sudo docker run --net onlyoffice -i -t -d --restart=always --name onlyoffice-community-server \
+            # -p 80:80 -p 5222:5222 -p 443:443 \
+            # -v /app/onlyoffice/CommunityServer/mysql:/var/lib/mysql \
+            # -v /app/onlyoffice/DocumentServer/data:/var/www/onlyoffice/DocumentServerData \
+            # -e DOCUMENT_SERVER_PORT_80_TCP_ADDR=onlyoffice-document-server \
+            # -e MAIL_SERVER_DB_HOST=onlyoffice-mail-server \
+            # onlyoffice/communityserver
+        # healthcheck:
+        #     test: ["CMD", "wget", "https://office.${ROOT_DOMAIN}/welcome/", "-O", "/dev/null"]
+        #     interval: 1m
+        #     timeout: 10s
+        #     retries: 3
+        #     start_period: 10s

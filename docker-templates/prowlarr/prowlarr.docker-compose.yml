@@ -2,9 +2,9 @@
 version: '3.7'
 
 services:
-    sonarr:
-      image: linuxserver/sonarr
-      container_name: sonarr
+    prowlarr:
+      image: ghcr.io/linuxserver/prowlarr:develop
+      container_name: prowlarr
       networks:
             - backend
       environment:
@@ -13,9 +13,7 @@ services:
         - TZ=America/New_York
         - UMASK_SET=002
       volumes:
-        - "${PERSISTENT_ROOT}/docker-data/sonarr:/config"
-        - "${PLEX_DATA}/TV:/tv"
-        - "${PLEX_DATA}/transmission:/data"
+        - "${PERSISTENT_ROOT}/docker-data/prowlarr:/config"
       # ports:
-      #   - 8989:8989
+      #   - 9696:9696
       restart: unless-stopped

@@ -32,10 +32,41 @@ nginx_cert_check () {
    # Check for SSL cert
    if [ ! -d docker-data/letsencrypt/live/$1.$ROOT_DOMAIN ]; then
       echo "Certificate does exist for $1.$ROOT_DOMAIN"
-      echo "Run ./add-domain.sh $1.$ROOT_DOMAIN"
+      echo "Run ./domain-add.sh $1.$ROOT_DOMAIN"
       exit 1
    fi
 }
+nginx_enabled () {
+   if [[ ! $NGINX_ENABLED == "true" ]]; then
+      echo "Must have NGINX enabled for web based containers"
+      exit 1
+   fi
+}
+data_dir_exists () {
+   # Check if data folder exists
+   if [ ! -d $PERSISTENT_ROOT/docker-data/$1 ]; then
+      echo "Creating docker-data/$1 directory"
+      mkdir $PERSISTENT_ROOT/docker-data/$1
+      return 0
+   fi
+   return 1
+}
+
+# ==========================
+# NGINX
+# ==========================
+if [[ $NGINX_ENABLED == "true" ]]; then
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/nginx/nginx.docker-compose.yml"
+
+   data_dir_exists "nginx"
+
+   #Generate htpasswd
+   echo $NGINX_USERNAME
+   echo $NGINX_PASSWORD
+   NGINX_PASSWORD="$(openssl passwd -1 $NGINX_PASSWORD)"
+   echo $NGINX_PASSWORD
+   echo "$NGINX_USERNAME:$NGINX_PASSWORD" > $PERSISTENT_ROOT/docker-data/nginx/.htpasswd
+fi
 
 # ==========================
 # Samba
@@ -43,12 +74,7 @@ nginx_cert_check () {
 if [[ $SAMBA_ENABLED == "true" ]]; then
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/samba/samba.docker-compose.yml"
 
-   # Check if data folder exists
-   [ ! -d $PERSISTENT_ROOT/docker-data/samba ] && echo "Creating docker-data/samba directory" && mkdir $PERSISTENT_ROOT/docker-data/samba
-
-   # Check if config file exists or copy it
-   [ ! -f $PERSISTENT_ROOT/docker-data/samba/smb.conf ] && echo "Creating docker-data/samba/smb.conf file" && cp $PERSISTENT_ROOT/docker-templates/samba/smb.conf $PERSISTENT_ROOT/docker-data/samba/smb.conf
-
+   data_dir_exists "samba" && cp $PERSISTENT_ROOT/docker-templates/samba/smb.conf $PERSISTENT_ROOT/docker-data/samba/smb.conf
 fi
 
 # ==========================
@@ -56,6 +82,7 @@ fi
 # ==========================
 if [[ $PHPMYADMIN_ENABLED == "true" ]]; then
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/phpmyadmin/phpmyadmin.docker-compose.yml"
+   nginx_enabled
    nginx_symlink_enable "phpmyadmin"
    nginx_cert_check "phpmyadmin"
    checkdomain "phpmyadmin"
@@ -68,13 +95,13 @@ fi
 # ==========================
 if [[ $TRANSMISSION_ENABLED == "true" ]]; then
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/transmission/transmission.docker-compose.yml"
-
+   nginx_enabled
    nginx_symlink_enable "transmission"
    nginx_cert_check "transmission"
    checkdomain "transmission"
 
    # Check if data folder exists
-   [ ! -d $PERSISTENT_ROOT/docker-data/transmission ] && echo "Creating docker-data/transmission directory" && mkdir $PERSISTENT_ROOT/docker-data/transmission $PERSISTENT_ROOT/docker-data/transmission/scripts $PERSISTENT_ROOT/docker-data/transmission/config $PERSISTENT_ROOT/docker-data/transmission/data
+   data_dir_exists "transmission" && mkdir $PERSISTENT_ROOT/docker-data/transmission/scripts $PERSISTENT_ROOT/docker-data/transmission/config $PERSISTENT_ROOT/docker-data/transmission/data
 else
    nginx_symlink_disable "transmission"
 fi
@@ -84,13 +111,11 @@ fi
 # ==========================
 if [[ $PORTAINER_ENABLED == "true" ]]; then
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/portainer/portainer.docker-compose.yml"
-
+   nginx_enabled
    nginx_symlink_enable "portainer"
    nginx_cert_check "portainer"
    checkdomain "portainer"
-
-   # Check if data folder exists
-   [ ! -d $PERSISTENT_ROOT/docker-data/portainer ] && echo "Creating docker-data/portainer directory" && mkdir $PERSISTENT_ROOT/docker-data/portainer
+   data_dir_exists "portainer"
 else
    nginx_symlink_disable "portainer"
 fi
@@ -100,9 +125,7 @@ fi
 # ==========================
 if [[ $MINECRAFT_ENABLED == "true" ]]; then
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/minecraft/minecraft.docker-compose.yml"
-
-   # Check if data folder exists
-   [ ! -d $PERSISTENT_ROOT/docker-data/minecraft ] && echo "Creating docker-data/minecraft directory" && mkdir $PERSISTENT_ROOT/docker-data/minecraft
+   data_dir_exists "minecraft"
 fi
 
 # ==========================
@@ -110,9 +133,7 @@ fi
 # ==========================
 if [[ $ARK_ENABLED == "true" ]]; then
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/ark/ark.docker-compose.yml"
-
-   # Check if data folder exists
-   [ ! -d $PERSISTENT_ROOT/docker-data/ark ] && echo "Creating docker-data/ark directory" && mkdir $PERSISTENT_ROOT/docker-data/ark
+   data_dir_exists "ark"
 fi
 
 # ==========================
@@ -120,9 +141,11 @@ fi
 # ==========================
 if [[ $SONARR_ENABLED == "true" ]]; then
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/sonarr/sonarr.docker-compose.yml"
-
-   # Check if data folder exists
-   [ ! -d $PERSISTENT_ROOT/docker-data/sonarr ] && echo "Creating docker-data/sonarr directory" && mkdir $PERSISTENT_ROOT/docker-data/sonarr
+   data_dir_exists "sonarr"
+   nginx_enabled
+   nginx_symlink_enable "sonarr"
+   nginx_cert_check "sonarr"
+   checkdomain "sonarr"
 fi
 
 # ==========================
@@ -130,9 +153,23 @@ fi
 # ==========================
 if [[ $RADARR_ENABLED == "true" ]]; then
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/radarr/radarr.docker-compose.yml"
+   data_dir_exists "radarr"
+   nginx_enabled
+   nginx_symlink_enable "radarr"
+   nginx_cert_check "radarr"
+   checkdomain "radarr"
+fi
 
-   # Check if data folder exists
-   [ ! -d $PERSISTENT_ROOT/docker-data/sonarr ] && echo "Creating docker-data/radarr directory" && mkdir $PERSISTENT_ROOT/docker-data/radarr
+# ==========================
+# Prowlarr
+# ==========================
+if [[ $PROWLARR_ENABLED == "true" ]]; then
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/prowlarr/prowlarr.docker-compose.yml"
+   data_dir_exists "prowlarr"
+   nginx_enabled
+   nginx_symlink_enable "prowlarr"
+   nginx_cert_check "prowlarr"
+   checkdomain "prowlarr"
 fi
 
 # ==========================
@@ -156,16 +193,12 @@ fi
 # ==========================
 if [[ $NEXTCLOUD_ENABLED == "true" ]]; then
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/nextcloud/nextcloud.docker-compose.yml"
-
+   nginx_enabled
    nginx_symlink_enable "cloud"
    nginx_cert_check "cloud"
    checkdomain "cloud"
-
-   # Check if data folder exists
-   [ ! -d $PERSISTENT_ROOT/docker-data/nextcloud ] && echo "Creating docker-data/nextcloud directory" && mkdir $PERSISTENT_ROOT/docker-data/nextcloud
-
-   # Check if data folder exists
-   [ ! -d $PERSISTENT_ROOT/docker-data/mariadb ] && echo "Creating docker-data/mariadb directory" && mkdir $PERSISTENT_ROOT/docker-data/mariadb
+   data_dir_exists "nextcloud"
+   data_dir_exists "mariadb"
 else
    nginx_symlink_disable "cloud"
 fi
@@ -183,6 +216,7 @@ fi
 # Collabora
 # ==========================
 if [[ $COLLABORA_ENABLED == "true" ]]; then
+   nginx_enabled
    nginx_symlink_enable "office"
    nginx_cert_check "office"
    checkdomain "office"
@@ -195,6 +229,7 @@ fi
 # Onlyoffice
 # ==========================
 if [[ $ONLYOFFICE_ENABLED == "true" ]]; then
+   nginx_enabled
    nginx_symlink_enable "office"
    nginx_cert_check "office"
    checkdomain "office"
@@ -207,6 +242,7 @@ fi
 # Octoprint
 # ==========================
 if [[ $OCTOPRINT_ENABLED == "true" ]]; then
+   nginx_enabled
    nginx_symlink_enable "octoprint"
    nginx_cert_check "octoprint"
    checkdomain "octoprint"
@@ -219,6 +255,7 @@ fi
 # Router
 # ==========================
 if [[ $ROUTER_ENABLED == "true" ]]; then
+   nginx_enabled
    nginx_symlink_enable "router"
    nginx_cert_check "router"
    checkdomain "router"
@@ -240,6 +277,7 @@ fi
 # ==========================
 HOMEASSISTANT_URI=http://hass
 if [[ $HOMEASSISTANT_ENABLED == "true" ]]; then
+   nginx_enabled
    nginx_symlink_enable "hass"
    nginx_cert_check "hass"
    checkdomain "hass"
@@ -253,6 +291,7 @@ fi
 # ==========================
 if [[ $HOMEASSISTANT_LAN_ENABLED == "true" ]]; then
    export HOMEASSISTANT_URI=$HOMEASSISTANT_LAN_URI
+   nginx_enabled
    nginx_symlink_enable "hass"
    nginx_cert_check "hass"
    checkdomain "hass"
