@@ -8,12 +8,6 @@ Edit your `.env` file and enable this container with `PROWLARR_ENABLED=true` and
 
 To use web access you must have nginx auth password set
 
-### Additional Configuration
-
-#### Enable root folder
-
-Settings -> Media Management -> Root Folders -> Add Root Folder -> /movies
-
 #### Enable Download clients
 
 Settings -> Download Clients -> Add + -> Transmission
@@ -31,6 +25,6 @@ Click test, then Save
 
 #### Enable Indexers
 
-Settings -> Indexers -> Add +
+Indexers -> Add New Indexer
 
 Select the indexer your want to enable and configure
