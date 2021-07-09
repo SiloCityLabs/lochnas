@@ -1,18 +1,12 @@
-# Radarr container
+# Prowlarr container
 
 This is a template to add this container to your nas setup full functional with matching permissions and settings that of docker-nas repo. This assumes you are using plex and transmission paths.
 
 ## How to enable
 
-Edit your `.env` file and enable this container with `RADARR_ENABLED=true` and other variables. You can access it via https://prowlarr.yourdomain.com
+Edit your `.env` file and enable this container with `PROWLARR_ENABLED=true` and other variables. You can access it via https://prowlarr.yourdomain.com
 
 To use web access you must have nginx auth password set
-
-### Additional Configuration
-
-#### Enable root folder
-
-Settings -> Media Management -> Root Folders -> Add Root Folder -> /movies
 
 #### Enable Download clients
 
@@ -25,12 +19,12 @@ Settings -> Download Clients -> Add + -> Transmission
  - Use SSL: `Checked`
  - Username: `<transmission username>`
  - Password: `<transmission password>`
- - Category: `radarr`
+ - Category: `prowlarr`
 
 Click test, then Save
 
 #### Enable Indexers
 
-Settings -> Indexers -> Add +
+Indexers -> Add New Indexer
 
 Select the indexer your want to enable and configure
