@@ -1,0 +1,6 @@
+assets/*
+dockerfile
+*.md
+.git
+screenshot.png
+node_modules

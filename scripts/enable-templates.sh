@@ -29,11 +29,21 @@ nginx_symlink_disable () {
    [ -L $NGINX_DATA/$TPL_FILE ] && rm $NGINX_DATA/$TPL_FILE
 }
 nginx_cert_check () {
-   # Check for SSL cert
-   if [ ! -d docker-data/letsencrypt/live/$1.$ROOT_DOMAIN ]; then
-      echo "Certificate does exist for $1.$ROOT_DOMAIN"
-      echo "Run ./domain-add.sh $1.$ROOT_DOMAIN"
-      exit 1
+   # Allows us to use root domain if blank
+   if [[ $1 = "" ]]; then 
+      # Check for SSL cert
+      if [ ! -d docker-data/letsencrypt/live/$ROOT_DOMAIN ]; then
+         echo "Certificate does exist for $ROOT_DOMAIN"
+         echo "Run ./domain-add.sh $ROOT_DOMAIN"
+         exit 1
+      fi
+   else
+      # Check for SSL cert
+      if [ ! -d docker-data/letsencrypt/live/$1.$ROOT_DOMAIN ]; then
+         echo "Certificate does exist for $1.$ROOT_DOMAIN"
+         echo "Run ./domain-add.sh $1.$ROOT_DOMAIN"
+         exit 1
+      fi
    fi
 }
 nginx_enabled () {
@@ -63,6 +73,19 @@ if [[ $NGINX_ENABLED == "true" ]]; then
    #Generate htpasswd
    NGINX_PASSWORD="$(openssl passwd -1 $NGINX_PASSWORD)"
    echo "$NGINX_USERNAME:$NGINX_PASSWORD" > $PERSISTENT_ROOT/docker-data/nginx/.htpasswd
+fi
+
+# ==========================
+# Dashboard
+# ==========================
+if [[ $DASHBOARD_ENABLED == "true" ]]; then
+   # DOCKER_FILES=$DOCKER_FILES" -f docker-templates/dashboard/dashboard.docker-compose.yml"
+   nginx_enabled
+   nginx_symlink_enable "dashboard"
+   nginx_cert_check ""
+   checkdomain ""
+else
+   nginx_symlink_disable "dashboard"
 fi
 
 # ==========================

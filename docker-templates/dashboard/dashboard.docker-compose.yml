@@ -1,0 +1,21 @@
+#https://composerize.com/
+version: '3.7'
+
+services:
+    samba:
+        container_name: dashboard
+        build: 
+            context: ./docker-templates/dashboard/dockerimage/
+            dockerfile: Dockerfile
+        network_mode: host
+        restart: unless-stopped
+        volumes:
+            - "${PERSISTENT_ROOT}/docker-templates:/www/assets"
+            - /your/local/assets/:/www/assets
+        ports:
+            - "9191:9191/tcp"
+        environment:
+           - DASHBOARD_USERNAME
+           - DASHBOARD_PASSWORD
+           - UID=PUID
+           - GID=PGID
