@@ -28,3 +28,14 @@ Click test, then Save
 Indexers -> Add New Indexer
 
 Select the indexer your want to enable and configure
+
+#### Enable Applications
+
+Settings -> Apps -> Add Application
+
+ - Prowlarr Server
+   - Replace localhost with prowlarr
+ - Sonarr Server
+   - Replace localhost with sonarr
+ - Radarr Server
+   - Replace localhost with radarr
