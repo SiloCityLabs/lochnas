@@ -28,7 +28,7 @@ services:
         #     start_period: 25s
     mariadb:
         container_name: mariadb
-        command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+        command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb_read_only_compressed=OFF
         volumes:
             - "${PERSISTENT_ROOT}/docker-data/mariadb:/var/lib/mysql"
         restart: unless-stopped
