@@ -34,6 +34,6 @@ if [[ $NEXTCLOUD_ENABLED == "true" ]]; then
    docker restart nginx
    
    # Force update nextcoud db then kick it out of maintenance mode.
-   docker exec -u $GLOBAL_UID -it nextcloud php occ maintenance:repair --include-expensive
-   docker exec -u $GLOBAL_UID -it nextcloud php occ maintenance:mode --off
+   docker exec -u $PUID -it nextcloud php occ maintenance:repair --include-expensive
+   docker exec -u $PUID -it nextcloud php occ maintenance:mode --off
 fi
