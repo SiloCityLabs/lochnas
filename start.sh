@@ -35,7 +35,7 @@ docker-compose $DOCKER_FILES stop
 source scripts/port-check.sh
 
 # Check for updates
-docker-compose pull
+docker-compose $DOCKER_FILES pull
 
 # Run
 docker-compose $DOCKER_FILES up -d --build --remove-orphans --force-recreate
