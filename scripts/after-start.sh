@@ -28,10 +28,12 @@ if [[ $NEXTCLOUD_ENABLED == "true" ]]; then
       echo "Run the following command once to pre-generate all thumbnails"
       echo "docker exec -u $PUID -it nextcloud php occ preview:generate-all -vvv"
    fi
-   
-   docker exec -u $GLOBAL_UID -it nextcloud php occ maintenance:repair --include-expensive
 
    # bug in nginx cache http/s redirect infinit loop
    sleep 15s #time it takes for nextcloud to startup
    docker restart nginx
+   
+   # Force update nextcoud db then kick it out of maintenance mode.
+   docker exec -u $GLOBAL_UID -it nextcloud php occ maintenance:repair --include-expensive
+   docker exec -u $GLOBAL_UID -it nextcloud php occ maintenance:mode --off
 fi
