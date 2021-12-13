@@ -1,9 +1,9 @@
 FROM alpine:latest
 
-RUN apk add --no-cache samba-server samba-common-tools openssl bash
+RUN apk add --no-cache samba-server samba-common-tools openssl bash curl
 
-ADD https://github.com/just-containers/s6-overlay/releases/download/v2.2.0.3/s6-overlay-amd64.tar.gz /tmp/
-RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C /
+COPY ./s6/gets6.sh /tmp/gets6.sh
+RUN /tmp/gets6.sh
 
 COPY ./s6/config.sh /etc/cont-init.d/00-config
 COPY ./s6/smbd.run /etc/services.d/smbd/run
