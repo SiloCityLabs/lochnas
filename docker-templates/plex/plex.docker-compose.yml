@@ -7,7 +7,7 @@ services:
         volumes:
             - "${PERSISTENT_ROOT}/docker-data/plex:/config"
             - '/tmp/transcode:/transcode'
-            - "${PLEX_DATA}:/data"
+            - "${PLEX_DATA}:/data:shared"
         restart: unless-stopped
         network_mode: host
         environment:
