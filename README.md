@@ -17,6 +17,7 @@ Just clone the repo and your all set. Afterwards run `./start.sh`
 sudo apt install git
 cd /
 git clone https://github.com/SiloCityLabs/docker-nas.git
+cd /docker-nas
 sudo ./start.sh
 ```
 
