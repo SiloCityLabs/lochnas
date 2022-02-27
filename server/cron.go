@@ -18,12 +18,12 @@ func startCron() {
 
 	c.AddFunc("0 0 6 * * 0", func() { // 6AM Sundays
 		log.Println("Triggering start.sh")
-		util.Command(false, models.Config.WorkingDirectory, nil, "./start.sh")
+		util.Command(false, models.Config.WorkingDirectory, nil, "./scripts/start.sh")
 	})
 
 	c.AddFunc("0 2 5 * * 0", func() { // 5:02AM Sundays
 		log.Println("Triggering start.sh")
-		util.Command(false, models.Config.WorkingDirectory, nil, "./domain-renew.sh")
+		util.Command(false, models.Config.WorkingDirectory, nil, "./scripts/domain-renew.sh")
 	})
 
 	// c.AddFunc("* * * * * *", func() { log.Println("Every second") })

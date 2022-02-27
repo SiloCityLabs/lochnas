@@ -11,7 +11,7 @@ import (
 
 var DDNS DDNSModel
 
-//AppModel ...
+//DDNSModel ...
 type DDNSModel map[string]string
 
 func (a DDNSModel) Init() {

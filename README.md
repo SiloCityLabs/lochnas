@@ -23,8 +23,31 @@ git clone https://github.com/SiloCityLabs/docker-nas.git
 So long as you dont tamper with commited files and keep your changes inside docker-data and home you should be all set. If you need additional paths to ignore I recommend you add a local git ignore.
 
 ```
-./update.sh
+./server.bin -app update
 ```
+
+### Commands
+
+```
+    server.bin -config /path/to/config/file
+    server.bin -daemon
+        start - Start in background
+        stop - Stop background
+        restart - restart in background
+        install - Install as service
+        uninstall - Uninstall service
+    server.bin -ddns
+        ip - Grab current wanip from router
+        refresh - update ddns if ip changed
+        force - Force update ddns ip
+    server.bin -domain
+        renew - Renew all domains
+        add - Renew all domains, expects domain as argument
+        delete - Renew all domains
+    server.bin -app
+        update - Update
+```
+
 
 ### Prerequisites
 

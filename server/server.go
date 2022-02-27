@@ -58,7 +58,7 @@ func (p *program) run() error {
 	// }
 
 	//Temporary way to start our docker setup until we move it fully into golang
-	util.Command(false, models.Config.WorkingDirectory, nil, "./start.sh")
+	util.Command(false, models.Config.WorkingDirectory, nil, "./scripts/start.sh")
 
 	go startCron()
 
@@ -71,7 +71,7 @@ func (p *program) run() error {
 func (p *program) Stop(s service.Service) error {
 	// Any work in Stop should be quick, usually a few seconds at most.
 	log.Println("I'm Stopping!")
-	util.Command(false, models.Config.WorkingDirectory, nil, "./stop.sh")
+	util.Command(false, models.Config.WorkingDirectory, nil, "./scripts/stop.sh")
 
 	close(p.exit)
 	return nil

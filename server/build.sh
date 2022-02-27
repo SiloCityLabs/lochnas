@@ -2,5 +2,4 @@
 
 go build -o ../server.bin server && \
 cd ../ && \
-chmod +x server.bin && \
-./server.bin
+chmod +x server.bin
