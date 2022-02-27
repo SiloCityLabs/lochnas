@@ -5,18 +5,20 @@ services:
     nginx:
         container_name: nginx
         volumes:
-            - "${PERSISTENT_ROOT}/docker-templates/dashboard/dist:/dashboard:ro"
-            - "${PERSISTENT_ROOT}/docker-templates/nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
-            - "${PERSISTENT_ROOT}/docker-templates/nginx/sites:${PERSISTENT_ROOT}/docker-templates/nginx/sites:ro"
-            - "${PERSISTENT_ROOT}/docker-data/nginx/.htpasswd:/etc/nginx/.htpasswd:ro"
-            - "${PERSISTENT_ROOT}/docker-data/nginx/sites:/etc/nginx/templates:ro"
-            - "${PERSISTENT_ROOT}/docker-data/nginx/logs:/etc/nginx/logs"
-            - "${PERSISTENT_ROOT}/docker-data/letsencrypt:/etc/letsencrypt"
-            - "${PERSISTENT_ROOT}/docker-data/certbot:/var/www/certbot"
+            - "${GLOBAL_ROOT}/docker-templates/dashboard/dist:/dashboard:ro"
+            - "${GLOBAL_ROOT}/docker-templates/nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
+            - "${GLOBAL_ROOT}/docker-templates/nginx/sites:${GLOBAL_ROOT}/docker-templates/nginx/sites:ro"
+            - "${GLOBAL_ROOT}/docker-data/nginx/.htpasswd:/etc/nginx/.htpasswd:ro"
+            - "${GLOBAL_ROOT}/docker-data/nginx/sites:/etc/nginx/templates:ro"
+            - "${GLOBAL_ROOT}/docker-data/nginx/logs:/etc/nginx/logs"
+            - "${GLOBAL_ROOT}/docker-data/letsencrypt:/etc/letsencrypt"
+            - "${GLOBAL_ROOT}/docker-data/certbot:/var/www/certbot"
         networks:
             - backend
+        # env_file:
+        #     - docker-templates/nginx/.env
         environment:
-            - ROOT_DOMAIN
+            - GLOBAL_DOMAIN
             - OCTOPRINT_PATH
             - HOMEASSISTANT_URI
         ports:

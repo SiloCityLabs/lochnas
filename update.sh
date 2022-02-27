@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# THIS SCRIPT WILL EVENTUALLY MOVE INTO GOLANG
+
 # Root check
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root" 

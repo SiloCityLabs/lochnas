@@ -6,8 +6,10 @@ services:
         container_name: portainer
         networks:
             - backend
+        # env_file:
+        #     - docker-templates/portainer/.env
         volumes:
-            - "${PERSISTENT_ROOT}/docker-data/portainer:/data"
+            - "${GLOBAL_ROOT}/docker-data/portainer:/data"
             - '/var/run/docker.sock:/var/run/docker.sock'
         restart: always
         image: 'portainer/portainer-ce:latest'

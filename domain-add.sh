@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# THIS SCRIPT WILL EVENTUALLY MOVE INTO GOLANG
+
 cd "$(dirname "$0")"
 
 # Load env variables
@@ -22,12 +24,12 @@ if [ -z "$1" ]
 fi
 
 docker run --rm -i \
--v "${PERSISTENT_ROOT}/docker-data/letsencrypt:/etc/letsencrypt" \
--v "${PERSISTENT_ROOT}/docker-data/certbot:/var/www/certbot" \
+-v "${GLOBAL_ROOT}/docker-data/letsencrypt:/etc/letsencrypt" \
+-v "${GLOBAL_ROOT}/docker-data/certbot:/var/www/certbot" \
 -p 80:80 \
 -p 443:443 \
 certbot/certbot 'certonly' '--standalone' \
-"-d $1" '--agree-tos' "-m $LE_EMAIL"
+"-d $1" '--agree-tos' "-m $GLOBAL_EMAIL"
 
 if [ $DOCKER_STOPPED = true ]; then
     docker container start nginx

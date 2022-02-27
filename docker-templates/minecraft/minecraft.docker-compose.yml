@@ -8,7 +8,9 @@ services:
         ports:
             - "25565:25565"
         volumes:
-            - "${PERSISTENT_ROOT}/docker-data/minecraft:/data"
+            - "${GLOBAL_ROOT}/docker-data/minecraft:/data"
+        # env_file:
+        #     - docker-templates/minecraft/.env
         environment:
             EULA: "TRUE"
             ENABLE_RCON: "false"

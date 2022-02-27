@@ -5,10 +5,12 @@ services:
     collabora:
         container_name: collabora
         image: collabora/code
+        # env_file:
+        #     - docker-templates/collabora/.env
         environment:
             - 'extra_params=--o:ssl.enable=false --o:ssl.termination=true'
             - DONT_GEN_SSL_CERT=true
-            - server_name=office.${ROOT_DOMAIN}
+            - server_name=office.${GLOBAL_DOMAIN}
             - dictionaries=en_US
         networks:
             - backend
@@ -17,7 +19,7 @@ services:
             - '/etc/timezone:/etc/timezone:ro'
         restart: unless-stopped
         healthcheck:
-            test: ["CMD", "wget", "https://office.${ROOT_DOMAIN}/", "-O", "/dev/null"]
+            test: ["CMD", "wget", "https://office.${GLOBAL_DOMAIN}/", "-O", "/dev/null"]
             interval: 1m
             timeout: 10s
             retries: 3

@@ -8,9 +8,11 @@ services:
         networks:
             - backend
         image: 'onlyoffice/documentserver'
+        # env_file:
+        #     - docker-templates/onlyoffice/.env
         volumes:
-            - "${PERSISTENT_ROOT}/docker-data/onlyoffice/CommunityServer/data:/var/www/onlyoffice/Data"
-            - "${PERSISTENT_ROOT}/docker-data/onlyoffice/CommunityServer/logs:/var/log/onlyoffice"
+            - "${GLOBAL_ROOT}/docker-data/onlyoffice/CommunityServer/data:/var/www/onlyoffice/Data"
+            - "${GLOBAL_ROOT}/docker-data/onlyoffice/CommunityServer/logs:/var/log/onlyoffice"
         ports:
             # - '80:80/tcp'
             # - '443:443/tcp'
@@ -23,7 +25,7 @@ services:
             # -e MAIL_SERVER_DB_HOST=onlyoffice-mail-server \
             # onlyoffice/communityserver
         # healthcheck:
-        #     test: ["CMD", "wget", "https://office.${ROOT_DOMAIN}/welcome/", "-O", "/dev/null"]
+        #     test: ["CMD", "wget", "https://office.${GLOBAL_DOMAIN}/welcome/", "-O", "/dev/null"]
         #     interval: 1m
         #     timeout: 10s
         #     retries: 3

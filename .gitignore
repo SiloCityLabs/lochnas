@@ -1,4 +1,5 @@
 home/
 docker-data/
 .env
+config.yml
 lost+found

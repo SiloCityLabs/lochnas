@@ -1,18 +1,18 @@
 #!/bin/bash
 
-if [[ $PERSISTENT_ROOT == "" ]]; then
+if [[ $GLOBAL_ROOT == "" ]]; then
    echo "Do not run this file directly, use start.sh or stop.sh"
 fi
 
 # Check if data folder exists
-[ ! -d $PERSISTENT_ROOT/docker-data ] && echo "Creating docker-data directory" && mkdir -p $PERSISTENT_ROOT/docker-data/certbot
+[ ! -d $GLOBAL_ROOT/docker-data ] && echo "Creating docker-data directory" && mkdir -p $GLOBAL_ROOT/docker-data/certbot
 
 # Build string of enabled containers
 DOCKER_FILES="-f docker-compose.yml"
 
 
-NGINX_TPL=$PERSISTENT_ROOT/docker-templates/nginx/sites
-NGINX_DATA=$PERSISTENT_ROOT/docker-data/nginx/sites
+NGINX_TPL=$GLOBAL_ROOT/docker-templates/nginx/sites
+NGINX_DATA=$GLOBAL_ROOT/docker-data/nginx/sites
 
 nginx_symlink_enable () {
    echo "Creating link for $1"
@@ -32,16 +32,16 @@ nginx_cert_check () {
    # Allows us to use root domain if blank
    if [[ $1 = "" ]]; then 
       # Check for SSL cert
-      if [ ! -d docker-data/letsencrypt/live/$ROOT_DOMAIN ]; then
-         echo "Certificate does exist for $ROOT_DOMAIN"
-         echo "Run ./domain-add.sh $ROOT_DOMAIN"
+      if [ ! -d docker-data/letsencrypt/live/$GLOBAL_DOMAIN ]; then
+         echo "Certificate does exist for $GLOBAL_DOMAIN"
+         echo "Run ./domain-add.sh $GLOBAL_DOMAIN"
          exit 1
       fi
    else
       # Check for SSL cert
-      if [ ! -d docker-data/letsencrypt/live/$1.$ROOT_DOMAIN ]; then
-         echo "Certificate does exist for $1.$ROOT_DOMAIN"
-         echo "Run ./domain-add.sh $1.$ROOT_DOMAIN"
+      if [ ! -d docker-data/letsencrypt/live/$1.$GLOBAL_DOMAIN ]; then
+         echo "Certificate does exist for $1.$GLOBAL_DOMAIN"
+         echo "Run ./domain-add.sh $1.$GLOBAL_DOMAIN"
          exit 1
       fi
    fi
@@ -54,13 +54,33 @@ nginx_enabled () {
 }
 data_dir_exists () {
    # Check if data folder exists
-   if [ ! -d $PERSISTENT_ROOT/docker-data/$1 ]; then
+   if [ ! -d $GLOBAL_ROOT/docker-data/$1 ]; then
       echo "Creating docker-data/$1 directory"
-      mkdir $PERSISTENT_ROOT/docker-data/$1
+      mkdir $GLOBAL_ROOT/docker-data/$1
       return 0
    fi
    return 1
 }
+# Check if domain points here
+checkdomain () {
+    wanip="$(dig +short myip.opendns.com @resolver1.opendns.com)"
+
+    # Allows us to use root domain if blank
+    if [[ $1 == "" ]]; then 
+        dnsip="$(dig +short $GLOBAL_DOMAIN @resolver1.opendns.com)"
+        if [[ ! $wanip == $dnsip ]]; then
+            echo "$GLOBAL_DOMAIN ($dnsip) is not pointing to your ip $wanip"
+            exit 1
+        fi
+    else
+        dnsip="$(dig +short $1.$GLOBAL_DOMAIN @resolver1.opendns.com)"
+        if [[ ! $wanip == $dnsip ]]; then
+            echo "$1 ($dnsip) is not pointing to your ip $wanip"
+            exit 1
+        fi
+    fi
+}
+
 
 # ==========================
 # NGINX
@@ -72,7 +92,7 @@ if [[ $NGINX_ENABLED == "true" ]]; then
 
    #Generate htpasswd
    NGINX_PASSWORD="$(openssl passwd -1 $NGINX_PASSWORD)"
-   echo "$NGINX_USERNAME:$NGINX_PASSWORD" > $PERSISTENT_ROOT/docker-data/nginx/.htpasswd
+   echo "$NGINX_USERNAME:$NGINX_PASSWORD" > $GLOBAL_ROOT/docker-data/nginx/.htpasswd
 fi
 
 # ==========================
@@ -94,7 +114,7 @@ fi
 if [[ $SAMBA_ENABLED == "true" ]]; then
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/samba/samba.docker-compose.yml"
 
-   data_dir_exists "samba" && cp $PERSISTENT_ROOT/docker-templates/samba/smb.conf $PERSISTENT_ROOT/docker-data/samba/smb.conf
+   data_dir_exists "samba" && cp $GLOBAL_ROOT/docker-templates/samba/smb.conf $GLOBAL_ROOT/docker-data/samba/smb.conf
 fi
 
 # ==========================
@@ -121,7 +141,7 @@ if [[ $TRANSMISSION_ENABLED == "true" ]]; then
    checkdomain "transmission"
 
    # Check if data folder exists
-   data_dir_exists "transmission" && mkdir $PERSISTENT_ROOT/docker-data/transmission/scripts $PERSISTENT_ROOT/docker-data/transmission/config $PERSISTENT_ROOT/docker-data/transmission/data
+   data_dir_exists "transmission" && mkdir $GLOBAL_ROOT/docker-data/transmission/scripts $GLOBAL_ROOT/docker-data/transmission/config $GLOBAL_ROOT/docker-data/transmission/data
 else
    nginx_symlink_disable "transmission"
 fi
@@ -146,6 +166,14 @@ fi
 if [[ $MINECRAFT_ENABLED == "true" ]]; then
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/minecraft/minecraft.docker-compose.yml"
    data_dir_exists "minecraft"
+fi
+
+# ==========================
+# Minecraft Bedrick
+# ==========================
+if [[ $MINECRAFTBEDROCK_ENABLED == "true" ]]; then
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/minecraft-bedrock/minecraft-bedrock.docker-compose.yml"
+   data_dir_exists "minecraft-bedrock"
 fi
 
 # ==========================
@@ -199,7 +227,7 @@ if [[ $PLEX_ENABLED == "true" ]]; then
    DOCKER_FILES=$DOCKER_FILES" -f docker-templates/plex/plex.docker-compose.yml"
 
    # Check if data folder exists
-   if [ ! -d $PERSISTENT_ROOT/docker-data/plex ]; then
+   if [ ! -d $GLOBAL_ROOT/docker-data/plex ]; then
       echo "Looks like plex has not been setup, please run docker-templates/plex/setup.sh tokenhere"
       exit 1
    fi

@@ -21,23 +21,23 @@ if [ -z "$1" ]
 fi
 
 # Check if data folder exists
-if [ ! -d $PERSISTENT_ROOT/docker-data/plex ]; then
-  echo "Creating docker-data/plex directory" && mkdir $PERSISTENT_ROOT/docker-data/plex
+if [ ! -d $GLOBAL_ROOT/docker-data/plex ]; then
+  echo "Creating docker-data/plex directory" && mkdir $GLOBAL_ROOT/docker-data/plex
 else
   echo "Plex folder already exists, exiting."
   exit 1
 fi
 
-echo "Now starting plex, check your server at port http://$hostname:32400/web. Press CTRL + C once you confirm its up and running."
+echo "Now starting plex, check your server at port http://$HOSTNAME:32400/web. Press CTRL + C once you confirm its up and running."
 
 docker run --rm -i \
 --name plextmp \
 -v /tmp/transcode:/transcode:rw \
 -v "${PLEX_DATA}:/data:rw" \
--v "${PERSISTENT_ROOT}/docker-data/plex:/config:rw" \
+-v "${GLOBAL_ROOT}/docker-data/plex:/config:rw" \
 --net host \
--e PLEX_UID="${PUID}" \
--e PLEX_GID="${PGID}" \
+-e PLEX_UID="${GLOBAL_UID}" \
+-e PLEX_GID="${GLOBAL_GID}" \
 -e PLEX_CLAIM="$1" \
 -e 'HOME=/config' \
 -e 'CHANGE_CONFIG_DIR_OWNERSHIP=true' \

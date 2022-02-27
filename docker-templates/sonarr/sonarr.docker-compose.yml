@@ -7,13 +7,15 @@ services:
       container_name: sonarr
       networks:
             - backend
+      # env_file:
+      #     - docker-templates/sonarr/.env
       environment:
-        - PUID
-        - PGID
+        - PUID=${GLOBAL_UID}
+        - PGID=${GLOBAL_GID}
         - TZ=America/New_York
         - UMASK_SET=002
       volumes:
-        - "${PERSISTENT_ROOT}/docker-data/sonarr:/config"
+        - "${GLOBAL_ROOT}/docker-data/sonarr:/config"
         - "${PLEX_DATA}/TV:/tv"
         - "${PLEX_DATA}/transmission:/data"
       # ports:

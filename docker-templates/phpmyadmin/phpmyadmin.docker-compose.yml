@@ -6,6 +6,8 @@ services:
         container_name: phpmyadmin
         networks:
             - backend
+        # env_file:
+        #     - docker-templates/phpmyadmin/.env
         environment:
             - PMA_HOST=mariadb
         image: 'phpmyadmin/phpmyadmin:latest'

@@ -1,0 +1,8 @@
+server:
+    debug: true
+    port: 4000
+    ddns:
+        ip: 0.0.0.0
+        url:
+            - http://ddnsupdate.com
+            - http://ddnsupdate.com

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 PORTCHECKBIN=./scripts/port-check/port-check.$(dpkg --print-architecture).bin
+wanip="$(dig +short myip.opendns.com @resolver1.opendns.com)"
 
 # Check if port 80 is open
 $PORTCHECKBIN --port 80 --ip $wanip

@@ -1,9 +1,9 @@
 server {
     listen 443 ssl http2;
-    server_name transmission.${ROOT_DOMAIN};
+    server_name transmission.${GLOBAL_DOMAIN};
 
-    ssl_certificate /etc/letsencrypt/live/transmission.${ROOT_DOMAIN}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/transmission.${ROOT_DOMAIN}/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/transmission.${GLOBAL_DOMAIN}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/transmission.${GLOBAL_DOMAIN}/privkey.pem;
     ssl_session_timeout 1d;
     ssl_session_cache shared:MozSSL:10m;  # about 40000 sessions
     ssl_session_tickets off;

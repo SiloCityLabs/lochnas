@@ -5,14 +5,16 @@ services:
     plex:
         container_name: plex
         volumes:
-            - "${PERSISTENT_ROOT}/docker-data/plex:/config"
+            - "${GLOBAL_ROOT}/docker-data/plex:/config"
             - '/tmp/transcode:/transcode'
             - "${PLEX_DATA}:/data"
         restart: unless-stopped
         network_mode: host
+        # env_file:
+        #     - docker-templates/plex/.env
         environment:
             - CHANGE_CONFIG_DIR_OWNERSHIP=true
             - HOME=/config
-            - "PLEX_UID=${PUID}"
-            - "PLEX_GID=${PGID}"
+            - "PLEX_UID=${GLOBAL_UID}"
+            - "PLEX_GID=${GLOBAL_GID}"
         image: 'plexinc/pms-docker:latest'

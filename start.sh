@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# THIS SCRIPT WILL EVENTUALLY MOVE INTO GOLANG
+
 # Root check
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root" 
@@ -10,9 +12,6 @@ cd "$(dirname "$0")"
 
 # Load env variables
 source .env
-
-# Load ip's
-source scripts/getip.sh
 
 # Install docker
 if ! [ -x "$(command -v docker)" ]; then
@@ -28,21 +27,24 @@ fi
 # Docker Path builder
 source scripts/enable-templates.sh
 
+
 # Stop if running
 docker-compose $DOCKER_FILES stop
 
 # Check ports
-source scripts/port-check.sh
+# source scripts/port-check.sh
 
 # Check for updates
-docker-compose pull
+# docker-compose $DOCKER_FILES pull
 
 # Run
 docker-compose $DOCKER_FILES up -d --build --remove-orphans --force-recreate
 
 # Remove old images
-docker image prune -f
-docker volume prune -f
+# docker image prune -f
+# docker volume prune -f
 
 # After start
 source scripts/after-start.sh
+
+echo "Done"

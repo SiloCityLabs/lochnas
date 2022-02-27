@@ -10,13 +10,15 @@ services:
         network_mode: host
         restart: unless-stopped
         volumes:
-            - "${PERSISTENT_ROOT}/docker-data/samba/smb.conf:/etc/samba/smb.conf"
-            - "${PERSISTENT_ROOT}:${PERSISTENT_ROOT}"
+            - "${GLOBAL_ROOT}/docker-data/samba/smb.conf:/etc/samba/smb.conf"
+            - "${GLOBAL_ROOT}:${GLOBAL_ROOT}"
             - "${PLEX_DATA}:${PLEX_DATA}"
         ports:
             - "137:137/udp"
             - "138:138/udp"
             - "139:139/tcp"
             - "445:445/tcp"
+        # env_file:
+        #     - docker-templates/samba/.env
         environment:
             - SAMBA_USERMAP
