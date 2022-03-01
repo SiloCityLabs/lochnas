@@ -15,8 +15,8 @@ services:
             - "${PLEX_DATA}:${PLEX_DATA}"
         ports:
             - "8181:80/tcp"
-        # env_file:
-        #     - docker-templates/heimdall/.env
+        env_file:
+            - docker-templates/heimdall/.env
         environment:
             - PUID=${GLOBAL_UID}
             - PGID=${GLOBAL_GID}

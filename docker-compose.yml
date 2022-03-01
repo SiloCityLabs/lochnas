@@ -16,7 +16,7 @@ networks:
 services:
     autoheal:
         container_name: autoheal
-        restart: always
+        restart: unless-stopped
         image: willfarrell/autoheal
         environment:
             - AUTOHEAL_CONTAINER_LABEL=all

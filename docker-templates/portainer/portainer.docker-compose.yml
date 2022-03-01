@@ -11,7 +11,7 @@ services:
         volumes:
             - "${GLOBAL_ROOT}/docker-data/portainer:/data"
             - '/var/run/docker.sock:/var/run/docker.sock'
-        restart: always
+        restart: unless-stopped
         image: 'portainer/portainer-ce:latest'
         ports:
             - '9000:9000/tcp'
