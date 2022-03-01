@@ -11,6 +11,11 @@ func (a AppModel) Init() {
 	// a["ip"] = env.Get("GLOBAL_DDNS_IP")
 }
 
+func (a AppModel) Test() string {
+
+	return ""
+}
+
 func (a AppModel) Update() string {
 	util.Command(false, Config.WorkingDirectory, nil, "./scripts/update.sh")
 	// util.Command(false, Config.WorkingDirectory, nil, "apt update && apt dist-upgrade")

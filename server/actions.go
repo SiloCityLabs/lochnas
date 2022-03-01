@@ -35,6 +35,8 @@ func action(action string, param string) error {
 		models.App.Init()
 
 		switch param {
+		case "test":
+			log.Println(models.App.Test())
 		case "update":
 			log.Println(models.App.Update())
 		default:
