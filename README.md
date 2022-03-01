@@ -14,8 +14,10 @@ If you have v1 see this [migration guide](docs/migrating.v2.md)
 
 Just clone the repo and your all set. Afterwards run `./server.bin`
 ```
+sudo apt install git
+cd /
 git clone https://github.com/SiloCityLabs/docker-nas.git
-./server.bin -daemon install
+sudo ./server.bin -daemon install
 ```
 
 ### Updates

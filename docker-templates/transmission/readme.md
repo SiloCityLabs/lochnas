@@ -22,3 +22,11 @@ Inside portainer you can add your own rss feeds by making a new container like s
   environment:
     - RSS_URL=http://.../xxxxx.rss
 ```
+
+### Increase simultaneous downloads
+
+ * Login to your server as root
+ * Run command `docker stop transmission`
+ * Edit config file `nano docker-data/transmission/transmission-home/settings.json`
+ * Change `download-queue-size` to any value you want.
+ * Run command `docker start transmission`
