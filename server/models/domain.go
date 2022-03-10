@@ -14,12 +14,14 @@ func (a DomainModel) Init() {
 	// a["ip"] = env.Get("GLOBAL_DDNS_IP")
 }
 
+//TODO: Bring domain-renew the fully into golang
 func (a DomainModel) Renew() string {
 	util.Command(false, Config.WorkingDirectory, nil, "./scripts/domain-renew.sh")
 	util.Command(false, Config.WorkingDirectory, nil, "docker restart nginx")
 	return ""
 }
 
+//TODO: Bring domain-add the fully into golang
 func (a DomainModel) Add() string {
 	args := os.Args[1:]
 
@@ -31,6 +33,7 @@ func (a DomainModel) Add() string {
 	return ""
 }
 
+//TODO: Bring domain-remove the fully into golang
 func (a DomainModel) Delete() string {
 	util.Command(false, Config.WorkingDirectory, nil, "./scripts/domain-remove.sh")
 	return ""

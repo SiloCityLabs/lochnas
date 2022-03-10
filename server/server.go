@@ -94,7 +94,7 @@ func main() {
 	daemonFlag := flag.String("daemon", "", "Control the system service.")
 	ddnsFlag := flag.String("ddns", "", "Run DDNS actions.")
 	domainFlag := flag.String("domain", "", "Run domain actions.")
-	appFlag := flag.String("app", "", "Run app actions.")
+	appsFlag := flag.String("apps", "", "Run apps action.")
 	flag.Parse()
 
 	models.Config.Path = *configFlag
@@ -146,8 +146,8 @@ func main() {
 		}
 		return
 	}
-	if len(*appFlag) != 0 {
-		if err := action("app", *appFlag); err != nil {
+	if len(*appsFlag) != 0 {
+		if err := action("apps", *appsFlag); err != nil {
 			log.Fatal(err)
 		}
 		return

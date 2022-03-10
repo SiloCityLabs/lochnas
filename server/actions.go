@@ -30,15 +30,17 @@ func action(action string, param string) error {
 		default:
 			return errors.New("Invalid option try -ddns [refresh, ip, ip-info]")
 		}
-	case "app":
-		models.App = make(models.AppModel)
-		models.App.Init()
+	case "apps":
+		models.Apps = make(models.AppsModel, 0) //[]AppModel{}
+		models.Apps.Init()
 
 		switch param {
+		case "start":
+			log.Println(models.Apps.Start())
 		case "test":
-			log.Println(models.App.Test())
+			log.Println(models.Apps.Start())
 		case "update":
-			log.Println(models.App.Update())
+			log.Println(models.Apps.Update())
 		default:
 			return errors.New("Invalid option try -app [update]")
 		}
