@@ -6,3 +6,7 @@ server:
         url:
             - http://ddnsupdate.com
             - http://ddnsupdate.com
+    nginx:
+        sites-enabled:
+            - test.conf.template
+            - hello.conf.example
