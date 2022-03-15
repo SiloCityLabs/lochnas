@@ -72,7 +72,9 @@ echo "PORTAINER_ENABLED=$PORTAINER_ENABLED" > $PORTAINER_ENV
 
 #Homeassistant ENV
 HOMEASSISTANT_ENV=docker-data/v3/.env.homeassistant
-echo "HOMEASSISTANT_ENABLED=$HOMEAwelcome to v3 message with link to docs
+echo "HOMEASSISTANT_ENABLED=$HOMEASSISTANT_ENABLED" >  $HOMEASSISTANT_ENV
+
+#SAMBA ENV
 SAMBA_ENV=docker-data/v3/.env.samba
 echo "SAMBA_ENABLED=$SAMBA_ENABLED" > $SAMBA_ENV
 echo "SAMBA_USERMAP=$SAMBA_USERMAP" >> $SAMBA_ENV
@@ -85,7 +87,17 @@ echo "SONARR_ENABLED=$SONARR_ENABLED" > $SONARR_ENV
 PHPMYADMIN_ENV=docker-data/v3/.env.phpmyadmin
 echo "PHPMYADMIN_ENABLED=$PHPMYADMIN_ENABLED" > $PHPMYADMIN_ENV
 
-#Collabora ENVwelcome to v3 message with link to docsCE_ENABLED" > $ONLYOFFICE_ENV
+#Collabora ENV
+COLLABORA_ENV=docker-data/v3/.env.collabora
+echo "COLLABORA_ENABLED=$COLLABORA_ENABLED" > $COLLABORA_ENV
+
+#Onlyoffice ENV
+ONLYOFFICE_ENV=docker-data/v3/.env.onlyoffice
+echo "ONLYOFFICE_ENABLED=$ONLYOFFICE_ENABLED" > $ONLYOFFICE_ENV
+
+#Homeassistant ENV
+HOMEASSISTANT_ENV=docker-data/v3/.env.homeassistant
+echo "HOMEASSISTANT_ENABLED=$HOMEASSISTANT_ENABLED" >  $HOMEASSISTANT_ENV
 
 #Ark Proxy LAN ENV
 ARK_ENV=docker-data/v3/.env.ark
@@ -113,7 +125,7 @@ echo "ARK_BACKUPONSTOP=$ARK_BACKUPONSTOP" >> $ARK_ENV
 echo "ARK_WARNONSTOP=$ARK_WARNONSTOP" >> $ARK_ENV
 echo "ARK_SERVERPASSWORD=\"$ARK_SERVERPASSWORD\"" >> $ARK_ENV
 
-#NGINX Proxy LAN ENV
+#NGINX ENV
 NGINX_ENV=docker-data/v3/.env.nginx
 echo "NGINX_ENABLED=$NGINX_ENABLED" > $NGINX_ENV
 echo "NGINX_USERNAME=$NGINX_USERNAME" >> $NGINX_ENV
@@ -129,18 +141,24 @@ echo "RADARR_ENABLED=$RADARR_ENABLED" > $RADARR_ENV
 
 ### LAN Config ###
 LAN_CONFIG=docker-data/v3/config.yml
+echo "server:" > $LAN_CONFIG
+LANConfigTAB='    '
 
 #Homeassistant LAN
-echo "HOMEASSISTANT_LAN_ENABLED=$HOMEASSISTANT_LAN_ENABLED" > $LAN_CONFIG
-echo -e "HOMEASSISTANT_LAN_URI=$HOMEASSISTANT_LAN_URI\n" >> $LAN_CONFIG
+# sed -Ei "s/^/ / " $LAN_CONFIG
+echo -e "${LANConfigTAB}homeassistant_lan:" >> $LAN_CONFIG
+echo -e "${LANConfigTAB}${LANConfigTAB}enabled: $HOMEASSISTANT_LAN_ENABLED" >> $LAN_CONFIG
+echo -e "${LANConfigTAB}${LANConfigTAB}uri: $HOMEASSISTANT_LAN_URI" >> $LAN_CONFIG
 
-#Octoprint Proxy LAN
-echo "OCTOPRINT_ENABLED=$OCTOPRINT_ENABLED" >> $LAN_CONFIG
-echo -e "OCTOPRINT_PATH=$OCTOPRINT_PATH\n" >> $LAN_CONFIG
+# #Octoprint Proxy LAN
+echo -e "${LANConfigTAB}octoprint:" >> $LAN_CONFIG
+echo -e "${LANConfigTAB}${LANConfigTAB}enabled: $OCTOPRINT_ENABLED" >> $LAN_CONFIG
+echo -e "${LANConfigTAB}${LANConfigTAB}path: $OCTOPRINT_PATH" >> $LAN_CONFIG
 
-#Router Proxy LAN
-echo "ROUTER_ENABLED=$ROUTER_ENABLED" >> $LAN_CONFIG
-echo "ROUTER_PATH=$ROUTER_PATH" >> $LAN_CONFIG
+# #Router Proxy LAN
+echo -e "${LANConfigTAB}router_proxy:" >> $LAN_CONFIG
+echo -e "${LANConfigTAB}${LANConfigTAB}enabled: $ROUTER_ENABLED" >> $LAN_CONFIG
+echo -e "${LANConfigTAB}${LANConfigTAB}path: $ROUTER_PATH" >> $LAN_CONFIG
 
 # Remove crons
 # crontab -l | grep -v "0 0 \* \* 0 $PERSISTENT_ROOT/renew-domain.sh" | crontab -
