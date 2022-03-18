@@ -16,6 +16,8 @@ cd "$(dirname "$0")"
 # Load env variables
 source .env
 
+./stop.sh
+
 mkdir -p docker-data/v3
 
 re="[[:space:]]+"
