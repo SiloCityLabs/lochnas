@@ -17,8 +17,8 @@ cd "$(dirname "$0")"
 source .env
 
 ./stop.sh
-docker network prune
 docker-compose down
+docker network prune
 
 mkdir -p docker-data/v3
 
