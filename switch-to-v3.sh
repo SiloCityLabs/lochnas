@@ -18,6 +18,7 @@ source .env
 
 ./stop.sh
 docker network prune
+docker-compose down
 
 mkdir -p docker-data/v3
 
