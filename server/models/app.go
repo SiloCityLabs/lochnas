@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -25,37 +26,42 @@ type AppModel struct {
 	Enabled bool
 	// Has after-start.sh file
 	AfterStart bool
+	// Has nginx.conf file
+	Nginx       bool
+	NginxLinked bool
 	// ENV Variables
 	ENV map[string]string
 }
 
-func (a AppsModel) Init() error {
+func (a AppsModel) New() (AppsModel, error) {
 	tplPath := Config.WorkingDirectory + "/docker-templates/"
+	dataPath := Config.WorkingDirectory + "/docker-data/"
 
 	//TODO: Root check
 
 	if err := a.DockerInstalled(); err != nil {
-		return err
+		return a, err
 	}
 
 	files, err := ioutil.ReadDir(tplPath)
 	if err != nil {
 		log.Println(err)
-		return err
+		return a, err
 	}
 
 	for _, f := range files {
 		//Only look at folders
 		if f.IsDir() {
-			app := AppModel{}
-			app.Name = f.Name()
-			app.Path = tplPath + app.Name + "/"
-			app.Enabled = false
+			app := AppModel{
+				Name:    f.Name(),
+				Path:    tplPath + f.Name() + "/",
+				Enabled: false,
+			}
 
-			//Check app.docker-compose.yml
-			if _, err := os.Stat(app.Path + app.Name + ".docker-compose.yml"); err != nil {
+			//Check docker-compose.yml
+			if _, err := os.Stat(app.Path + "docker-compose.yml"); err != nil {
 				if Config.Server.Debug {
-					log.Println("Could not find " + app.Path + app.Name + ".docker-compose.yml")
+					log.Println("Could not find " + app.Path + "docker-compose.yml")
 				}
 				continue
 			}
@@ -68,14 +74,27 @@ func (a AppsModel) Init() error {
 				// Is app enabled?
 				app.ENV, err = godotenv.Read(app.Path + ".env")
 				if err != nil {
-					if Config.Server.Debug {
-						log.Println("Could not read " + app.Path + ".env")
-					}
-					continue
+					return nil, errors.New("Could not read " + app.Path + ".env: " + err.Error())
 				}
 
 				if val, ok := app.ENV[envName]; ok && val == "true" {
 					app.Enabled = true
+				}
+			}
+
+			//Check nginx.conf
+			if _, err := os.Stat(app.Path + "nginx.conf"); err == nil {
+				app.Nginx = true
+			}
+
+			//Check if nginx.conf is already symlinked
+			nginxPath := dataPath + "nginx/sites/" + app.Name + ".apps.conf.template"
+			if f, err := os.Lstat(nginxPath); err == nil {
+				if f.Mode()&os.ModeSymlink == os.ModeSymlink {
+					originFile, err := os.Readlink(nginxPath)
+					if err == nil && originFile == app.Path+"nginx.conf" {
+						app.NginxLinked = true
+					}
 				}
 			}
 
@@ -90,7 +109,7 @@ func (a AppsModel) Init() error {
 		}
 	}
 
-	return nil
+	return a, nil
 }
 
 func (a AppsModel) DockerInstalled() error {
@@ -143,13 +162,44 @@ func (a AppsModel) Update() string {
 }
 
 func (a AppsModel) params() string {
-	//DOCKER_FILES=$DOCKER_FILES" -f docker-templates/nginx/nginx.docker-compose.yml"
+	var params []string
+	for _, app := range a {
+		if app.Enabled {
+			params = append(params, "-f "+app.Path+"docker-compose.yml")
+		}
+	}
+	return strings.Join(params, " ")
+}
 
-	params := ""
-	// for _, app := range a {
+func (a AppsModel) NginxSites() error {
+	enabled := false
+	//Enable site apps if nginx is enabled
+	for _, app := range a {
+		if app.Name == "nginx" && app.Enabled {
+			enabled = true
+			break
+		}
+	}
 
-	// }
-	return params
+	if enabled {
+		for _, app := range a {
+			if app.Enabled && app.Nginx {
+				if !app.NginxLinked {
+					//Add a link
+					new := dataPath + "nginx/sites/" + app.Name + ".apps.conf.template"
+					err := os.Symlink("file.txt", "file-symlink.txt")
+					if err != nil {
+						fmt.Println(err)
+						os.Exit(1)
+					}
+				}
+			} else if app.NginxLinked {
+				//Remove the link
+			}
+		}
+	}
+
+	return nil
 }
 
 func (a AppsModel) Stop() string {
@@ -162,7 +212,7 @@ func (a AppsModel) Start() string {
 
 	//Build docker params
 	params := a.params()
-	println(params)
+	log.Println(params)
 
 	//Enable nginx subdomains
 

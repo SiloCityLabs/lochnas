@@ -2,8 +2,8 @@ package util
 
 import (
 	"bufio"
-	"fmt"
 	"io"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -13,13 +13,13 @@ import (
 func SortFile(file string) {
 	lines, err := ReadLines(file)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		os.Exit(1)
 	}
 	sort.Strings(lines)
 	err = WriteLines(file, lines)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		os.Exit(1)
 	}
 }

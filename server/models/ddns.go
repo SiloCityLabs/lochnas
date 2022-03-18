@@ -2,7 +2,6 @@ package models
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -79,10 +78,10 @@ func (a DDNSModel) URL(url string) error {
 		return err
 	}
 
-	fmt.Println("HTTP Response Status:", resp.StatusCode, http.StatusText(resp.StatusCode))
+	log.Println("HTTP Response Status:", resp.StatusCode, http.StatusText(resp.StatusCode))
 
 	if resp.StatusCode >= 200 && resp.StatusCode <= 299 {
-		fmt.Println("Updated URL DDNS")
+		log.Println("Updated URL DDNS")
 	} else {
 		return errors.New("something went wrong while trying to hit url ddns update")
 	}

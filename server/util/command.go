@@ -7,7 +7,7 @@ import (
 
 func Command(output bool, wd string, envList []string, command string) (string, error) {
 
-	// fmt.Println("Running command " + command + " " + strings.Join(arg, " "))
+	// log.Println("Running command " + command + " " + strings.Join(arg, " "))
 
 	//Running withouth bash -c causes golang to hold on to port bindings and fails docker restart
 	cmd := exec.Command("bash", "-c", command)

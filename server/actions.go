@@ -31,8 +31,13 @@ func action(action string, param string) error {
 			return errors.New("Invalid option try -ddns [refresh, ip, ip-info]")
 		}
 	case "apps":
-		models.Apps = make(models.AppsModel, 0) //[]AppModel{}
-		models.Apps.Init()
+		// models.Apps = make(models.AppsModel, 0) //[]AppModel{}
+		// apps := make(models.AppsModel, 0)
+		var err error
+		models.Apps, _ = models.Apps.New()
+		if err != nil {
+			log.Fatalln("Failed to initialize apps: " + err.Error())
+		}
 
 		switch param {
 		case "start":
