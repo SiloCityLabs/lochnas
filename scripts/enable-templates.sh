@@ -86,7 +86,7 @@ checkdomain () {
 # NGINX
 # ==========================
 if [[ $NGINX_ENABLED == "true" ]]; then
-   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/nginx/nginx.docker-compose.yml"
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/nginx/docker-compose.yml"
 
    data_dir_exists "nginx"
 
@@ -99,7 +99,7 @@ fi
 # Dashboard
 # ==========================
 if [[ $DASHBOARD_ENABLED == "true" ]]; then
-   # DOCKER_FILES=$DOCKER_FILES" -f docker-templates/dashboard/dashboard.docker-compose.yml"
+   # DOCKER_FILES=$DOCKER_FILES" -f docker-templates/dashboard/docker-compose.yml"
    nginx_enabled
    nginx_symlink_enable "dashboard"
    nginx_cert_check ""
@@ -112,7 +112,7 @@ fi
 # Samba
 # ==========================
 if [[ $SAMBA_ENABLED == "true" ]]; then
-   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/samba/samba.docker-compose.yml"
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/samba/docker-compose.yml"
 
    data_dir_exists "samba" && cp $GLOBAL_ROOT/docker-templates/samba/smb.conf $GLOBAL_ROOT/docker-data/samba/smb.conf
 fi
@@ -121,7 +121,7 @@ fi
 # PHPMyAdmin
 # ==========================
 if [[ $PHPMYADMIN_ENABLED == "true" ]]; then
-   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/phpmyadmin/phpmyadmin.docker-compose.yml"
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/phpmyadmin/docker-compose.yml"
    nginx_enabled
    nginx_symlink_enable "phpmyadmin"
    nginx_cert_check "phpmyadmin"
@@ -134,7 +134,7 @@ fi
 # Transmission
 # ==========================
 if [[ $TRANSMISSION_ENABLED == "true" ]]; then
-   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/transmission/transmission.docker-compose.yml"
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/transmission/docker-compose.yml"
    nginx_enabled
    nginx_symlink_enable "transmission"
    nginx_cert_check "transmission"
@@ -150,7 +150,7 @@ fi
 # Portainer
 # ==========================
 if [[ $PORTAINER_ENABLED == "true" ]]; then
-   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/portainer/portainer.docker-compose.yml"
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/portainer/docker-compose.yml"
    nginx_enabled
    nginx_symlink_enable "portainer"
    nginx_cert_check "portainer"
@@ -164,7 +164,7 @@ fi
 # Minecraft
 # ==========================
 if [[ $MINECRAFT_ENABLED == "true" ]]; then
-   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/minecraft/minecraft.docker-compose.yml"
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/minecraft/docker-compose.yml"
    data_dir_exists "minecraft"
 fi
 
@@ -172,7 +172,7 @@ fi
 # Minecraft Bedrick
 # ==========================
 if [[ $MINECRAFTBEDROCK_ENABLED == "true" ]]; then
-   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/minecraft-bedrock/minecraft-bedrock.docker-compose.yml"
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/minecraft-bedrock/docker-compose.yml"
    data_dir_exists "minecraft-bedrock"
 fi
 
@@ -180,7 +180,7 @@ fi
 # Ark
 # ==========================
 if [[ $ARK_ENABLED == "true" ]]; then
-   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/ark/ark.docker-compose.yml"
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/ark/docker-compose.yml"
    data_dir_exists "ark"
 fi
 
@@ -188,7 +188,7 @@ fi
 # Sonarr
 # ==========================
 if [[ $SONARR_ENABLED == "true" ]]; then
-   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/sonarr/sonarr.docker-compose.yml"
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/sonarr/docker-compose.yml"
    data_dir_exists "sonarr"
    nginx_enabled
    nginx_symlink_enable "sonarr"
@@ -200,7 +200,7 @@ fi
 # Radarr
 # ==========================
 if [[ $RADARR_ENABLED == "true" ]]; then
-   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/radarr/radarr.docker-compose.yml"
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/radarr/docker-compose.yml"
    data_dir_exists "radarr"
    nginx_enabled
    nginx_symlink_enable "radarr"
@@ -212,7 +212,7 @@ fi
 # Prowlarr
 # ==========================
 if [[ $PROWLARR_ENABLED == "true" ]]; then
-   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/prowlarr/prowlarr.docker-compose.yml"
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/prowlarr/docker-compose.yml"
    data_dir_exists "prowlarr"
    nginx_enabled
    nginx_symlink_enable "prowlarr"
@@ -224,7 +224,7 @@ fi
 # Plex
 # ==========================
 if [[ $PLEX_ENABLED == "true" ]]; then
-   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/plex/plex.docker-compose.yml"
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/plex/docker-compose.yml"
 
    # Check if data folder exists
    if [ ! -d $GLOBAL_ROOT/docker-data/plex ]; then
@@ -240,7 +240,7 @@ fi
 # Nextcloud
 # ==========================
 if [[ $NEXTCLOUD_ENABLED == "true" ]]; then
-   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/nextcloud/nextcloud.docker-compose.yml"
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/nextcloud/docker-compose.yml"
    nginx_enabled
    nginx_symlink_enable "cloud"
    nginx_cert_check "cloud"
@@ -268,7 +268,7 @@ if [[ $COLLABORA_ENABLED == "true" ]]; then
    nginx_symlink_enable "office"
    nginx_cert_check "office"
    checkdomain "office"
-   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/collabora/collabora.docker-compose.yml"
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/collabora/docker-compose.yml"
 else
    nginx_symlink_disable "office"
 fi
@@ -281,7 +281,7 @@ if [[ $ONLYOFFICE_ENABLED == "true" ]]; then
    nginx_symlink_enable "office"
    nginx_cert_check "office"
    checkdomain "office"
-   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/onlyoffice/onlyoffice.docker-compose.yml"
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/onlyoffice/docker-compose.yml"
 else
    nginx_symlink_disable "office"
 fi
@@ -294,7 +294,7 @@ if [[ $OCTOPRINT_ENABLED == "true" ]]; then
    nginx_symlink_enable "octoprint"
    nginx_cert_check "octoprint"
    checkdomain "octoprint"
-   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/octoprint/octoprint.docker-compose.yml"
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/octoprint/docker-compose.yml"
 else
    nginx_symlink_disable "octoprint"
 fi
@@ -329,7 +329,7 @@ if [[ $HOMEASSISTANT_ENABLED == "true" ]]; then
    nginx_symlink_enable "hass"
    nginx_cert_check "hass"
    checkdomain "hass"
-   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/homeassistant/hass.docker-compose.yml"
+   DOCKER_FILES=$DOCKER_FILES" -f docker-templates/homeassistant/docker-compose.yml"
 else
    nginx_symlink_disable "hass"
 fi
