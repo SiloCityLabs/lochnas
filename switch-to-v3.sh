@@ -173,11 +173,11 @@ cp $SAMBA_ENV docker-templates/samba/.env
 cp $SONARR_ENV docker-templates/sonarr/.env
 cp $TRANSMISSION_ENV docker-templates/transmission/.env
 
-./server.bin -daemon install
-
 echo "############################################################"
 echo "###               Welcome to docker-nas v3               ###"
-echo "###     Please check over all your .env files then run   ###"
+echo "###    Please check over all your .env files then run    ###"
+echo "###      Create config.yml from config.example.yml       ###"
+echo "###          ./server.bin -daemon install                ###"
 echo "###           ./server.bin -daemon start                 ###"
 echo "###                                                      ###"
 echo "###  https://github.com/SiloCityLabs/docker-nas/tree/v3  ###"
