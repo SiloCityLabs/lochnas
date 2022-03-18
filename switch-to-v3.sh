@@ -1,18 +1,15 @@
 #!/bin/bash
 
-# Step 1: load all the variables from .env 
-# Step 2: create folder docker-data/v3
-# Step 3: create docker-data/v3/.env.global 
-#     - look at v3 for what to throw in files
-# Step 4: create docker-data/v3/.env.{app_alias}
-#     - look at v3 for what to throw in files
-# Step 5: switch to v3 branch (Test with luis)
-# Step 6: Replace all the .envs to the new paths
-# Step 7: Remove crons related to domain renewal
-#   - Learn how to read/edit crontab
-# Step 8: Remove crons related to start.sh
-# Step 9: Run damen installer
-# Step 10: welcome to v3 message with link to docs
+#x Step 1: load all the variables from .env 
+#x Step 2: create folder docker-data/v3
+#x Step 3: create docker-data/v3/.env.global 
+#x Step 4: create docker-data/v3/.env.{app_alias}
+#x Step 5: switch to v3 branch (Test with luis)
+#x Step 6: Replace all the .envs to the new paths
+#x Step 7: Remove crons related to domain renewal
+#x Step 8: Remove crons related to start.sh
+#x Step 9: Run damen installer
+#x Step 10: welcome to v3 message with link to docs
 
 cd "$(dirname "$0")"
 
@@ -95,11 +92,7 @@ echo "COLLABORA_ENABLED=$COLLABORA_ENABLED" > $COLLABORA_ENV
 ONLYOFFICE_ENV=docker-data/v3/.env.onlyoffice
 echo "ONLYOFFICE_ENABLED=$ONLYOFFICE_ENABLED" > $ONLYOFFICE_ENV
 
-#Homeassistant ENV
-HOMEASSISTANT_ENV=docker-data/v3/.env.homeassistant
-echo "HOMEASSISTANT_ENABLED=$HOMEASSISTANT_ENABLED" >  $HOMEASSISTANT_ENV
-
-#Ark Proxy LAN ENV
+#Ark ENV
 ARK_ENV=docker-data/v3/.env.ark
 echo "ARK_ENABLED=$ARK_ENABLED" > $ARK_ENV
 if [[ $ARK_SESSIONNAME =~ $re ]]; then
@@ -139,32 +132,53 @@ echo "PROWLARR_ENABLED=$PROWLARR_ENABLED" > $PROWLARR_ENV
 RADARR_ENV=docker-data/v3/.env.radarr
 echo "RADARR_ENABLED=$RADARR_ENABLED" > $RADARR_ENV
 
-### LAN Config ###
-LAN_CONFIG=docker-data/v3/config.yml
-echo "server:" > $LAN_CONFIG
-LANConfigTAB='    '
-
 #Homeassistant LAN
-# sed -Ei "s/^/ / " $LAN_CONFIG
-echo -e "${LANConfigTAB}homeassistant_lan:" >> $LAN_CONFIG
-echo -e "${LANConfigTAB}${LANConfigTAB}enabled: $HOMEASSISTANT_LAN_ENABLED" >> $LAN_CONFIG
-echo -e "${LANConfigTAB}${LANConfigTAB}uri: $HOMEASSISTANT_LAN_URI" >> $LAN_CONFIG
+if [[ $HOMEASSISTANT_LAN_ENABLED == "true" ]]; then
+    echo "HOMEASSISTANT_LAN_ENABLED This feature has been moved to manual templates. See docker-templates/nginx/sites-available/"
+fi
 
-# #Octoprint Proxy LAN
-echo -e "${LANConfigTAB}octoprint:" >> $LAN_CONFIG
-echo -e "${LANConfigTAB}${LANConfigTAB}enabled: $OCTOPRINT_ENABLED" >> $LAN_CONFIG
-echo -e "${LANConfigTAB}${LANConfigTAB}path: $OCTOPRINT_PATH" >> $LAN_CONFIG
+#Octoprint LAN
+if [[ $OCTOPRINT_ENABLED == "true" ]]; then
+    echo "OCTOPRINT_ENABLED This feature has been moved to manual templates. See docker-templates/nginx/sites-available/"
+fi
 
-# #Router Proxy LAN
-echo -e "${LANConfigTAB}router_proxy:" >> $LAN_CONFIG
-echo -e "${LANConfigTAB}${LANConfigTAB}enabled: $ROUTER_ENABLED" >> $LAN_CONFIG
-echo -e "${LANConfigTAB}${LANConfigTAB}path: $ROUTER_PATH" >> $LAN_CONFIG
+#Router Proxy LAN
+if [[ $ROUTER_ENABLED == "true" ]]; then
+    echo "ROUTER_ENABLED This feature has been moved to manual templates. See docker-templates/nginx/sites-available/"
+fi
 
 # Remove crons
-# crontab -l | grep -v "0 0 \* \* 0 $PERSISTENT_ROOT/renew-domain.sh" | crontab -
-# crontab -l | grep -v "0 0 \* \* 0 $PERSISTENT_ROOT/start.sh" | crontab -
+crontab -l | grep -v "0 0 \* \* 0 $PERSISTENT_ROOT/renew-domain.sh" | crontab -
+crontab -l | grep -v "0 0 \* \* 0 $PERSISTENT_ROOT/start.sh" | crontab -
 
+echo "Edit your crontab -e and move any ddns into config.yml manually"
 
-#Add cron back
-# line="0 0 * * 0 $PERSISTENT_ROOT/start.sh"
-# (crontab -u $(whoami) -l; echo "$line" ) | crontab -u $(whoami) -
+git checkout v3
+
+cp .env .env.backup
+cp $GLOBAL_ENV .env
+cp $ARK_ENV docker-templates/ark/.env
+cp $COLLABORA_ENV docker-templates/collabora/.env
+cp $HOMEASSISTANT_ENV docker-templates/homeassistant/.env
+cp $MINECRAFT_ENV docker-templates/minecraft/.env
+cp $NEXTCLOUD_ENV docker-templates/nextcloud/.env
+cp $NGINX_ENV docker-templates/nginx/.env
+cp $ONLYOFFICE_ENV docker-templates/onlyoffice/.env
+cp $PHPMYADMIN_ENABLED docker-templates/phpmyadmin/.env
+cp $PLEX_ENV docker-templates/plex/.env
+cp $PORTAINER_ENV docker-templates/portainer/.env
+cp $PROWLARR_ENV docker-templates/prowlarr/.env
+cp $RADARR_ENV docker-templates/radarr/.env
+cp $SAMBA_ENV docker-templates/samba/.env
+cp $SONARR_ENV docker-templates/sonarr/.env
+cp $TRANSMISSION_ENV docker-templates/transmission/.env
+
+./server.bin -daemon install
+
+echo "############################################################"
+echo "###               Welcome to docker-nas v3               ###"
+echo "###     Please check over all your .env files then run   ###"
+echo "###           ./server.bin -daemon start                 ###"
+echo "###                                                      ###"
+echo "###  https://github.com/SiloCityLabs/docker-nas/tree/v3  ###"
+echo "############################################################"
