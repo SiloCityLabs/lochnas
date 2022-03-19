@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"server/models"
-	"server/util"
 
 	"github.com/robfig/cron"
 )
@@ -17,14 +16,20 @@ func startCron() {
 	})
 
 	c.AddFunc("0 0 6 * * 0", func() { // 6AM Sundays
-		log.Println("Triggering start.sh")
-		util.Command(false, models.Config.WorkingDirectory, nil, "./scripts/start.sh")
+		log.Println("Triggering start()")
+		var err error
+		models.Apps, err = models.Apps.New()
+		if err != nil {
+			log.Fatalln("Failed to initialize apps: " + err.Error())
+		}
+		log.Println(models.Apps.Start())
 	})
 
-	c.AddFunc("0 2 5 * * 0", func() { // 5:02AM Sundays
-		log.Println("Triggering start.sh")
-		util.Command(false, models.Config.WorkingDirectory, nil, "./scripts/domain-renew.sh")
-	})
+	//TODO: domain renewal stuff
+	// c.AddFunc("0 2 5 * * 0", func() { // 5:02AM Sundays
+	// 	log.Println("Triggering domain-renew.sh")
+	// 	util.Command(false, models.Config.WorkingDirectory, nil, "./scripts/domain-renew.sh")
+	// })
 
 	// c.AddFunc("* * * * * *", func() { log.Println("Every second") })
 

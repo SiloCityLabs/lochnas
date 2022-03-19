@@ -5,13 +5,13 @@ services:
     plex:
         container_name: plex
         volumes:
-            - "${GLOBAL_ROOT}/docker-data/plex:/config"
+            - "/docker-nas/docker-data/plex:/config"
             - '/tmp/transcode:/transcode'
-            - "${PLEX_DATA}:/data:shared"
+            - "/docker-nas/home:/docker-nas/home:shared"
         restart: unless-stopped
         network_mode: host
-        # env_file:
-        #     - docker-templates/plex/.env
+        env_file:
+            - /docker-nas/docker-templates/plex/.env
         environment:
             - CHANGE_CONFIG_DIR_OWNERSHIP=true
             - HOME=/config

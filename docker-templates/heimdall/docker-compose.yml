@@ -4,19 +4,17 @@ services:
     samba:
         container_name: heimdall
         build: 
-            context: ./docker-templates/heimdall/dockerimage/
+            context: /docker-nas/docker-templates/heimdall/dockerimage/
             dockerfile: Dockerfile
         networks:
             - backend
         restart: unless-stopped
         volumes:
-            - "${GLOBAL_ROOT}/docker-data/heimdall/config:/config"
-            - "${GLOBAL_ROOT}:${GLOBAL_ROOT}"
-            - "${PLEX_DATA}:${PLEX_DATA}"
+            - "/docker-nas/docker-data/heimdall/config:/config"
         ports:
             - "8181:80/tcp"
         env_file:
-            - docker-templates/heimdall/.env
+            - /docker-nas/docker-templates/heimdall/.env
         environment:
             - PUID=${GLOBAL_UID}
             - PGID=${GLOBAL_GID}

@@ -1,13 +1,18 @@
 package models
 
 import (
+	"context"
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"server/util"
 	"strings"
+	"sync"
+	"time"
 
 	"github.com/joho/godotenv"
 )
@@ -37,7 +42,7 @@ func (a AppsModel) New() (AppsModel, error) {
 	tplPath := Config.WorkingDirectory + "/docker-templates/"
 	dataPath := Config.WorkingDirectory + "/docker-data/"
 
-	//TODO: Root check
+	//TODO: Root check, This might need to go in main() instead
 
 	if err := a.DockerInstalled(); err != nil {
 		return a, err
@@ -150,7 +155,7 @@ func (a AppsModel) Test() string {
 }
 
 func (a AppsModel) Update() string {
-	util.Command(false, Config.WorkingDirectory, nil, "./scripts/update.sh")
+	// util.Command(false, Config.WorkingDirectory, nil, "./scripts/update.sh")
 
 	//TODO: Move update.sh stuff into this file. Prefferably not in the form of util.Command's
 	// util.Command(false, Config.WorkingDirectory, nil, "apt update && apt dist-upgrade")
@@ -158,7 +163,7 @@ func (a AppsModel) Update() string {
 
 	//TODO: This will kill itself. May need to do it gracefully another way
 	// util.Command(false, Config.WorkingDirectory, nil, "service docker-nas restart")
-	return ""
+	return "NOT WORKING YET"
 }
 
 func (a AppsModel) params() string {
@@ -183,18 +188,25 @@ func (a AppsModel) NginxSites() error {
 
 	if enabled {
 		for _, app := range a {
+			tplPath := Config.WorkingDirectory + "/docker-templates/"
+			linkPath := Config.WorkingDirectory + "/docker-data/nginx/sites/" + app.Name + ".apps.conf.template"
+
 			if app.Enabled && app.Nginx {
 				if !app.NginxLinked {
 					//Add a link
-					new := dataPath + "nginx/sites/" + app.Name + ".apps.conf.template"
-					err := os.Symlink("file.txt", "file-symlink.txt")
-					if err != nil {
-						fmt.Println(err)
-						os.Exit(1)
+					log.Printf("add link for %s\n", linkPath)
+					if err := os.Symlink(tplPath+app.Name+"/nginx.conf", linkPath); err != nil {
+						log.Fatalln(err)
 					}
+				} else if Config.Server.Debug {
+					log.Printf("Symlink already exists for %s skipping...\n", linkPath)
 				}
 			} else if app.NginxLinked {
 				//Remove the link
+				log.Printf("remove link for %s\n", linkPath)
+				if err := os.Remove(linkPath); err != nil {
+					log.Fatalln(err)
+				}
 			}
 		}
 	}
@@ -203,39 +215,120 @@ func (a AppsModel) NginxSites() error {
 }
 
 func (a AppsModel) Stop() string {
-	//TODO: Stop if running
-	//docker-compose $DOCKER_FILES stop
-	return ""
+	params := a.params()
+	if Config.Server.Debug {
+		log.Println(params)
+	}
+
+	util.Command(false, Config.WorkingDirectory, nil, "docker-compose -f docker-compose.yml "+params+" stop")
+	return "App Stopped"
+}
+
+func (a AppsModel) PortCheck() {
+	for _, app := range a {
+		if app.Enabled {
+			if ports, ok := app.ENV["PORT_CHECK"]; ok {
+				ports := strings.Split(ports, ",") //Check for multiple ports
+				for _, port := range ports {
+					//Has port check flag, lets check it
+					if Config.Server.Debug {
+						log.Printf("Checking port %s for app %s\n", port, app.Name)
+					}
+
+					//Start server
+					blockit := sync.WaitGroup{}
+					blockit.Add(1)
+					go func(port string, blockit *sync.WaitGroup) {
+						m := http.NewServeMux()
+						s := http.Server{Addr: ":" + port, Handler: m}
+						m.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+							// A very simple health check.
+							w.WriteHeader(http.StatusOK)
+							w.Header().Set("Content-Type", "application/json")
+							io.WriteString(w, `ok`)
+						})
+						if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+							log.Fatalln(err)
+						}
+
+						blockit.Wait()
+
+						s.Shutdown(context.Background())
+					}(port, &blockit)
+
+					//Give it a second to start up
+					time.Sleep(1 * time.Second)
+
+					//Fetch body and check
+					fmt.Println("Checking http://" + Config.Server.DDNS.IP + ":" + port)
+					resp, err := http.Get("http://" + Config.Server.DDNS.IP + ":" + port)
+					blockit.Done()
+
+					//TODO: Probably let the user know instead of quiting out, telegram or notify package
+					//TODO: timeout 3 seconds
+
+					if err != nil {
+						log.Fatalln("error connecting: " + err.Error())
+					}
+
+					defer resp.Body.Close()
+
+					body, err := ioutil.ReadAll(resp.Body)
+
+					if err != nil {
+						log.Fatalln("error reading body: " + err.Error())
+					}
+
+					if string(body) != "ok" {
+						log.Fatalln("message != ok")
+					}
+				}
+			}
+		}
+	}
+}
+
+func (a AppsModel) AfterStart() {
+	for _, app := range a {
+		if app.Enabled && app.AfterStart {
+			util.Command(false, Config.WorkingDirectory, nil, Config.WorkingDirectory+"/docker-templates/"+app.Name+"/after-start.sh")
+		}
+	}
 }
 
 func (a AppsModel) Start() string {
 
 	//Build docker params
 	params := a.params()
-	log.Println(params)
+	if Config.Server.Debug {
+		log.Println(params)
+	}
 
 	//Enable nginx subdomains
+	a.NginxSites()
 
 	//Stop if running
 	a.Stop()
 
-	//TODO: Check ports
-	//source scripts/port-check.sh
-	// 80,443,32400,25565
-	// web,ssl,plex,minecraft
+	//Check ports
+	a.PortCheck()
 
-	//TODO: Check for updates
-	//docker-compose $DOCKER_FILES pull
+	//Check Domains
+	//a.DomainCheck() //TODO: Similar to port check but for domain->ip match
 
-	//TODO: Run
-	//docker-compose $DOCKER_FILES up -d --build --remove-orphans --force-recreate
+	//Check for container updates
+	util.Command(false, Config.WorkingDirectory, nil, "docker-compose -f docker-compose.yml "+params+" pull")
 
-	//TODO: Remove old images
-	//docker image prune -f
-	//docker volume prune -f
+	//Run
+	util.Command(false, Config.WorkingDirectory, nil, "docker-compose -f docker-compose.yml "+params+" up -d --build --remove-orphans --force-recreate")
 
-	//TODO: After Start
-	//source scripts/after-start.sh
+	//Remove old container data
+	util.Command(false, Config.WorkingDirectory, nil, "docker image prune -f")
+	util.Command(false, Config.WorkingDirectory, nil, "docker volume prune -f")
+	util.Command(false, Config.WorkingDirectory, nil, "docker network prune -f")
+
+	//After Start
+	a.AfterStart()
 
 	return "Start() Completed"
 }

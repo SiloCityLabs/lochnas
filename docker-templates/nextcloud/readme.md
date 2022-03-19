@@ -10,7 +10,7 @@ Edit your `.env` file and enable this container then run `./start.sh`
 
 ```
 NEXTCLOUD_ENABLED=true
-NEXTCLOUD_DATA=/mnt/raid/home
+NEXTCLOUD_DATA=/docker-nas/home
 MYSQL_ROOT_PASSWORD=password
 MYSQL_PASSWORD=password
 ```

@@ -7,15 +7,16 @@ services:
       container_name: prowlarr
       networks:
             - backend
-      # env_file:
-      #     - docker-templates/prowlarr/.env
+      env_file:
+          - /docker-nas/docker-templates/prowlarr/.env
       environment:
         - PUID=${GLOBAL_UID}
         - PGID=${GLOBAL_GID}
-        - TZ=America/New_York
         - UMASK_SET=002
       volumes:
-        - "${GLOBAL_ROOT}/docker-data/prowlarr:/config"
+        - '/etc/localtime:/etc/localtime:ro'
+        - '/etc/timezone:/etc/timezone:ro'
+        - "/docker-nas/docker-data/prowlarr:/config"
       # ports:
       #   - 9696:9696
       restart: unless-stopped

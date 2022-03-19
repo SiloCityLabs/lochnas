@@ -2,7 +2,6 @@ package models
 
 import (
 	"os"
-	"server/util"
 )
 
 var Domain DomainModel
@@ -16,8 +15,8 @@ func (a DomainModel) Init() {
 
 //TODO: Bring domain-renew the fully into golang
 func (a DomainModel) Renew() string {
-	util.Command(false, Config.WorkingDirectory, nil, "./scripts/domain-renew.sh")
-	util.Command(false, Config.WorkingDirectory, nil, "docker restart nginx")
+	// util.Command(false, Config.WorkingDirectory, nil, "./scripts/domain-renew.sh")
+	// util.Command(false, Config.WorkingDirectory, nil, "docker restart nginx")
 	return ""
 }
 
@@ -29,12 +28,12 @@ func (a DomainModel) Add() string {
 		return "Please supply only one domain name like: './server.bin -domain add domain.com'"
 	}
 
-	util.Command(false, Config.WorkingDirectory, nil, "./scripts/domain-add.sh "+args[0])
+	// util.Command(false, Config.WorkingDirectory, nil, "./scripts/domain-add.sh "+args[0])
 	return ""
 }
 
 //TODO: Bring domain-remove the fully into golang
 func (a DomainModel) Delete() string {
-	util.Command(false, Config.WorkingDirectory, nil, "./scripts/domain-remove.sh")
+	// util.Command(false, Config.WorkingDirectory, nil, "./scripts/domain-remove.sh")
 	return ""
 }

@@ -5,8 +5,8 @@ services:
     collabora:
         container_name: collabora
         image: collabora/code
-        # env_file:
-        #     - docker-templates/collabora/.env
+        env_file:
+            - /docker-nas/docker-templates/collabora/.env
         environment:
             - 'extra_params=--o:ssl.enable=false --o:ssl.termination=true'
             - DONT_GEN_SSL_CERT=true

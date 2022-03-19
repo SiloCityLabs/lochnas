@@ -12,8 +12,8 @@ services:
             retries: 3
             start_period: 15s
         volumes:
-            - "${GLOBAL_ROOT}/docker-data/homeassistant:/config"
+            - "/docker-nas/docker-data/homeassistant:/config"
         restart: unless-stopped
         image: 'homeassistant/home-assistant:stable'
-        # env_file:
-        #     - docker-templates/homeassistant/.env
+        env_file:
+            - /docker-nas/docker-templates/homeassistant/.env

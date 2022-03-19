@@ -4,18 +4,18 @@ version: '3.7'
 services:
     nextcloud:
         container_name: nextcloud
+        env_file:
+            - /docker-nas/docker-templates/nextcloud/.env
         hostname: cloud.${GLOBAL_DOMAIN}
         volumes:
-            - "${GLOBAL_ROOT}/docker-data/nextcloud/html:/var/www/html"
-            - "${NEXTCLOUD_DATA}:/raid"
+            - "/docker-nas/docker-data/nextcloud/html:/var/www/html"
+            - "/docker-nas/home:/docker-nas/home:shared"
         restart: unless-stopped
         networks:
             - backend
         build: 
-          context: ./docker-templates/nextcloud/dockerimage/
+          context: /docker-nas/docker-templates/nextcloud/dockerimage/
           dockerfile: Dockerfile
-        # env_file:
-        #     - docker-templates/nextcloud/.env
         environment:
             - MYSQL_HOST=mariadb
         links:
@@ -31,16 +31,14 @@ services:
     mariadb:
         container_name: mariadb
         command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb_read_only_compressed=OFF
+        env_file:
+            - /docker-nas/docker-templates/nextcloud/.env
         volumes:
-            - "${GLOBAL_ROOT}/docker-data/mariadb:/var/lib/mysql"
+            - "/docker-nas/docker-data/mariadb:/var/lib/mysql"
         restart: unless-stopped
         networks:
             - backend
-        # env_file:
-        #     - docker-templates/ark/.env
         environment:
-            - MYSQL_ROOT_PASSWORD=${NEXTCLOUD_MYSQL_ROOT_PASSWORD}
-            - MYSQL_PASSWORD=${NEXTCLOUD_MYSQL_PASSWORD}
             - MYSQL_DATABASE=nextcloud
             - MYSQL_USER=nextcloud
         image: 'mariadb:latest'

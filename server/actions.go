@@ -31,10 +31,8 @@ func action(action string, param string) error {
 			return errors.New("Invalid option try -ddns [refresh, ip, ip-info]")
 		}
 	case "apps":
-		// models.Apps = make(models.AppsModel, 0) //[]AppModel{}
-		// apps := make(models.AppsModel, 0)
 		var err error
-		models.Apps, _ = models.Apps.New()
+		models.Apps, err = models.Apps.New()
 		if err != nil {
 			log.Fatalln("Failed to initialize apps: " + err.Error())
 		}
@@ -42,8 +40,10 @@ func action(action string, param string) error {
 		switch param {
 		case "start":
 			log.Println(models.Apps.Start())
+		case "stop":
+			log.Println(models.Apps.Stop())
 		case "test":
-			log.Println(models.Apps.Start())
+			log.Println(models.Apps.Test())
 		case "update":
 			log.Println(models.Apps.Update())
 		default:

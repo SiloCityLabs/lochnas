@@ -1,6 +1,6 @@
 # Raid setup
 
-For my setup I followed an [online guide](https://www.digitalocean.com/community/tutorials/how-to-create-raid-arrays-with-mdadm-on-ubuntu-16-04) by digital ocean to setup raid. I have a raid 5 mounted to `/mnt/raid` and another raid 5 mounted to `/mnt/plex`
+For my setup I followed an [online guide](https://www.digitalocean.com/community/tutorials/how-to-create-raid-arrays-with-mdadm-on-ubuntu-16-04) by digital ocean to setup raid. I have a raid 5 mounted to `/docker-nas` and another raid 5 mounted to `/mnt/plex`
 
 ## Mount raid with fstab
 
@@ -12,16 +12,16 @@ Double check that the mdadm configuration file `/etc/mdadm/mdadm.conf` has the o
 mdadm --detail --scan >> /etc/mdadm/mdadm.conf
 ```
 
-Now that we have located out raid drive (/dev/md0) we can mount it on every startup to `/mnt/raid` by adding the following to `/etc/fstab`.
+Now that we have located out raid drive (/dev/md0) we can mount it on every startup to `/docker-nas` by adding the following to `/etc/fstab`.
 
 `nano /etc/fstab`
 ```
-/dev/md0 /mnt/raid ext4 defaults,nofail,discard 0 0
+/dev/md0 /docker-nas ext4 defaults,nofail,discard 0 0
 ```
 
 Last and finally make the folder and mount the drive.
 
 ```
-mkdir /mnt/raid
+mkdir /docker-nas
 mount -a
 ```

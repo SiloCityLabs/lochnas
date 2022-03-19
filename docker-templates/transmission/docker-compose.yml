@@ -9,36 +9,20 @@ services:
             - backend
         volumes:
             - '/etc/localtime:/etc/localtime:ro'
-            - "${GLOBAL_ROOT}/docker-data/transmission/scripts:/scripts"
-            - "${GLOBAL_ROOT}/docker-data/transmission/config:/config"
-            - "${GLOBAL_ROOT}/docker-data/transmission/custom:/etc/openvpn/custom:ro"
-            - "${PLEX_DATA}/transmission:/data"
+            - '/etc/timezone:/etc/timezone:ro'
+            - "/docker-nas/docker-data/transmission/scripts:/scripts"
+            - "/docker-nas/docker-data/transmission/config:/config"
+            - "/docker-nas/docker-data/transmission/custom:/etc/openvpn/custom:ro"
+            - "${PLEX_DATA}/transmission:/data:shared"
         restart: unless-stopped
         cap_add:
             - NET_ADMIN
         dns:
             - 1.1.1.1
             - 8.8.8.8
-        # env_file:
-        #     - docker-templates/transmission/.env
+        env_file:
+            - /docker-nas/docker-templates/transmission/.env
         environment:
-            - OPENVPN_PASSWORD=${TRANSMISSION_OPENVPN_PASSWORD}
-            - OPENVPN_USERNAME=${TRANSMISSION_OPENVPN_USERNAME}
-            - OPENVPN_PROVIDER=${TRANSMISSION_OPENVPN_PROVIDER}
             - PUID=${GLOBAL_UID}
             - PGID=${GLOBAL_GID}
-            - NORDVPN_COUNTRY=${TRANSMISSION_NORDVPN_COUNTRY}
-            - TRANSMISSION_BLOCKLIST_ENABLED=true
-            - 'TRANSMISSION_BLOCKLIST_URL=http://john.bitsurge.net/public/biglist.p2p.gz'
-            - TRANSMISSION_RPC_AUTHENTICATION_REQUIRED=true
-            - TRANSMISSION_RPC_ENABLED=true
-            - TRANSMISSION_RPC_PASSWORD
-            - TRANSMISSION_RPC_PORT=9091
-            - TRANSMISSION_RPC_URL=/
-            - TRANSMISSION_RPC_USERNAME
-            - TRANSMISSION_UMASK=2
-            - TRANSMISSION_WATCH_DIR=/data/watch
-            - TRANSMISSION_HOME=/data/transmission-home
-            - HEALTH_CHECK_HOST=google.com
-            - CREATE_TUN_DEVICE=true
         image: 'haugene/transmission-openvpn:latest'

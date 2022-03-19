@@ -5,18 +5,17 @@ services:
     nginx:
         container_name: nginx
         volumes:
-            - "${GLOBAL_ROOT}/docker-templates/dashboard/dist:/dashboard:ro"
-            - "${GLOBAL_ROOT}/docker-templates/nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
-            - "${GLOBAL_ROOT}/docker-templates/nginx/sites:${GLOBAL_ROOT}/docker-templates/nginx/sites:ro"
-            - "${GLOBAL_ROOT}/docker-data/nginx/.htpasswd:/etc/nginx/.htpasswd:ro"
-            - "${GLOBAL_ROOT}/docker-data/nginx/sites:/etc/nginx/templates:ro"
-            - "${GLOBAL_ROOT}/docker-data/nginx/logs:/etc/nginx/logs"
-            - "${GLOBAL_ROOT}/docker-data/letsencrypt:/etc/letsencrypt"
-            - "${GLOBAL_ROOT}/docker-data/certbot:/var/www/certbot"
+            - "/docker-nas/docker-templates/nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
+            - "/docker-nas/docker-templates/nginx/sites:/docker-nas/docker-templates/nginx/sites:ro"
+            - "/docker-nas/docker-data/nginx/.htpasswd:/etc/nginx/.htpasswd:ro"
+            - "/docker-nas/docker-data/nginx/sites:/etc/nginx/templates:ro"
+            - "/docker-nas/docker-data/nginx/logs:/etc/nginx/logs"
+            - "/docker-nas/docker-data/letsencrypt:/etc/letsencrypt"
+            - "/docker-nas/docker-data/certbot:/var/www/certbot"
         networks:
             - backend
-        # env_file:
-        #     - docker-templates/nginx/.env
+        env_file:
+            - /docker-nas/docker-templates/nginx/.env
         environment:
             - GLOBAL_DOMAIN
             - OCTOPRINT_PATH

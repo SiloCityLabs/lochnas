@@ -5,20 +5,19 @@ services:
     samba:
         container_name: samba
         build: 
-            context: ./docker-templates/samba/dockerimage/
+            context: /docker-nas/docker-templates/samba/dockerimage/
             dockerfile: Dockerfile
         network_mode: host
         restart: unless-stopped
         volumes:
-            - "${GLOBAL_ROOT}/docker-data/samba/smb.conf:/etc/samba/smb.conf"
-            - "${GLOBAL_ROOT}:${GLOBAL_ROOT}"
-            - "${PLEX_DATA}:${PLEX_DATA}"
+            - "/docker-nas/docker-data/samba/smb.conf:/etc/samba/smb.conf"
+            - "/docker-nas/home:/docker-nas/home:shared"
         ports:
             - "137:137/udp"
             - "138:138/udp"
             - "139:139/tcp"
             - "445:445/tcp"
-        # env_file:
-        #     - docker-templates/samba/.env
+        env_file:
+            - /docker-nas/docker-templates/samba/.env
         environment:
             - SAMBA_USERMAP

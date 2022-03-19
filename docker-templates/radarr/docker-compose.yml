@@ -7,17 +7,17 @@ services:
       container_name: radarr
       networks:
             - backend
-      # env_file:
-      #     - docker-templates/radarr/.env
+      env_file:
+          - /docker-nas/docker-templates/radarr/.env
       environment:
         - PUID=${GLOBAL_UID}
         - PGID=${GLOBAL_GID}
-        - TZ=America/New_York
         - UMASK_SET=002
       volumes:
-        - "${GLOBAL_ROOT}/docker-data/radarr:/config"
-        - "${PLEX_DATA}/Movies:/movies"
-        - "${PLEX_DATA}/transmission:/data"
+        - '/etc/localtime:/etc/localtime:ro'
+        - '/etc/timezone:/etc/timezone:ro'
+        - "/docker-nas/docker-data/radarr:/config"
+        - "/docker-nas/home:/docker-nas/home:shared"
       # ports:
       #   - 7878:7878
       restart: unless-stopped

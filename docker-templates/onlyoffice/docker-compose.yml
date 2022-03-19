@@ -8,11 +8,11 @@ services:
         networks:
             - backend
         image: 'onlyoffice/documentserver'
-        # env_file:
-        #     - docker-templates/onlyoffice/.env
+        env_file:
+            - /docker-nas/docker-templates/onlyoffice/.env
         volumes:
-            - "${GLOBAL_ROOT}/docker-data/onlyoffice/CommunityServer/data:/var/www/onlyoffice/Data"
-            - "${GLOBAL_ROOT}/docker-data/onlyoffice/CommunityServer/logs:/var/log/onlyoffice"
+            - "/docker-nas/docker-data/onlyoffice/CommunityServer/data:/var/www/onlyoffice/Data"
+            - "/docker-nas/docker-data/onlyoffice/CommunityServer/logs:/var/log/onlyoffice"
         ports:
             # - '80:80/tcp'
             # - '443:443/tcp'

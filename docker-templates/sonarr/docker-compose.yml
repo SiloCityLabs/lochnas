@@ -7,17 +7,17 @@ services:
       container_name: sonarr
       networks:
             - backend
-      # env_file:
-      #     - docker-templates/sonarr/.env
+      env_file:
+          - /docker-nas/docker-templates/sonarr/.env
       environment:
         - PUID=${GLOBAL_UID}
         - PGID=${GLOBAL_GID}
-        - TZ=America/New_York
         - UMASK_SET=002
       volumes:
-        - "${GLOBAL_ROOT}/docker-data/sonarr:/config"
-        - "${PLEX_DATA}/TV:/tv"
-        - "${PLEX_DATA}/transmission:/data"
+        - '/etc/localtime:/etc/localtime:ro'
+        - '/etc/timezone:/etc/timezone:ro'
+        - "/docker-nas/docker-data/sonarr:/config"
+        - "/docker-nas/home:/docker-nas/home:shared"
       # ports:
       #   - 8989:8989
       restart: unless-stopped

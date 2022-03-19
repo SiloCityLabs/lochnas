@@ -6,25 +6,11 @@ services:
         container_name: ark
         restart: unless-stopped
         volumes:
-            - "${GLOBAL_ROOT}/docker-data/ark:/ark"
+            - "/docker-nas/docker-data/ark:/ark"
         network_mode: host
         image: 'turzam/ark:latest'
-        # env_file:
-        #     - docker-templates/ark/.env
+        env_file:
+            - /docker-nas/docker-templates/ark/.env
         environment:
-            - "SESSIONNAME=${ARK_SESSIONNAME}"
-            - "ADMINPASSWORD=${ARK_ADMINPASSWORD}"
-            - "AUTOUPDATE=${ARK_AUTOUPDATE}"
-            - "AUTOBACKUP=${ARK_AUTOBACKUP}"
-            - "WARNMINUTE=${ARK_WARNMINUTE}"
-            - "SERVERMAP=${ARK_SERVERMAP}"
-            - "NBPLAYERS=${ARK_NBPLAYERS}"
-            - "UPDATEONSTART=${ARK_UPDATEONSTART}"
-            - "BACKUPONSTART=${ARK_BACKUPONSTART}"
-            - "SERVERPORT=${ARK_SERVERPORT}"
-            - "STEAMPORT=${ARK_STEAMPORT}"
-            - "BACKUPONSTOP=${ARK_BACKUPONSTOP}"
-            - "WARNONSTOP=${ARK_WARNONSTOP}"
-            - "SERVERPASSWORD=${ARK_SERVERPASSWORD}"
             - "UID=${GLOBAL_UID}"
             - "GID=${GLOBAL_GID}"

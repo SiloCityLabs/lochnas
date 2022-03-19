@@ -52,13 +52,12 @@ func (p *program) run() error {
 
 	r.NoRoute(func(c *gin.Context) { c.JSON(http.StatusNotFound, gin.H{"message": "Not Found"}) })
 
-	// if err := nas.Start(models.Config.WorkingDirectory); err != nil {
-	// 	log.Println("Failed to start containers due to: " + err.Error())
-	// 	return err
-	// }
-
-	//Temporary way to start our docker setup until we move it fully into golang
-	util.Command(false, models.Config.WorkingDirectory, nil, "./scripts/start.sh")
+	var err error
+	models.Apps, err = models.Apps.New()
+	if err != nil {
+		log.Fatalln("Failed to initialize apps: " + err.Error())
+	}
+	log.Println(models.Apps.Start())
 
 	go startCron()
 
@@ -71,7 +70,13 @@ func (p *program) run() error {
 func (p *program) Stop(s service.Service) error {
 	// Any work in Stop should be quick, usually a few seconds at most.
 	log.Println("I'm Stopping!")
-	util.Command(false, models.Config.WorkingDirectory, nil, "./scripts/stop.sh")
+
+	var err error
+	models.Apps, err = models.Apps.New()
+	if err != nil {
+		log.Fatalln("Failed to initialize apps: " + err.Error())
+	}
+	log.Println(models.Apps.Stop())
 
 	close(p.exit)
 	return nil

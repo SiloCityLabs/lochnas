@@ -2,7 +2,9 @@ package models
 
 import (
 	"fmt"
+	"log"
 	"os"
+	"strings"
 	"time"
 
 	"gopkg.in/yaml.v2"
@@ -17,6 +19,9 @@ type ConfigModel struct {
 	Path             string `yaml:"-"`
 	WorkingDirectory string `yaml:"-"`
 	Server           struct {
+		// ENV variables used globally for many containers
+		GlobalENV []string `yaml:"global-env"`
+
 		// Run server in debug mode
 		Debug bool `yaml:"debug"`
 
@@ -69,6 +74,15 @@ func (c *ConfigModel) Load() error {
 	// Start YAML decoding from file
 	if err := d.Decode(&c); err != nil {
 		return err
+	}
+
+	// Load global env in
+	for _, env := range Config.Server.GlobalENV {
+		envSplit := strings.SplitN(env, "=", 2)
+		os.Setenv(envSplit[0], envSplit[1])
+		if Config.Server.Debug {
+			log.Println("Loading env: " + env)
+		}
 	}
 
 	return nil

@@ -34,7 +34,7 @@ docker run --rm -i \
 --name plextmp \
 -v /tmp/transcode:/transcode:rw \
 -v "${PLEX_DATA}:/data:rw" \
--v "${GLOBAL_ROOT}/docker-data/plex:/config:rw" \
+-v "/docker-nas/docker-data/plex:/config:rw" \
 --net host \
 -e PLEX_UID="${GLOBAL_UID}" \
 -e PLEX_GID="${GLOBAL_GID}" \
