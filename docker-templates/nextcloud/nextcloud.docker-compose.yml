@@ -39,4 +39,4 @@ services:
             - MYSQL_PASSWORD
             - MYSQL_DATABASE=nextcloud
             - MYSQL_USER=nextcloud
-        image: 'mariadb:latest'
+        image: 'mariadb:10.7'
