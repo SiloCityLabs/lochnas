@@ -10,9 +10,16 @@ import (
 func action(action string, param string) error {
 	switch action {
 	case "domain":
+		models.Domain = make(models.DomainModel)
+		models.Domain.Init()
+
 		switch param {
+		case "add":
+			log.Println(models.Domain.Add())
+		case "delete":
+			log.Println(models.Domain.Delete())
 		case "renew":
-			log.Println("domain renew")
+			log.Println(models.Domain.Renew())
 		default:
 			return errors.New("Invalid option try -domain [renew]")
 		}

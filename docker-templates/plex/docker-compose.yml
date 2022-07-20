@@ -1,10 +1,11 @@
-#https://composerize.com/
 version: '3.7'
 
 services:
     plex:
         container_name: plex
         volumes:
+            - '/etc/localtime:/etc/localtime:ro'
+            - '/etc/timezone:/etc/timezone:ro'
             - "/docker-nas/docker-data/plex:/config"
             - '/tmp/transcode:/transcode'
             - "/docker-nas/home:/docker-nas/home:shared"

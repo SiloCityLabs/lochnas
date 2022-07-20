@@ -16,4 +16,4 @@ Head over to your browser and type `http://serverip:32400/web` and if you have a
 
 ### Additional Configuration
 
-`PLEX_DATA=/mnt/plex` - Path to plex media directory mounted inside plex as `/data`
+`PLEX_DATA=/docker-nas/home/plex` - Path to plex media directory mounted inside plex as `/docker-nas/home`

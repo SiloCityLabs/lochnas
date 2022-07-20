@@ -4,13 +4,13 @@ These config files allow you to route internal network traffic via nginx. These 
 
 #### Enabling a custom site
 
-Create a `appname.conf.example` file in `/docker-nas/docker-data/nginx/sites/`.
+Create a `appname.conf.example` file in `/docker-nas/docker-data/nginx/templates/`.
 
 #### Using a custom template below
 
 Create a copy in the sites folder then edit your file or add the .env variables to nginx app.
 
 ```
-cp homeassistant_lan.conf.templates ../../docker-data/nginx/sites/
+cp homeassistant_lan.conf.templates ../../docker-data/nginx/templates/
 ```
 

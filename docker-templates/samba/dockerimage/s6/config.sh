@@ -12,6 +12,8 @@ for SAMBA_USER in "${SAMBA_USERS[@]}"
 do
     IFS=':' read -r -a USER_DATA <<< "$SAMBA_USER"
 
+    # echo "Adding user ${USER_DATA[0]} with password ${USER_DATA[2]}"
+
     adduser -S -G xfs -u ${USER_DATA[1]} -H -D ${USER_DATA[0]}
     echo "${USER_DATA[2]}" | tee - | smbpasswd -s -c /etc/samba/smb.conf -a ${USER_DATA[0]}
 

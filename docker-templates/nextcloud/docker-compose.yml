@@ -1,4 +1,3 @@
-#https://composerize.com/
 version: '3.7'
 
 services:
@@ -8,6 +7,8 @@ services:
             - /docker-nas/docker-templates/nextcloud/.env
         hostname: cloud.${GLOBAL_DOMAIN}
         volumes:
+            - '/etc/localtime:/etc/localtime:ro'
+            - '/etc/timezone:/etc/timezone:ro'
             - "/docker-nas/docker-data/nextcloud/html:/var/www/html"
             - "/docker-nas/home:/docker-nas/home:shared"
         restart: unless-stopped
@@ -34,6 +35,8 @@ services:
         env_file:
             - /docker-nas/docker-templates/nextcloud/.env
         volumes:
+            - '/etc/localtime:/etc/localtime:ro'
+            - '/etc/timezone:/etc/timezone:ro'
             - "/docker-nas/docker-data/mariadb:/var/lib/mysql"
         restart: unless-stopped
         networks:
@@ -41,4 +44,5 @@ services:
         environment:
             - MYSQL_DATABASE=nextcloud
             - MYSQL_USER=nextcloud
-        image: 'mariadb:latest'
+        image: 'mariadb:10.7'
+        #10.8.3 or latest seems to have issues. Lets pin this version

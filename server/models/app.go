@@ -1,7 +1,6 @@
 package models
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -11,7 +10,6 @@ import (
 	"os"
 	"server/util"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -87,20 +85,16 @@ func (a AppsModel) New() (AppsModel, error) {
 				}
 			}
 
-			//Check nginx.conf
-			if _, err := os.Stat(app.Path + "nginx.conf"); err == nil {
-				app.Nginx = true
+			//Check if nginx.conf exists for apps other than nginx
+			if app.Name != "nginx" {
+				if _, err := os.Stat(app.Path + "nginx.conf"); err == nil {
+					app.Nginx = true
+				}
 			}
 
-			//Check if nginx.conf is already symlinked
-			nginxPath := dataPath + "nginx/sites/" + app.Name + ".apps.conf.template"
-			if f, err := os.Lstat(nginxPath); err == nil {
-				if f.Mode()&os.ModeSymlink == os.ModeSymlink {
-					originFile, err := os.Readlink(nginxPath)
-					if err == nil && originFile == app.Path+"nginx.conf" {
-						app.NginxLinked = true
-					}
-				}
+			//Check if nginx.conf is already copied over
+			if _, err := os.Stat(dataPath + "nginx/templates/" + app.Name + ".apps.conf.template"); err == nil {
+				app.NginxLinked = true
 			}
 
 			//Check after-start.sh
@@ -189,22 +183,20 @@ func (a AppsModel) NginxSites() error {
 	if enabled {
 		for _, app := range a {
 			tplPath := Config.WorkingDirectory + "/docker-templates/"
-			linkPath := Config.WorkingDirectory + "/docker-data/nginx/sites/" + app.Name + ".apps.conf.template"
+			copyPath := Config.WorkingDirectory + "/docker-data/nginx/templates/" + app.Name + ".apps.conf.template"
 
 			if app.Enabled && app.Nginx {
-				if !app.NginxLinked {
-					//Add a link
-					log.Printf("add link for %s\n", linkPath)
-					if err := os.Symlink(tplPath+app.Name+"/nginx.conf", linkPath); err != nil {
-						log.Fatalln(err)
-					}
-				} else if Config.Server.Debug {
-					log.Printf("Symlink already exists for %s skipping...\n", linkPath)
+				//Copy template to nginx folder, overwriting if it exists
+				log.Printf("add template for %s\n", copyPath)
+				err := util.CopyFile(tplPath+app.Name+"/nginx.conf", copyPath, true)
+				if err != nil {
+					log.Fatalln("Could not copy nginx.conf template for " + app.Name + ": " + err.Error())
 				}
+
 			} else if app.NginxLinked {
-				//Remove the link
-				log.Printf("remove link for %s\n", linkPath)
-				if err := os.Remove(linkPath); err != nil {
+				//Remove the template
+				log.Printf("remove template for %s\n", copyPath)
+				if err := os.Remove(copyPath); err != nil {
 					log.Fatalln(err)
 				}
 			}
@@ -236,33 +228,33 @@ func (a AppsModel) PortCheck() {
 					}
 
 					//Start server
-					blockit := sync.WaitGroup{}
-					blockit.Add(1)
-					go func(port string, blockit *sync.WaitGroup) {
-						m := http.NewServeMux()
-						s := http.Server{Addr: ":" + port, Handler: m}
-						m.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-							// A very simple health check.
-							w.WriteHeader(http.StatusOK)
-							w.Header().Set("Content-Type", "application/json")
-							io.WriteString(w, `ok`)
-						})
+					m := http.NewServeMux()
+					s := http.Server{Addr: ":" + port, Handler: m}
+					m.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+						// A very simple health check.
+						w.WriteHeader(http.StatusOK)
+						w.Header().Set("Content-Type", "application/json")
+						io.WriteString(w, `ok`)
+					})
+
+					//Listen and server on go routine
+					go func(s *http.Server) {
 						if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 							log.Fatalln(err)
 						}
-
-						blockit.Wait()
-
-						s.Shutdown(context.Background())
-					}(port, &blockit)
+					}(&s)
 
 					//Give it a second to start up
-					time.Sleep(1 * time.Second)
+					time.Sleep(100 * time.Millisecond)
 
 					//Fetch body and check
 					fmt.Println("Checking http://" + Config.Server.DDNS.IP + ":" + port)
 					resp, err := http.Get("http://" + Config.Server.DDNS.IP + ":" + port)
-					blockit.Done()
+
+					//free up http server port binding
+					if err := s.Close(); err != nil {
+						log.Fatalln(err)
+					}
 
 					//TODO: Probably let the user know instead of quiting out, telegram or notify package
 					//TODO: timeout 3 seconds
@@ -312,6 +304,8 @@ func (a AppsModel) Start() string {
 
 	//Check ports
 	a.PortCheck()
+	// TODO: This is holding our port hostage ( Error starting userland proxy: listen tcp 0.0.0.0:443: bind: address already in use)
+	// TODO: We need to check if the ip is the same as the one we are using
 
 	//Check Domains
 	//a.DomainCheck() //TODO: Similar to port check but for domain->ip match

@@ -1,6 +1,6 @@
 # Raid setup
 
-For my setup I followed an [online guide](https://www.digitalocean.com/community/tutorials/how-to-create-raid-arrays-with-mdadm-on-ubuntu-16-04) by digital ocean to setup raid. I have a raid 5 mounted to `/docker-nas` and another raid 5 mounted to `/mnt/plex`
+For my setup I followed an [online guide](https://www.digitalocean.com/community/tutorials/how-to-create-raid-arrays-with-mdadm-on-ubuntu-16-04) by digital ocean to setup raid. I have a raid 5 mounted to `/docker-nas` and another raid 5 mounted to `/docker-nas/home/plex`
 
 ## Mount raid with fstab
 

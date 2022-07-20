@@ -10,6 +10,8 @@ services:
             - backend
         restart: unless-stopped
         volumes:
+            - '/etc/localtime:/etc/localtime:ro'
+            - '/etc/timezone:/etc/timezone:ro'
             - "/docker-nas/docker-data/heimdall/config:/config"
         ports:
             - "8181:80/tcp"

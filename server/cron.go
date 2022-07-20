@@ -12,7 +12,9 @@ func startCron() {
 
 	c.AddFunc("0 */5 * * * *", func() { // Every 5 mins
 		log.Println("Triggering -ddns refresh")
-		models.DDNS.Refresh()
+		models.DDNS = make(models.DDNSModel)
+		models.DDNS.Init()
+		log.Println(models.DDNS.Refresh())
 	})
 
 	c.AddFunc("0 0 6 * * 0", func() { // 6AM Sundays
@@ -25,13 +27,12 @@ func startCron() {
 		log.Println(models.Apps.Start())
 	})
 
-	//TODO: domain renewal stuff
-	// c.AddFunc("0 2 5 * * 0", func() { // 5:02AM Sundays
-	// 	log.Println("Triggering domain-renew.sh")
-	// 	util.Command(false, models.Config.WorkingDirectory, nil, "./scripts/domain-renew.sh")
-	// })
-
-	// c.AddFunc("* * * * * *", func() { log.Println("Every second") })
+	//domain renewal
+	c.AddFunc("0 2 5 * * 0", func() { // 5:02AM Sundays
+		log.Println("Triggering Renew()")
+		models.Domain = make(models.DomainModel)
+		log.Println(models.Domain.Renew())
+	})
 
 	c.Start()
 }

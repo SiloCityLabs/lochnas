@@ -1,4 +1,3 @@
-#https://composerize.com/
 version: '3.7'
 
 services:
@@ -8,10 +7,11 @@ services:
         ports:
             - "19132:19132/udp"
         volumes:
+            - '/etc/localtime:/etc/localtime:ro'
+            - '/etc/timezone:/etc/timezone:ro'
             - "/docker-nas/docker-data/minecraft-bedrock:/data"
         env_file:
             - /docker-nas/docker-templates/minecraft-bedrock/.env
         environment:
-            EULA: "TRUE"
             REPLACE_ENV_VARIABLES: "TRUE"
         restart: unless-stopped

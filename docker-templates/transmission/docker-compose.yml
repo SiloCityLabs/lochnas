@@ -1,4 +1,3 @@
-#https://composerize.com/
 version: '3.7'
 
 services:
@@ -10,10 +9,11 @@ services:
         volumes:
             - '/etc/localtime:/etc/localtime:ro'
             - '/etc/timezone:/etc/timezone:ro'
+            - "/docker-nas/docker-data/transmission/home:/data/transmission-home"
             - "/docker-nas/docker-data/transmission/scripts:/scripts"
             - "/docker-nas/docker-data/transmission/config:/config"
             - "/docker-nas/docker-data/transmission/custom:/etc/openvpn/custom:ro"
-            - "${PLEX_DATA}/transmission:/data:shared"
+            - "/docker-nas/home:/docker-nas/home:shared"
         restart: unless-stopped
         cap_add:
             - NET_ADMIN
@@ -26,3 +26,5 @@ services:
             - PUID=${GLOBAL_UID}
             - PGID=${GLOBAL_GID}
         image: 'haugene/transmission-openvpn:latest'
+        ports:
+            - '9091:9091'

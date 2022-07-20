@@ -1,4 +1,3 @@
-#https://composerize.com/
 version: '3.4'
 
 services:
@@ -12,6 +11,8 @@ services:
             retries: 3
             start_period: 15s
         volumes:
+            - '/etc/localtime:/etc/localtime:ro'
+            - '/etc/timezone:/etc/timezone:ro'
             - "/docker-nas/docker-data/homeassistant:/config"
         restart: unless-stopped
         image: 'homeassistant/home-assistant:stable'

@@ -81,3 +81,30 @@ func ExecWd() (string, error) {
 	exPath := filepath.Dir(ex)
 	return exPath, err
 }
+
+func CopyFile(src, dst string, overwrite bool) error {
+	srcFile, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer srcFile.Close()
+
+	if _, err := os.Stat(dst); err == nil {
+		if !overwrite {
+			return nil
+		}
+	}
+
+	dstFile, err := os.Create(dst)
+	if err != nil {
+		return err
+	}
+	defer dstFile.Close()
+
+	_, err = io.Copy(dstFile, srcFile)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

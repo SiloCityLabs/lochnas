@@ -3,3 +3,5 @@ docker-data/
 .env
 config.yml
 lost+found
+server.bin
+.vscode

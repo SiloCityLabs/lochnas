@@ -2,12 +2,13 @@ package models
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"strings"
 	"time"
 
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 var DefaultConfigPath = "config.yml"
@@ -88,6 +89,32 @@ func (c *ConfigModel) Load() error {
 	return nil
 }
 
+//Encode yaml and write to file
 func (c *ConfigModel) Write() error {
+	s, err := os.Stat(c.Path)
+	if err != nil {
+		return fmt.Errorf("os.Stat(%s) error: %s\n", c.Path, err.Error())
+	}
+	if s.IsDir() {
+		return fmt.Errorf("'%s' is a directory, not a normal file", c.Path)
+	}
+
+	// Open config file
+	file, err := os.Open(c.Path)
+	if err != nil {
+		return fmt.Errorf("os.Open error: %s\n", err.Error())
+	}
+	defer file.Close()
+
+	yamlData, err := yaml.Marshal(&c)
+	if err != nil {
+		return fmt.Errorf("Error while Marshaling: %s\n", err.Error())
+	}
+
+	err = ioutil.WriteFile(c.Path, yamlData, 0644)
+	if err != nil {
+		return fmt.Errorf("Unable to write data into the file: %s\n", err.Error())
+	}
+
 	return nil
 }
