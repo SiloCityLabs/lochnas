@@ -1,8 +1,10 @@
-# All-In-One Docker NAS Setup V2
+# All-In-One Docker NAS Setup V3
+
+THIS IS A ALPHA BRANCH. DO NOT USE IT FOR PRODUCTION.
 
 This is a docker NAS setup used to quickly get going with a private NAS and cloud setup. The purpose to keep it all dockerized is for super quick migrations in the long term future and to allow better long term updates even with an OS that is not updated as often. All containers are optional and most can easily be enabled with a boolean setting excluding nginx which is required. 
 
-If you have v1 see this [migration guide](docs/migrating.v2.md)
+If you have v2 see this [migration guide](docs/migrating.v3.md)
 
 ### Requires
  - Ubuntu 20 server or greater is the preffered setup used for this system.
@@ -12,13 +14,23 @@ If you have v1 see this [migration guide](docs/migrating.v2.md)
 
 ### Install
 
+#### Ubuntu/Debian
+
 Just clone the repo and your all set. Afterwards run `./server.bin`
+
 ```
 sudo apt install git
 cd /
 git clone https://github.com/SiloCityLabs/docker-nas.git
 sudo ./server.bin -daemon install
 ```
+
+#### Windows
+
+This is untested as of right now, See issue #53 for more information.
+#### OSX
+
+This is untested as of right now, See issue #44 for more information.
 
 ### Updates
 
@@ -74,7 +86,7 @@ chmod -R 770 path/to/local
 
 #### Edit config
 
-Modify the `.env` with your settings.
+Modify/create the `config.yml` and  with your settings.
 
 ### Container Docs
 
