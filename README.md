@@ -78,6 +78,8 @@ Modify the `.env` with your settings.
 
 ### Container Docs
 
+[Request a custom container](https://github.com/SiloCityLabs/docker-nas/issues/new?assignees=&labels=App+Request&template=app-request-template.md&title=)
+
 Containers:
  - [Nginx + SSL + Auto Renew with certbot](docker-templates/nginx/readme.md) (web proxy + ssl)
  - [Transmission + VPN](docker-templates/transmission/readme.md) (Torrents, Requires VPN)
