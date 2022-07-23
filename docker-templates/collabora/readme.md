@@ -10,4 +10,9 @@ Edit your `.env` file and enable this container with `COLLABORA_ENABLED=true`.
 
 ### Additional Configuration
 
-Once this is enabled you can configure it with the collabora plugin in Nextcloud
+You can try it in 5 minutes with Nextcloud following these basic steps:
+
+ - In your browser go to https://cloud.yourdomain.com and set up your Nextcloud.
+ - In Nextcloud go to Apps – Office and Text, and install Nextcloud Office app.
+ - In Nextcloud go to Settings -> Administration -> Office
+ - Select "Use your own server" and type in `https://office.yourdomain.com`
