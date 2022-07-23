@@ -13,6 +13,5 @@ services:
         env_file:
             - /docker-nas/docker-templates/minecraft/.env
         environment:
-            EULA: "TRUE"
             REPLACE_ENV_VARIABLES: "TRUE"
         restart: unless-stopped

@@ -9,8 +9,8 @@ If you have v2 see this [migration guide](docs/migrating.v3.md)
 ### Requires
  - Ubuntu 20 server or greater is the preffered setup used for this system.
  - Domain name [ddns docs](docs/ddns.md)
- - Port forwarding 80 + 443
- - Static IP on Server, alternative is DHCP reservation on router.
+ - [Port forwarding](https://portforward.com/router.htm) 80 + 443
+ - Static IP on Server, alternative is [DHCP reservation](https://portforward.com/dhcp-reservation/#how-to-make-a-dhcp-reservation-in-your-router) on router.
 
 ### Install
 

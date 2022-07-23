@@ -7,3 +7,7 @@ Original maintainer [phpmyadmin/phpmyadmin](https://hub.docker.com/r/phpmyadmin/
 ## How to enable
 
 Edit your `.env` file and enable this container with `PHPMYADMIN_ENABLED=true`
+
+## How to use
+
+Access your site via your browser at https://phpmyadmin.yourdomain.com

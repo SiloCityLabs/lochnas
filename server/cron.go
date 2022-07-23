@@ -10,13 +10,17 @@ import (
 func startCron() {
 	c := cron.New()
 
-	c.AddFunc("0 */5 * * * *", func() { // Every 5 mins
-		log.Println("Triggering -ddns refresh")
-		models.DDNS = make(models.DDNSModel)
-		models.DDNS.Init()
-		log.Println(models.DDNS.Refresh())
-	})
+	//Check if ddns config is empty
+	if len(models.Config.Server.DDNS.URL) != 0 {
+		c.AddFunc("0 */5 * * * *", func() { // Every 5 mins
+			log.Println("Triggering -ddns refresh")
+			models.DDNS = make(models.DDNSModel)
+			models.DDNS.Init()
+			log.Println(models.DDNS.Refresh())
+		})
+	}
 
+	//Restart the docker containers so they update
 	c.AddFunc("0 0 6 * * 0", func() { // 6AM Sundays
 		log.Println("Triggering start()")
 		var err error
@@ -27,7 +31,7 @@ func startCron() {
 		log.Println(models.Apps.Start())
 	})
 
-	//domain renewal
+	//domain ssl renewal
 	c.AddFunc("0 2 5 * * 0", func() { // 5:02AM Sundays
 		log.Println("Triggering Renew()")
 		models.Domain = make(models.DomainModel)
