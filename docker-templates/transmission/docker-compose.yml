@@ -34,4 +34,5 @@ services:
             - TRANSMISSION_RPC_URL=/
             - TRANSMISSION_UMASK=2
             - CREATE_TUN_DEVICE=true
+            - LOCAL_NETWORK=172.33.0.0/16
         image: 'haugene/transmission-openvpn:latest'
