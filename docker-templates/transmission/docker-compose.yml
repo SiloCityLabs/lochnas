@@ -3,20 +3,23 @@ version: '3.7'
 services:
     transmission:
         container_name: transmission
-        command: "'dumb-init' '/etc/openvpn/start.sh'"
         networks:
             - backend
         volumes:
             - '/etc/localtime:/etc/localtime:ro'
             - '/etc/timezone:/etc/timezone:ro'
-            - "/docker-nas/docker-data/transmission/home:/data/transmission-home"
+            - "/docker-nas/docker-data/transmission/data:/data"
             - "/docker-nas/docker-data/transmission/scripts:/scripts"
             - "/docker-nas/docker-data/transmission/config:/config"
-            - "/docker-nas/docker-data/transmission/custom:/etc/openvpn/custom"
+            - "/docker-nas/docker-data/transmission/custom:/etc/openvpn/custom:ro"
             - "/docker-nas/home:/docker-nas/home:shared"
         restart: unless-stopped
         cap_add:
             - NET_ADMIN
+        logging:
+            driver: json-file
+            options:
+                max-size: 10m
         dns:
             - 1.1.1.1
             - 8.8.8.8
@@ -25,6 +28,10 @@ services:
         environment:
             - PUID=${GLOBAL_UID}
             - PGID=${GLOBAL_GID}
+            - TRANSMISSION_RPC_ENABLED=true
+            - TRANSMISSION_RPC_AUTHENTICATION_REQUIRED=true
+            - TRANSMISSION_RPC_PORT=9091
+            - TRANSMISSION_RPC_URL=/
+            - TRANSMISSION_UMASK=2
+            - CREATE_TUN_DEVICE=true
         image: 'haugene/transmission-openvpn:latest'
-        ports:
-            - '9091:9091'

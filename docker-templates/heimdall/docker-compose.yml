@@ -1,22 +1,21 @@
 version: '3.7'
 
 services:
-    samba:
-        container_name: heimdall
-        build: 
-            context: /docker-nas/docker-templates/heimdall/dockerimage/
-            dockerfile: Dockerfile
-        networks:
-            - backend
-        restart: unless-stopped
-        volumes:
-            - '/etc/localtime:/etc/localtime:ro'
-            - '/etc/timezone:/etc/timezone:ro'
-            - "/docker-nas/docker-data/heimdall/config:/config"
-        ports:
-            - "8181:80/tcp"
-        env_file:
-            - /docker-nas/docker-templates/heimdall/.env
-        environment:
-            - PUID=${GLOBAL_UID}
-            - PGID=${GLOBAL_GID}
+  heimdall:
+    image: lscr.io/linuxserver/heimdall:latest
+    container_name: heimdall
+    networks:
+        - backend
+    environment:
+        - PUID=${GLOBAL_UID}
+        - PGID=${GLOBAL_GID}
+        # - TZ=Europe/London
+    volumes:
+        - '/etc/localtime:/etc/localtime:ro'
+        - '/etc/timezone:/etc/timezone:ro'
+        - "/docker-nas/docker-data/heimdall/config:/config"
+    env_file:
+        - /docker-nas/docker-templates/heimdall/.env
+    # ports:
+    #     - 80:80
+    restart: unless-stopped
