@@ -10,6 +10,18 @@ Edit your `.env` file and enable this container with `TRANSMISSION_ENABLED=true`
 
 The other variables are required with this vpn only transmission container.
 
+## Using it in other apps
+
+#### Tremotesf
+
+#### Sonarr / Radarr
+
+To add it to this container you can do so from the respective app ui's.
+
+Navigate to Settings > Download Clients > Add Client > Select Transmission.
+
+![Transmission Settings!](./transmission-settings.png "Transmission Settings")
+
 ## Custom Transmission RSS
 
 Inside portainer you can add your own rss feeds by making a new container like so
