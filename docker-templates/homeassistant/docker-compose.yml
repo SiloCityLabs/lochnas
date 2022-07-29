@@ -14,6 +14,11 @@ services:
             - '/etc/localtime:/etc/localtime:ro'
             - '/etc/timezone:/etc/timezone:ro'
             - "/docker-nas/docker-data/homeassistant:/config"
+        devices:
+            - ${DEVICE_0}:/dev/ttyUSB0
+            - ${DEVICE_1}:/dev/ttyUSB1
+            - ${DEVICE_2}:/dev/ttyUSB2
+            - ${DEVICE_3}:/dev/ttyUSB3
         restart: unless-stopped
         image: 'homeassistant/home-assistant:stable'
         env_file:

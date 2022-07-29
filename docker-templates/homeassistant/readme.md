@@ -8,6 +8,14 @@ Original maintainer [homeassistant/home-assistant](https://hub.docker.com/r/home
 
 Edit your `.env` file and enable this container with `HOMEASSISTANT_ENABLED=true`. Run `./start.sh` and navigate in a browser to configure nextcloud at `hass.domain.com`. This should be pretty straight forward.
 
-## Run home assistant on a seperate machine
+## Adding dongle to container
 
-Edit your `.env` file and enable this container with `HOMEASSISTANT_LAN_ENABLED=true` and `HOMEASSISTANT_LAN_URI=http://iptohassio:8123`. Run `./start.sh` and navigate in a browser to configure nextcloud at `hass.domain.com`. This should be pretty straight forward. You cannot run both at the same time.
+To add a zigbee/zwave dongle to the container, you need to add the device path to your `.env` file:
+
+Example:
+```
+DEVICE_0=/dev/ttyUSB0
+DEVICE_1=/dev/ttyUSB1
+DEVICE_2=/dev/null
+DEVICE_3=/dev/null
+```

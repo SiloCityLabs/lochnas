@@ -12,7 +12,7 @@ To use web access you must have nginx auth password set
 
 #### Enable root folder
 
-Settings -> Media Management -> Root Folders -> Add Root Folder -> /movies
+Settings -> Media Management -> Root Folders -> Add Root Folder -> /docker-nas/home/path/to/Movies
 
 #### Enable Download clients
 
