@@ -15,3 +15,15 @@
     ├── server/ (server source path)
     └── config.yml (server config)
 ```
+
+## /docker-nas/
+
+Root folder
+
+### docker-data/
+
+### docker-templates/
+
+### docs/
+
+### server/
