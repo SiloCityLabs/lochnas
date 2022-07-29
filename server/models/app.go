@@ -104,7 +104,7 @@ func (a AppsModel) New() (AppsModel, error) {
 
 			a = append(a, app)
 		} else {
-			//TODO: Link user to folder structure github docs link
+			log.Println("Something does not look right about this apps folder (" + tplPath + f.Name() + "/" + "), see folder structure documentation here: https://github.com/SiloCityLabs/docker-nas/blob/0e0f23b/docs/folder-structure.md")
 		}
 	}
 
