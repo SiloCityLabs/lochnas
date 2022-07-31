@@ -11,6 +11,9 @@ services:
             - DONT_GEN_SSL_CERT=true
             - server_name=office.${GLOBAL_DOMAIN}
             - dictionaries=en_US
+        privileged: true
+        cap_add:
+            - MKNOD
         networks:
             - backend
         volumes:
