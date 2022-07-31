@@ -7,10 +7,10 @@
 #     rm -rf /docker-nas/docker-data/nextcloud/html/apps/files_trashbin
 #     # This plugin causes 403 errors in ios/Android app when deleting files on External storage
 #     # files_trashbin could not be removed as it is a shipped app, so lets just delete it so we dont have to keep running this
-#     # docker exec -u 33 -it nextcloud php occ app:delete files_trashbin
+#     # docker exec -u $GLOBAL_UID -it nextcloud php occ app:delete files_trashbin
 # fi
 
-docker exec -u 33 -it nextcloud php occ app:disable files_trashbin
+docker exec -u $GLOBAL_UID -it nextcloud php occ app:disable files_trashbin
 
 # Preview plugin
 if [[ ! -d /docker-nas/docker-data/nextcloud/html/custom_apps/previewgenerator ]]; then
@@ -23,6 +23,9 @@ if [[ ! -d /docker-nas/docker-data/nextcloud/html/custom_apps/previewgenerator ]
 fi
 
 # docker exec -u $GLOBAL_UID -it nextcloud php occ maintenance:repair --include-expensive
+
+# TODO: Possibly uninstall the following plugins:
+# docker exec -u $GLOBAL_UID -it nextcloud php occ app:disable richdocuments
 
 # bug in nginx cache http/s redirect infinit loop
 echo "Waiting..."
