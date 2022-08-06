@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -18,21 +19,34 @@ func (a DDNSModel) Init() {
 }
 
 func (a DDNSModel) Refresh() string {
+	notify := Config.Server.DDNS.Notification.Enabled
+	notifyService := Config.Server.DDNS.Notification.Service
+
 	ip, err := util.IP()
 	if err != nil {
 		return err.Error()
 	}
 
 	if Config.Server.DDNS.IP != ip {
-		log.Printf("IP Changed (%s != %s), running ddns update", ip, Config.Server.DDNS.IP)
+		ipChangedMsg := fmt.Sprintf("IP changed from %s to %s", Config.Server.DDNS.IP, ip)
+		if notify {
+			Config.Server.Notifications.Notify(notifyService, ipChangedMsg)
+		}
+		log.Printf(ipChangedMsg)
 		Config.Server.DDNS.IP = ip
 
 		if err := Config.Write(); err != nil {
+			if notify {
+				Config.Server.Notifications.Notify(notifyService, "Cannot write config: "+err.Error())
+			}
 			log.Fatal("Cannot write config: ", err)
 		}
 
 		for _, url := range Config.Server.DDNS.URL {
 			if err := a.URL(url); err != nil {
+				if notify {
+					Config.Server.Notifications.Notify(notifyService, "Cannot update url: "+err.Error())
+				}
 				return err.Error()
 			}
 		}

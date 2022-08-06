@@ -11,3 +11,23 @@ server:
         url:
             - http://ddnsupdate.com
             - http://ddnsupdate.com
+        notification:
+            enabled: true
+            service: telegram
+    notifications:
+        subject: Docker Nas Server
+        enabled: true
+        services:
+            email:
+                enabled: false
+                server: 
+                from: 
+                username: 
+                password: 
+                receivers: 
+                    - someuser@yahoo.com
+            telegram:
+                enabled: true
+                token: 
+                receivers:
+                    - -1234567890

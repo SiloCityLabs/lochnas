@@ -100,6 +100,7 @@ func main() {
 	ddnsFlag := flag.String("ddns", "", "Run DDNS actions.")
 	domainFlag := flag.String("domain", "", "Run domain actions.")
 	appsFlag := flag.String("apps", "", "Run apps action.")
+	serverFlag := flag.String("server", "", "Run server action.")
 	flag.Parse()
 
 	models.Config.Path = *configFlag
@@ -153,6 +154,12 @@ func main() {
 	}
 	if len(*appsFlag) != 0 {
 		if err := action("apps", *appsFlag); err != nil {
+			log.Fatal(err)
+		}
+		return
+	}
+	if len(*serverFlag) != 0 {
+		if err := action("server", *serverFlag); err != nil {
 			log.Fatal(err)
 		}
 		return

@@ -58,8 +58,10 @@ So long as you dont tamper with commited files and keep your changes inside dock
         renew - Renew all domains
         add - Renew all domains, expects domain as argument
         delete - Renew all domains
-    server.bin -app
+    server.bin -apps
         update - Update
+    server.bin -server
+        notify - Send test notifications
 ```
 
 

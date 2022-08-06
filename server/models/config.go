@@ -47,9 +47,12 @@ type ConfigModel struct {
 		} `yaml:"timeout,omitempty"`
 
 		DDNS struct {
-			IP  string   `yaml:"ip"`
-			URL []string `yaml:"url"`
+			IP           string              `yaml:"ip"`
+			URL          []string            `yaml:"url"`
+			Notification NotificationSetting `yaml:"notification"`
 		} `yaml:"ddns"`
+
+		Notifications NotificationsModel `yaml:"notifications"`
 	} `yaml:"server"`
 }
 
@@ -84,6 +87,11 @@ func (c *ConfigModel) Load() error {
 		if Config.Server.Debug {
 			log.Println("Loading env: " + env)
 		}
+	}
+
+	// Configure notifications
+	if err := Config.Server.Notifications.Configure(); err != nil {
+		return err
 	}
 
 	return nil

@@ -10,8 +10,8 @@ services:
             - 'extra_params=--o:ssl.enable=false --o:ssl.termination=true'
             - DONT_GEN_SSL_CERT=true
             - server_name=office.${GLOBAL_DOMAIN}
+            - aliasgroup1=cloud.${GLOBAL_DOMAIN}
             - dictionaries=en_US
-        privileged: true
         cap_add:
             - MKNOD
         networks:
@@ -20,6 +20,7 @@ services:
             - '/etc/localtime:/etc/localtime:ro'
             - '/etc/timezone:/etc/timezone:ro'
         restart: unless-stopped
+        privelaged: true
         healthcheck:
             test: ["CMD", "wget", "https://office.${GLOBAL_DOMAIN}/", "-O", "/dev/null"]
             interval: 1m

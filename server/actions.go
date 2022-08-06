@@ -56,6 +56,11 @@ func action(action string, param string) error {
 		default:
 			return errors.New("Invalid option try -app [update]")
 		}
+	case "server":
+		switch param {
+		case "notify":
+			log.Println(models.Config.Server.Notifications.Test())
+		}
 	}
 
 	return nil
