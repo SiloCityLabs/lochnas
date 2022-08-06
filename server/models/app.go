@@ -302,6 +302,9 @@ func (a AppsModel) Start() string {
 	//Stop if running
 	a.Stop()
 
+	//IP Check/Update
+	DDNS.Refresh()
+
 	//Check ports
 	a.PortCheck()
 	// TODO: This is holding our port hostage ( Error starting userland proxy: listen tcp 0.0.0.0:443: bind: address already in use)
