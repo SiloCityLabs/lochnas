@@ -29,6 +29,8 @@ type AppModel struct {
 	Enabled bool
 	// Has after-start.sh file
 	AfterStart bool
+	// Has before-start.sh file
+	BeforeStart bool
 	// Has nginx.conf file
 	Nginx       bool
 	NginxLinked bool
@@ -95,6 +97,11 @@ func (a AppsModel) New() (AppsModel, error) {
 			//Check if nginx.conf is already copied over
 			if _, err := os.Stat(dataPath + "nginx/templates/" + app.Name + ".apps.conf.template"); err == nil {
 				app.NginxLinked = true
+			}
+
+			//Check before-start.sh
+			if _, err := os.Stat(app.Path + "before-start.sh"); err == nil {
+				app.BeforeStart = true
 			}
 
 			//Check after-start.sh
@@ -288,6 +295,14 @@ func (a AppsModel) AfterStart() {
 	}
 }
 
+func (a AppsModel) BeforeStart() {
+	for _, app := range a {
+		if app.Enabled && app.BeforeStart {
+			util.Command(false, Config.WorkingDirectory, nil, Config.WorkingDirectory+"/docker-templates/"+app.Name+"/before-start.sh")
+		}
+	}
+}
+
 func (a AppsModel) Start() string {
 
 	//Build docker params
@@ -315,6 +330,9 @@ func (a AppsModel) Start() string {
 
 	//Check for container updates
 	util.Command(false, Config.WorkingDirectory, nil, "docker-compose -f docker-compose.yml "+params+" pull")
+
+	//Before Start
+	a.BeforeStart()
 
 	//Run
 	util.Command(false, Config.WorkingDirectory, nil, "docker-compose -f docker-compose.yml "+params+" up -d --build --remove-orphans --force-recreate")

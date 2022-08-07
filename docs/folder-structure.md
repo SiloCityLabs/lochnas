@@ -28,6 +28,7 @@ This is where apps store their templates. The subdirectory is the app name. This
     │   ├── nginx.conf (optional)
     │   ├── .env.example (required)
     │   ├── after-start.sh (optional)
+    │   ├── before-start.sh (optional)
     │   └── readme.md (required)
 ```
 
@@ -46,6 +47,10 @@ Required. This is the .env file for the app. It should be called from the docker
 #### **after-start.sh**
 
 Optional. This is a bash script that is run after the app is started. This is useful for settings up non persistent commands to run withouth modifying the original container. Such as a maintenance script.
+
+#### **before-start.sh**
+
+Optional. This is a bash script that is run before the app is started but after any port/domain checks. This is useful for settings up non persistent commands to run withouth modifying the original container. Such as a maintenance script.
 
 #### **readme.md**
 

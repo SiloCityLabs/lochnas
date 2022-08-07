@@ -10,14 +10,8 @@ Edit your `.env` file and enable this container with `NGINX_ENABLED=true` and ot
 
 ### Add a domain
 
-You need to use the `domain-add.sh` script to create SSL certificates for your nginx setup. This is highly recommended and uses Let's Encrypt for a valid certificate for free.
+You need to use the domain argument to create SSL certificates for your nginx setup. This is highly recommended and uses Let's Encrypt for a valid certificate for free.
 
 ```
-./domain-add.sh cloud.domain.com
-```
-
-### Enable autorenew by adding a cron with `crontab -e`
-
-```
-0 0 * * 0 /path/to/domain-renew.sh
+/docker-nas/server.bin -domain add cloud.domain.com
 ```
