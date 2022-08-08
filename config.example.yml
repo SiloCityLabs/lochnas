@@ -6,6 +6,9 @@ server:
         - "GLOBAL_GID=33"
         - "GLOBAL_UID=33"
     port: 4000
+    ssl:
+        notification:
+            enabled: true
     ddns:
         ip: 0.0.0.0
         url:

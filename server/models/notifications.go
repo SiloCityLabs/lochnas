@@ -12,7 +12,7 @@ import (
 
 type NotificationsModel struct {
 	Enabled  bool   `yaml:"enabled"`
-	Subject  string `yaml:"subject"`
+	Subject  string `yaml:"subject,omitempty"`
 	Services struct {
 		Telegram struct {
 			Enabled   bool               `yaml:"enabled"`
