@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gin-contrib/gzip"
 
@@ -94,6 +95,11 @@ func main() {
 		log.Fatal(err)
 	}
 	models.Config.WorkingDirectory = path
+
+	//Check for root user
+	if os.Geteuid() > 0 { //Windows = -1, Unix = 0
+		log.Fatalln("You must be root/admin to run this program.")
+	}
 
 	configFlag := flag.String("config", path+"/"+models.DefaultConfigPath, "Path to config file.")
 	daemonFlag := flag.String("daemon", "", "Control the system service.")

@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"server/util"
 )
@@ -10,6 +11,8 @@ var Domain DomainModel
 
 //DomainModel ...
 type DomainModel map[string]string
+
+var SSLPath string = "/docker-nas/docker-data/letsencrypt/live/"
 
 func (a DomainModel) Init() {
 	// a["ip"] = env.Get("GLOBAL_DDNS_IP")
@@ -94,5 +97,36 @@ func (a DomainModel) Delete() string {
 	renewCommand += "certbot/certbot 'delete'"
 
 	util.Command(false, Config.WorkingDirectory, nil, renewCommand)
+	return ""
+}
+
+//This will check if the existing certs are valid.
+func (a DomainModel) Check() string {
+
+	// Scan directory for domains
+	files, err := ioutil.ReadDir(SSLPath)
+	if err != nil {
+		return "Error scanning directory"
+	}
+
+	for _, file := range files {
+		fmt.Println(file.Name())
+
+		// Check if file is not a directory
+		if !file.IsDir() {
+			continue
+		}
+
+		// Validate the certificate
+		if err := util.VerifyCert(SSLPath+file.Name()+"/fullchain.pem", SSLPath+file.Name()+"/cert.pem", file.Name()); err != nil {
+			fmt.Println("Error validating certificate for " + file.Name() + ": " + err.Error())
+			//We dont need to error out, we just need to let the user know. App checker will verify it has the ones it needs.
+
+			if Config.Server.SSL.Notification.Enabled {
+				Config.Server.Notifications.Notify(Config.Server.SSL.Notification.Service, "Error validating certificate for "+file.Name()+": "+err.Error())
+			}
+		}
+	}
+
 	return ""
 }

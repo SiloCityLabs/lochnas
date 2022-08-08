@@ -45,11 +45,13 @@ type ConfigModel struct {
 			// until an IDLE HTTP session is closed
 			Idle time.Duration `yaml:"idle,omitempty"`
 		} `yaml:"timeout,omitempty"`
-
+		SSL struct {
+			Notification NotificationSetting `yaml:"notification,omitempty"`
+		} `yaml:"ssl,omitempty"`
 		DDNS struct {
 			IP           string              `yaml:"ip"`
 			URL          []string            `yaml:"url"`
-			Notification NotificationSetting `yaml:"notification"`
+			Notification NotificationSetting `yaml:"notification,omitempty"`
 		} `yaml:"ddns"`
 
 		Notifications NotificationsModel `yaml:"notifications"`

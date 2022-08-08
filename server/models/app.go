@@ -34,6 +34,8 @@ type AppModel struct {
 	// Has nginx.conf file
 	Nginx       bool
 	NginxLinked bool
+	//Nginx server_name
+	ServerName string
 	// ENV Variables
 	ENV map[string]string
 }
@@ -41,8 +43,6 @@ type AppModel struct {
 func (a AppsModel) New() (AppsModel, error) {
 	tplPath := Config.WorkingDirectory + "/docker-templates/"
 	dataPath := Config.WorkingDirectory + "/docker-data/"
-
-	//TODO: Root check, This might need to go in main() instead
 
 	if err := a.DockerInstalled(); err != nil {
 		return a, err
@@ -91,6 +91,36 @@ func (a AppsModel) New() (AppsModel, error) {
 			if app.Name != "nginx" {
 				if _, err := os.Stat(app.Path + "nginx.conf"); err == nil {
 					app.Nginx = true
+
+					//get server_name
+					out, err := util.Command(true, app.Path, nil, "grep -m1 -Poe 'server_name \\K[^; ]+' nginx.conf")
+					if err != nil {
+						return nil, errors.New("Could not get server_name from " + app.Path + "nginx.conf: " + err.Error())
+					}
+
+					//Replace env variables and trim whitespace
+					app.ServerName = strings.TrimSpace(strings.Replace(out, "${GLOBAL_DOMAIN}", os.Getenv("GLOBAL_DOMAIN"), -1))
+
+					if Config.Server.Debug {
+						log.Println("Found " + app.Path + "nginx.conf: " + app.ServerName)
+					}
+
+					//check if ssl is valid
+					// Validate the certificate
+					if app.ServerName == "" {
+						fmt.Println("server_name is not valid for " + app.Name)
+						if Config.Server.SSL.Notification.Enabled {
+							Config.Server.Notifications.Notify(Config.Server.SSL.Notification.Service, "server_name is not valid for "+app.Name)
+						}
+					} else {
+						if err := util.VerifyCert(SSLPath+app.ServerName+"/fullchain.pem", SSLPath+app.ServerName+"/cert.pem", app.ServerName); err != nil {
+							fmt.Println("Error validating certificate for " + SSLPath + app.ServerName + ": " + err.Error())
+
+							if Config.Server.SSL.Notification.Enabled {
+								Config.Server.Notifications.Notify(Config.Server.SSL.Notification.Service, "Error validating certificate for "+app.ServerName+": "+err.Error())
+							}
+						}
+					}
 				}
 			}
 
@@ -216,7 +246,7 @@ func (a AppsModel) NginxSites() error {
 func (a AppsModel) Stop() string {
 	params := a.params()
 	if Config.Server.Debug {
-		log.Println(params)
+		log.Println("docker-compose -f docker-compose.yml " + params + " stop")
 	}
 
 	util.Command(false, Config.WorkingDirectory, nil, "docker-compose -f docker-compose.yml "+params+" stop")
@@ -319,6 +349,9 @@ func (a AppsModel) Start() string {
 
 	//IP Check/Update
 	DDNS.Refresh()
+
+	//SSL Check
+	Domain.Check()
 
 	//Check ports
 	a.PortCheck()
