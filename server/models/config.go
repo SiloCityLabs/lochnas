@@ -45,6 +45,11 @@ type ConfigModel struct {
 			// until an IDLE HTTP session is closed
 			Idle time.Duration `yaml:"idle,omitempty"`
 		} `yaml:"timeout,omitempty"`
+		Updates struct {
+			Enabled      bool                `yaml:"enabled"`
+			Cron         string              `yaml:"cron"`
+			Notification NotificationSetting `yaml:"notification,omitempty"`
+		} `yaml:"updates"`
 		SSL struct {
 			Notification NotificationSetting `yaml:"notification,omitempty"`
 		} `yaml:"ssl,omitempty"`

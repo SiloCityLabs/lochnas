@@ -20,6 +20,19 @@ func startCron() {
 		})
 	}
 
+	//Updates enabled so lets call it
+	if models.Config.Server.Updates.Enabled {
+		//Make sure expression is valid
+		if _, err := cron.Parse(models.Config.Server.Updates.Cron); err != nil {
+			log.Println("Failed to parse cron expression for updates: " + err.Error())
+		} else {
+			c.AddFunc(models.Config.Server.Updates.Cron, func() {
+				log.Println("Triggering -app update")
+				log.Println(models.Apps.Update())
+			})
+		}
+	}
+
 	//Restart the docker containers so they update
 	c.AddFunc("0 0 6 * * 0", func() { // 6AM Sundays
 		log.Println("Triggering start()")

@@ -2,7 +2,6 @@ package models
 
 import (
 	"errors"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -108,13 +107,13 @@ func (a AppsModel) New() (AppsModel, error) {
 					//check if ssl is valid
 					// Validate the certificate
 					if app.ServerName == "" {
-						fmt.Println("server_name is not valid for " + app.Name)
+						log.Println("server_name is not valid for " + app.Name)
 						if Config.Server.SSL.Notification.Enabled {
 							Config.Server.Notifications.Notify(Config.Server.SSL.Notification.Service, "server_name is not valid for "+app.Name)
 						}
 					} else {
 						if err := util.VerifyCert(SSLPath+app.ServerName+"/fullchain.pem", SSLPath+app.ServerName+"/cert.pem", app.ServerName); err != nil {
-							fmt.Println("Error validating certificate for " + SSLPath + app.ServerName + ": " + err.Error())
+							log.Println("Error validating certificate for " + SSLPath + app.ServerName + ": " + err.Error())
 
 							if Config.Server.SSL.Notification.Enabled {
 								Config.Server.Notifications.Notify(Config.Server.SSL.Notification.Service, "Error validating certificate for "+app.ServerName+": "+err.Error())
@@ -186,15 +185,30 @@ func (a AppsModel) Test() string {
 }
 
 func (a AppsModel) Update() string {
-	// util.Command(false, Config.WorkingDirectory, nil, "./scripts/update.sh")
+	log.Println("Checking for updates...")
 
 	//TODO: Move update.sh stuff into this file. Prefferably not in the form of util.Command's
 	// util.Command(false, Config.WorkingDirectory, nil, "apt update && apt dist-upgrade")
-	// util.Command(false, Config.WorkingDirectory, nil, "git pull")
+	out, err := util.Command(true, Config.WorkingDirectory, nil, "git pull")
+	if err != nil {
+		log.Println("Error updating: " + err.Error())
+		return "Error updating: " + err.Error()
+	}
+	out = strings.TrimSpace(out)
 
-	//TODO: This will kill itself. May need to do it gracefully another way
-	// util.Command(false, Config.WorkingDirectory, nil, "service docker-nas restart")
-	return "NOT WORKING YET"
+	//Remove whitespace from out
+	if out == "Already up to date." {
+		return out
+	}
+
+	//New updates so let the user know we have to reboot
+	if Config.Server.Updates.Notification.Enabled {
+		Config.Server.Notifications.Notify(Config.Server.Updates.Notification.Service, "New updates installed, docker-nas will now restart.")
+	}
+
+	//Restart in background
+	util.Command(false, Config.WorkingDirectory, nil, "service docker-nas restart &")
+	return "New updates installed, docker-nas will now restart."
 }
 
 func (a AppsModel) params() string {
@@ -285,7 +299,7 @@ func (a AppsModel) PortCheck() {
 					time.Sleep(100 * time.Millisecond)
 
 					//Fetch body and check
-					fmt.Println("Checking http://" + Config.Server.DDNS.IP + ":" + port)
+					log.Println("Checking http://" + Config.Server.DDNS.IP + ":" + port)
 					resp, err := http.Get("http://" + Config.Server.DDNS.IP + ":" + port)
 
 					//free up http server port binding
@@ -359,7 +373,7 @@ func (a AppsModel) Start() string {
 	// TODO: We need to check if the ip is the same as the one we are using
 
 	//Check Domains
-	//a.DomainCheck() //TODO: Similar to port check but for domain->ip match
+	//a.DomainCheck()
 
 	//Check for container updates
 	util.Command(false, Config.WorkingDirectory, nil, "docker-compose -f docker-compose.yml "+params+" pull")

@@ -17,7 +17,7 @@ func Command(output bool, wd string, envList []string, command string) (string, 
 		cmd.Env = append(cmd.Env, envList...)
 	}
 
-	// fmt.Println(cmd.Env)
+	// log.Println(cmd.Env)
 
 	if output {
 		out, err := cmd.CombinedOutput()

@@ -2,7 +2,7 @@ package models
 
 import (
 	"context"
-	"fmt"
+	"log"
 	"strings"
 
 	"github.com/nikoksr/notify"
@@ -98,7 +98,7 @@ func (a NotificationsModel) Notify(service string, message string) {
 			Config.Server.Notifications.Services.Email.Service.Send(ctx, a.Subject, message)
 		}
 	default:
-		fmt.Println("Service '" + service + "' not found")
+		log.Println("Service '" + service + "' not found")
 	}
 }
 

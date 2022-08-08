@@ -6,6 +6,11 @@ server:
         - "GLOBAL_GID=33"
         - "GLOBAL_UID=33"
     port: 4000
+    updates:
+        enabled: true
+        cron: "0 0 0 * * 6"
+        notification:
+            enabled: true
     ssl:
         notification:
             enabled: true

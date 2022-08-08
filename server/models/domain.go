@@ -1,8 +1,8 @@
 package models
 
 import (
-	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"server/util"
 )
@@ -53,7 +53,7 @@ func (a DomainModel) Renew() string {
 func (a DomainModel) Add() string {
 	args := os.Args[1:]
 
-	fmt.Println(args)
+	log.Println(args)
 
 	if len(args) != 3 {
 		return "Please supply only one domain name like: './server.bin -domain add domain.com'"
@@ -110,7 +110,7 @@ func (a DomainModel) Check() string {
 	}
 
 	for _, file := range files {
-		fmt.Println(file.Name())
+		log.Println(file.Name())
 
 		// Check if file is not a directory
 		if !file.IsDir() {
@@ -119,7 +119,7 @@ func (a DomainModel) Check() string {
 
 		// Validate the certificate
 		if err := util.VerifyCert(SSLPath+file.Name()+"/fullchain.pem", SSLPath+file.Name()+"/cert.pem", file.Name()); err != nil {
-			fmt.Println("Error validating certificate for " + file.Name() + ": " + err.Error())
+			log.Println("Error validating certificate for " + file.Name() + ": " + err.Error())
 			//We dont need to error out, we just need to let the user know. App checker will verify it has the ones it needs.
 
 			if Config.Server.SSL.Notification.Enabled {

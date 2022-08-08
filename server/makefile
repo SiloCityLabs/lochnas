@@ -6,6 +6,9 @@ build:
 run: 
 	../server.bin
 
+update: 
+	../server.bin -apps update
+
 apps-stop:
 	../server.bin -apps stop
 apps-start:
