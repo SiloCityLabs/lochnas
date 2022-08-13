@@ -149,28 +149,40 @@ func (a AppsModel) New() (AppsModel, error) {
 
 func (a AppsModel) DockerInstalled() error {
 
-	// # Install docker
+	// Check for docker
 	out, err := util.Command(true, "/", nil, "command -v docker")
-	if err != nil || out == "" {
+	if err != nil {
 		return errors.New("docker not detected due to error (" + err.Error() + ")")
 	}
-	// # Install docker-compose
+	// Check for docker-compose
 	out, err = util.Command(true, "/", nil, "command -v docker-compose")
-	if err != nil || out == "" {
+	if err != nil {
 		return errors.New("docker not detected due to error (" + err.Error() + ")")
 	}
 
-	//TODO: Ask the user if they want to install docker
-	// if ! [ -x "$(command -v docker)" ]; then
-	// 	curl -fsSL https://get.docker.com -o get-docker.sh
-	// 	sh get-docker.sh
-	// fi
+	// Ask the user if they want to install docker
+	if out == "" {
+		if !util.Confirm("docker not detected, would you like to install it?") {
+			return errors.New("Please manually install docker")
+		} else {
+			//Install docker
+			if _, err := util.Command(false, "/", nil, "curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh"); err != nil {
+				return errors.New("Error installing docker: " + err.Error())
+			}
+		}
+	}
 
-	//TODO: Ask the user if they want to install docker-compose
-	// # Install docker-compose
-	// if ! [ -x "$(command -v docker-compose)" ]; then
-	// 	apt install -y docker-compose
-	// fi
+	// Ask the user if they want to install docker-compose
+	if out == "" {
+		if !util.Confirm("docker-compose not detected, would you like to install it?") {
+			return errors.New("Please manually install docker-compose")
+		} else {
+			//Install docker-compose
+			if _, err := util.Command(false, "/", nil, "apt install -y docker-compose"); err != nil {
+				return errors.New("Error installing docker-compose: " + err.Error())
+			}
+		}
+	}
 
 	if Config.Server.Debug {
 		log.Println("Docker detected in path " + out)
