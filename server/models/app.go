@@ -347,6 +347,21 @@ func (a AppsModel) BeforeStart() {
 	}
 }
 
+//Check to make sure app domains match the ip address
+func (a AppsModel) DomainIPCheck() {
+	for _, app := range a {
+		if app.Enabled && app.ServerName != "" {
+			if err := util.DomainIP(app.ServerName, Config.Server.DDNS.IP); err != nil {
+				log.Println("Domain IP Check failed for " + app.ServerName + ": " + err.Error())
+
+				if Config.Server.DDNS.Notification.Enabled {
+					Config.Server.Notifications.Notify(Config.Server.DDNS.Notification.Service, "Domain IP Check failed for "+app.ServerName+": "+err.Error())
+				}
+			}
+		}
+	}
+}
+
 func (a AppsModel) Start() string {
 
 	//Build docker params
@@ -369,11 +384,9 @@ func (a AppsModel) Start() string {
 
 	//Check ports
 	a.PortCheck()
-	// TODO: This is holding our port hostage ( Error starting userland proxy: listen tcp 0.0.0.0:443: bind: address already in use)
-	// TODO: We need to check if the ip is the same as the one we are using
 
-	//Check Domains
-	//a.DomainCheck()
+	//domain ip check
+	a.DomainIPCheck()
 
 	//Check for container updates
 	util.Command(false, Config.WorkingDirectory, nil, "docker-compose -f docker-compose.yml "+params+" pull")
