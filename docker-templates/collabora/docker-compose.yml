@@ -3,12 +3,16 @@ version: '3.7'
 services:
     collabora:
         container_name: collabora
-        image: collabora/code
+        build: 
+          context: /docker-nas/docker-templates/collabora/dockerimage/
+          dockerfile: Dockerfile
         env_file:
             - /docker-nas/docker-templates/collabora/.env
         environment:
+            - TZ=America/New_York
             - 'extra_params=--o:ssl.enable=false --o:ssl.termination=true'
             - DONT_GEN_SSL_CERT=true
+            - domain=cloud\.rodriguez\.systems
             - server_name=office.${GLOBAL_DOMAIN}
             - aliasgroup1=cloud.${GLOBAL_DOMAIN}
             - dictionaries=en_US
@@ -16,9 +20,9 @@ services:
             - MKNOD
         networks:
             - backend
-        volumes:
-            - '/etc/localtime:/etc/localtime:ro'
-            - '/etc/timezone:/etc/timezone:ro'
+        # volumes:
+        #     - '/etc/localtime:/etc/localtime:ro'
+        #     - '/etc/timezone:/etc/timezone:ro'
         restart: unless-stopped
         privileged: true
         healthcheck:

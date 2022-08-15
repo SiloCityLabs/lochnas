@@ -9,7 +9,7 @@ Original maintainer [Nextcloud](https://hub.docker.com/_/nextcloud), [mariadb](h
 Edit your `.env` file and enable this container then run `./start.sh`
 
 ```
-NEXTCLOUD_ENABLED=true
+NEXTCLOUD_ENABLED=false
 NEXTCLOUD_DATA=/docker-nas/home
 MYSQL_ROOT_PASSWORD=password
 MYSQL_PASSWORD=password

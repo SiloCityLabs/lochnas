@@ -400,11 +400,11 @@ func (a AppsModel) Start() string {
 	//domain ip check
 	a.DomainIPCheck()
 
-	//Check for container updates
-	util.Command(false, Config.WorkingDirectory, nil, "docker-compose -f docker-compose.yml "+params+" pull")
-
 	//Before Start
 	a.BeforeStart()
+
+	//Check for container updates
+	util.Command(false, Config.WorkingDirectory, nil, "docker-compose -f docker-compose.yml "+params+" pull")
 
 	//Run
 	util.Command(false, Config.WorkingDirectory, nil, "docker-compose -f docker-compose.yml "+params+" up -d --build --remove-orphans --force-recreate")

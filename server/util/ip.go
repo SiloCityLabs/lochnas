@@ -27,10 +27,10 @@ func IP() (string, error) {
 func DomainIP(domain string, ip string) error {
 
 	// Set timeout and retry times
-	dns.Config.SetTimeout(uint(2))
+	dns.Config.SetTimeout(uint(5))
 	dns.Config.RetryTimes = uint(4)
 
-	entries, err := dns.Exchange(domain, "1.1.1.1:53", dns.TypeA)
+	entries, err := dns.Exchange(domain, "208.67.222.222:53", dns.TypeA)
 
 	if err != nil {
 		log.Printf("Could not get IPs: %v\n", err)
@@ -41,7 +41,7 @@ func DomainIP(domain string, ip string) error {
 	}
 
 	if len(entries) > 1 {
-		return errors.New("Multiple IPs found. Docker nas is not a clusterable application.")
+		return errors.New("Multiple IPs found. Docker nas is not a clusterable application yet ;)")
 	}
 
 	// log.Println("Found Domain:", domain)
