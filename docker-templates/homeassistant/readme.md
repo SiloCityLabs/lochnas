@@ -14,8 +14,8 @@ To add a zigbee/zwave dongle to the container, you need to add the device path t
 
 Example:
 ```
-DEVICE_0=/dev/ttyUSB0
-DEVICE_1=/dev/ttyUSB1
-DEVICE_2=/dev/null
-DEVICE_3=/dev/null
+GLOBAL_DEVICE_0=/dev/ttyUSB0
+GLOBAL_DEVICE_1=/dev/ttyUSB1
+GLOBAL_DEVICE_2=/dev/null
+GLOBAL_DEVICE_3=/dev/null
 ```

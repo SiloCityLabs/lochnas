@@ -18,7 +18,7 @@ var Apps AppsModel
 
 type AppsModel []AppModel
 
-//AppModel ...
+// AppModel ...
 type AppModel struct {
 	// Folder name of the app
 	Name string
@@ -83,6 +83,13 @@ func (a AppsModel) New() (AppsModel, error) {
 
 				if val, ok := app.ENV[envName]; ok && val == "true" {
 					app.Enabled = true
+
+					//Load its global_ variables
+					for envKey, envValue := range app.ENV {
+						if strings.HasPrefix(strings.ToLower(envKey), "global_") {
+							os.Setenv(envKey, envValue)
+						}
+					}
 				}
 			}
 
@@ -359,7 +366,7 @@ func (a AppsModel) BeforeStart() {
 	}
 }
 
-//Check to make sure app domains match the ip address
+// Check to make sure app domains match the ip address
 func (a AppsModel) DomainIPCheck() {
 	for _, app := range a {
 		if app.Enabled && app.ServerName != "" {

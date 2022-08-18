@@ -42,7 +42,7 @@ Optional. This is the nginx configuration file for the app. When using this you 
 
 #### **.env.example**
 
-Required. This is the .env file for the app. It should be called from the docker-compose.yml file. It must have a boolean variable called `APPNAME_ENABLED` that is set to `false` by default. Only add required variables for the app to work and provide a link to documentation for more variables. Required static variables such as port and hostname configs should be set in the docker-compose.yml file instead.
+Required. This is the .env file for the app. It should be called from the docker-compose.yml file. It must have a boolean variable called `APPNAME_ENABLED` that is set to `false` by default. Only add required variables for the app to work and provide a link to documentation for more variables. Required static variables such as port and hostname configs should be set in the docker-compose.yml file instead. Variables that start with "GLOBAL_" are loaded into host os for use in docker-compose.yml (Eg: Homeassistant).
 
 #### **after-start.sh**
 
