@@ -10,9 +10,11 @@ Edit your `.env` file and enable this container with `PLEX_ENABLED=true`
 
 Go to https://www.plex.tv/claim/ to grab your claim code to be used for the command below.
 
-Run setup script `./docker-templates/plex/setup.sh <claimcode>`
+ENter your token into .env variable PLEX_CLAIM
 
 Head over to your browser and type `http://serverip:32400/web` and if you have a response you should be all set. Finalize it by pressing `Ctrl + C`
+
+You can comment or remove the PLEX_CLAIM variable now.
 
 ### Additional Configuration
 
