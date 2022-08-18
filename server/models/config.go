@@ -104,7 +104,7 @@ func (c *ConfigModel) Load() error {
 	return nil
 }
 
-//Encode yaml and write to file
+// Encode yaml and write to file
 func (c *ConfigModel) Write() error {
 	s, err := os.Stat(c.Path)
 	if err != nil {

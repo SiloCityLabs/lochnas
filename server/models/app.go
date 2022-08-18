@@ -206,8 +206,7 @@ func (a AppsModel) Test() string {
 func (a AppsModel) Update() string {
 	log.Println("Checking for updates...")
 
-	//TODO: Move update.sh stuff into this file. Prefferably not in the form of util.Command's
-	// util.Command(false, Config.WorkingDirectory, nil, "apt update && apt dist-upgrade")
+	//Check for updates
 	out, err := util.Command(true, Config.WorkingDirectory, nil, "git pull")
 	if err != nil {
 		log.Println("Error updating: " + err.Error())
@@ -327,7 +326,6 @@ func (a AppsModel) PortCheck() {
 					}
 
 					//TODO: Probably let the user know instead of quiting out, telegram or notify package
-					//TODO: timeout 3 seconds
 
 					if err != nil {
 						log.Fatalln("error connecting: " + err.Error())

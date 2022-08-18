@@ -9,7 +9,7 @@ import (
 
 var Domain DomainModel
 
-//DomainModel ...
+// DomainModel ...
 type DomainModel map[string]string
 
 var SSLPath string = "/docker-nas/docker-data/letsencrypt/live/"
@@ -18,8 +18,8 @@ func (a DomainModel) Init() {
 	// a["ip"] = env.Get("GLOBAL_DDNS_IP")
 }
 
-//Renew ssl certificate for the domains in letsencrypt config
-//Needs to stop nginx and restart it after renewal
+// Renew ssl certificate for the domains in letsencrypt config
+// Needs to stop nginx and restart it after renewal
 func (a DomainModel) Renew() string {
 
 	// Check if nginx container is running in docker
@@ -49,7 +49,6 @@ func (a DomainModel) Renew() string {
 	return ""
 }
 
-//TODO: Bring domain-add the fully into golang
 func (a DomainModel) Add() string {
 	args := os.Args[1:]
 
@@ -88,7 +87,6 @@ func (a DomainModel) Add() string {
 	return ""
 }
 
-//TODO: Bring domain-remove the fully into golang
 func (a DomainModel) Delete() string {
 
 	renewCommand := "docker run --rm -i "
@@ -100,7 +98,7 @@ func (a DomainModel) Delete() string {
 	return ""
 }
 
-//This will check if the existing certs are valid.
+// This will check if the existing certs are valid.
 func (a DomainModel) Check() string {
 
 	// Scan directory for domains
