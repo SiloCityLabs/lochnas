@@ -5,7 +5,7 @@ services:
         container_name: nextcloud
         env_file:
             - /docker-nas/docker-templates/nextcloud/.env
-        hostname: cloud.${GLOBAL_DOMAIN}
+        # hostname: cloud.${GLOBAL_DOMAIN} # Interferes with collabora hitting cloud.domain endpoint
         volumes:
             - '/etc/localtime:/etc/localtime:ro'
             - '/etc/timezone:/etc/timezone:ro'

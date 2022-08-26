@@ -10,25 +10,16 @@ services:
             - /docker-nas/docker-templates/collabora/.env
         environment:
             - TZ=America/New_York
-            - 'extra_params=--o:ssl.enable=false --o:ssl.termination=true'
+            - 'extra_params=--o:ssl.enable=false --o:net.proto=IPv4 --o:ssl.termination=true --o:net.post_allow.host[0]=172\.[0-9\.]+ --o:storage.wopi.host[0]=172\.[0-9\.]+'
             - DONT_GEN_SSL_CERT=true
-            - domain=cloud\.rodriguez\.systems
             - server_name=office.${GLOBAL_DOMAIN}
-            - aliasgroup1=cloud.${GLOBAL_DOMAIN}
-            - dictionaries=en_US
+            - username=${GLOBAL_COLLABORA_USERNAME}
+            - password=${GLOBAL_COLLABORA_PASSWORD}
+            - no_proxy=cloud.rodriguez.systems
         cap_add:
             - MKNOD
         networks:
             - backend
-        # volumes:
-        #     - '/etc/localtime:/etc/localtime:ro'
-        #     - '/etc/timezone:/etc/timezone:ro'
         restart: unless-stopped
         privileged: true
-        healthcheck:
-            test: ["CMD", "wget", "https://office.${GLOBAL_DOMAIN}/", "-O", "/dev/null"]
-            interval: 1m
-            timeout: 10s
-            retries: 3
-            start_period: 5s
 
