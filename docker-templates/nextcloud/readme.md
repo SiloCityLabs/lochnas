@@ -29,7 +29,7 @@ First enter a personal username and password to login to nextcloud. Then before 
  - Change `localhost` to `mariadb:3306`
  - Click `Next`
  
-Note: If you get the error `504 Gateway timeout`, edit the file and remove `:3306` from `dbhost` and add it to `dbport` as `3306`. This is an unfortunate bug in the nextcloud installer but shouldnt be an issue past this.
+Note: If you get the error `504 Gateway timeout`, edit the file `docker-data/nextcloud/html/config/config.php` and remove `:3306` from `dbhost` and add it to `dbport` as `3306`. This is an unfortunate bug in the nextcloud installer but shouldnt be an issue past this.
 
 After you get to the welcome screen go to settings -> basic settings. Change the cron settings to webcron. 
 
