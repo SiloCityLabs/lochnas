@@ -387,14 +387,14 @@ func (a AppsModel) Start() string {
 		log.Println(params)
 	}
 
+	//Stop if running
+	a.Stop()
+
 	//Before Start
 	a.BeforeStart()
 
 	//Enable nginx subdomains
 	a.NginxSites()
-
-	//Stop if running
-	a.Stop()
 
 	//IP Check/Update
 	DDNS.Refresh()
