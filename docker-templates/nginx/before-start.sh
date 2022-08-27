@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Make sure directory exists
-mkdir -p /docker-nas/docker-data/nginx/
+mkdir -p /docker-nas/docker-data/nginx/templates/
 
 #Generate htpasswd
 NGINX_PASSWORD="$(echo $NGINX_PASSWORD | openssl passwd -1 -stdin)"

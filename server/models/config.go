@@ -1,10 +1,12 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
+	"server/util"
 	"strings"
 	"time"
 
@@ -66,6 +68,17 @@ type ConfigModel struct {
 func (c *ConfigModel) Load() error {
 	s, err := os.Stat(c.Path)
 	if err != nil {
+		if err == os.ErrNotExist {
+			//Lets also create any folders we need for other apps.
+
+			errCopy := util.CopyFile("/docker-nas/config.example.yml", c.Path, false)
+			if errCopy != nil {
+				return errors.New("Copy over config.example.yml to config.yml and edit")
+			} else {
+				return errors.New("Config.yml does not exist. We created a copy for you. Please edit before restarting")
+			}
+		}
+
 		return err
 	}
 	if s.IsDir() {

@@ -387,6 +387,9 @@ func (a AppsModel) Start() string {
 		log.Println(params)
 	}
 
+	//Before Start
+	a.BeforeStart()
+
 	//Enable nginx subdomains
 	a.NginxSites()
 
@@ -404,9 +407,6 @@ func (a AppsModel) Start() string {
 
 	//domain ip check
 	a.DomainIPCheck()
-
-	//Before Start
-	a.BeforeStart()
 
 	//Check for container updates
 	util.Command(false, Config.WorkingDirectory, nil, "docker-compose -f docker-compose.yml "+params+" pull")
