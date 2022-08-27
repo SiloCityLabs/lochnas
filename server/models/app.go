@@ -114,12 +114,12 @@ func (a AppsModel) New() (AppsModel, error) {
 						if Config.Server.SSL.Notification.Enabled {
 							Config.Server.Notifications.Notify(Config.Server.SSL.Notification.Service, "server_name is not valid for "+app.Name)
 						}
-					} else {
+					} else if app.Enabled {
 						if err := util.VerifyCert(SSLPath+app.ServerName+"/fullchain.pem", SSLPath+app.ServerName+"/cert.pem", app.ServerName); err != nil {
-							log.Println("Error validating certificate for " + SSLPath + app.ServerName + ": " + err.Error())
+							log.Println("Error validating app certificate for " + SSLPath + app.ServerName + ": " + err.Error())
 
 							if Config.Server.SSL.Notification.Enabled {
-								Config.Server.Notifications.Notify(Config.Server.SSL.Notification.Service, "Error validating certificate for "+app.ServerName+": "+err.Error())
+								Config.Server.Notifications.Notify(Config.Server.SSL.Notification.Service, "Error validating app certificate for "+app.ServerName+": "+err.Error())
 							}
 						}
 					}
