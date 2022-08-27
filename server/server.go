@@ -17,7 +17,8 @@ import (
 )
 
 // Program structures.
-//  Define Start and Stop methods.
+//
+//	Define Start and Stop methods.
 type program struct {
 	exit chan struct{}
 }
@@ -84,10 +85,11 @@ func (p *program) Stop(s service.Service) error {
 }
 
 // Service setup.
-//   Define service config.
-//   Create the service.
-//   Handle service controls (optional).
-//   Run the service.
+//
+//	Define service config.
+//	Create the service.
+//	Handle service controls (optional).
+//	Run the service.
 func main() {
 	//Get working dir for systemd
 	path, err := util.ExecWd()
@@ -99,6 +101,10 @@ func main() {
 	//Check for root user
 	if os.Geteuid() > 0 { //Windows = -1, Unix = 0
 		log.Fatalln("You must be root/admin to run this program.")
+	}
+
+	if err := util.DockerInstalled(); err != nil {
+		log.Fatalln(err)
 	}
 
 	configFlag := flag.String("config", path+"/"+models.DefaultConfigPath, "Path to config file.")

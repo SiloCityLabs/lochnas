@@ -43,10 +43,6 @@ func (a AppsModel) New() (AppsModel, error) {
 	tplPath := Config.WorkingDirectory + "/docker-templates/"
 	dataPath := Config.WorkingDirectory + "/docker-data/"
 
-	if err := a.DockerInstalled(); err != nil {
-		return a, err
-	}
-
 	files, err := ioutil.ReadDir(tplPath)
 	if err != nil {
 		log.Println(err)
@@ -152,50 +148,6 @@ func (a AppsModel) New() (AppsModel, error) {
 	}
 
 	return a, nil
-}
-
-func (a AppsModel) DockerInstalled() error {
-
-	// Check for docker
-	out, err := util.Command(true, "/", nil, "command -v docker")
-	if err != nil {
-		return errors.New("docker not detected due to error (" + err.Error() + ")")
-	}
-	// Check for docker-compose
-	out, err = util.Command(true, "/", nil, "command -v docker-compose")
-	if err != nil {
-		return errors.New("docker not detected due to error (" + err.Error() + ")")
-	}
-
-	// Ask the user if they want to install docker
-	if out == "" {
-		if !util.Confirm("docker not detected, would you like to install it?") {
-			return errors.New("Please manually install docker")
-		} else {
-			//Install docker
-			if _, err := util.Command(false, "/", nil, "curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh"); err != nil {
-				return errors.New("Error installing docker: " + err.Error())
-			}
-		}
-	}
-
-	// Ask the user if they want to install docker-compose
-	if out == "" {
-		if !util.Confirm("docker-compose not detected, would you like to install it?") {
-			return errors.New("Please manually install docker-compose")
-		} else {
-			//Install docker-compose
-			if _, err := util.Command(false, "/", nil, "apt install -y docker-compose"); err != nil {
-				return errors.New("Error installing docker-compose: " + err.Error())
-			}
-		}
-	}
-
-	if Config.Server.Debug {
-		log.Println("Docker detected in path " + out)
-	}
-
-	return nil
 }
 
 func (a AppsModel) Test() string {
