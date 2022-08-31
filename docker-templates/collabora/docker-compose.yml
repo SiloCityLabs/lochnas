@@ -15,9 +15,11 @@ services:
             - server_name=office.${GLOBAL_DOMAIN}
             - username=${GLOBAL_COLLABORA_USERNAME}
             - password=${GLOBAL_COLLABORA_PASSWORD}
-            - no_proxy=cloud.rodriguez.systems
         cap_add:
             - MKNOD
+        dns: #Force it to go out so it hits the nginx proxy
+            - 1.1.1.1
+            - 8.8.8.8
         networks:
             - backend
         restart: unless-stopped
