@@ -12,7 +12,7 @@ var Domain DomainModel
 // DomainModel ...
 type DomainModel map[string]string
 
-var SSLPath string = "/docker-nas/docker-data/letsencrypt/live/"
+var SSLPath string = "/lochnas/docker-data/letsencrypt/live/"
 
 func (a DomainModel) Init() {
 	// a["ip"] = env.Get("GLOBAL_DDNS_IP")
@@ -34,8 +34,8 @@ func (a DomainModel) Renew() string {
 	}
 
 	renewCommand := "docker run --rm -i "
-	renewCommand += "-v \"/docker-nas/docker-data/letsencrypt:/etc/letsencrypt\" "
-	renewCommand += "-v \"/docker-nas/docker-data/certbot:/var/www/certbot\" "
+	renewCommand += "-v \"/lochnas/docker-data/letsencrypt:/etc/letsencrypt\" "
+	renewCommand += "-v \"/lochnas/docker-data/certbot:/var/www/certbot\" "
 	renewCommand += "-p 80:80 "
 	renewCommand += "-p 443:443 "
 	renewCommand += "certbot/certbot 'renew' '--standalone'"
@@ -70,8 +70,8 @@ func (a DomainModel) Add() string {
 	}
 
 	renewCommand := "docker run --rm -i "
-	renewCommand += "-v \"/docker-nas/docker-data/letsencrypt:/etc/letsencrypt\" "
-	renewCommand += "-v \"/docker-nas/docker-data/certbot:/var/www/certbot\" "
+	renewCommand += "-v \"/lochnas/docker-data/letsencrypt:/etc/letsencrypt\" "
+	renewCommand += "-v \"/lochnas/docker-data/certbot:/var/www/certbot\" "
 	renewCommand += "-p 80:80 "
 	renewCommand += "-p 443:443 "
 	renewCommand += "certbot/certbot 'certonly' '--standalone' "
@@ -90,8 +90,8 @@ func (a DomainModel) Add() string {
 func (a DomainModel) Delete() string {
 
 	renewCommand := "docker run --rm -i "
-	renewCommand += "-v \"/docker-nas/docker-data/letsencrypt:/etc/letsencrypt\" "
-	renewCommand += "-v \"/docker-nas/docker-data/certbot:/var/www/certbot\" "
+	renewCommand += "-v \"/lochnas/docker-data/letsencrypt:/etc/letsencrypt\" "
+	renewCommand += "-v \"/lochnas/docker-data/certbot:/var/www/certbot\" "
 	renewCommand += "certbot/certbot 'delete'"
 
 	util.Command(false, Config.WorkingDirectory, nil, renewCommand)

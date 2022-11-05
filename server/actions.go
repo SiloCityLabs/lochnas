@@ -61,6 +61,17 @@ func action(action string, param string) error {
 		case "notify":
 			log.Println(models.Config.Server.Notifications.Test())
 		}
+	case "disks":
+		var err error
+		models.Disks, err = models.Disks.Init()
+		if err != nil {
+			log.Fatalln("Failed to initialize disks: " + err.Error())
+		}
+
+		switch param {
+		case "list":
+			log.Println(models.Disks.List())
+		}
 	}
 
 	return nil

@@ -113,6 +113,7 @@ func main() {
 	domainFlag := flag.String("domain", "", "Run domain actions.")
 	appsFlag := flag.String("apps", "", "Run apps action.")
 	serverFlag := flag.String("server", "", "Run server action.")
+	disksFlag := flag.String("disks", "", "Run disks action.")
 	flag.Parse()
 
 	models.Config.Path = *configFlag
@@ -126,7 +127,7 @@ func main() {
 	options["SuccessExitStatus"] = "1 2 8 SIGKILL"
 	options["WorkingDirectory"] = path
 	svcConfig := &service.Config{
-		Name:        "docker-nas",
+		Name:        "lochnas",
 		DisplayName: "Docker Nas Server and API",
 		Description: "Manage docker nas containers, api and cron jobs.",
 		Dependencies: []string{
@@ -141,7 +142,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	log.Println("docker-nas open in " + path)
+	log.Println("lochnas open in " + path)
 
 	//If -daemon flag is set do something
 	if len(*daemonFlag) != 0 {
@@ -172,6 +173,12 @@ func main() {
 	}
 	if len(*serverFlag) != 0 {
 		if err := action("server", *serverFlag); err != nil {
+			log.Fatal(err)
+		}
+		return
+	}
+	if len(*disksFlag) != 0 {
+		if err := action("disks", *disksFlag); err != nil {
 			log.Fatal(err)
 		}
 		return
