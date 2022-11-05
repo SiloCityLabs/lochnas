@@ -7,7 +7,7 @@ services:
       networks:
             - backend
       env_file:
-          - /docker-nas/docker-templates/sonarr/.env
+          - /lochnas/docker-templates/sonarr/.env
       environment:
         - PUID=${GLOBAL_UID}
         - PGID=${GLOBAL_GID}
@@ -15,8 +15,8 @@ services:
       volumes:
         - '/etc/localtime:/etc/localtime:ro'
         - '/etc/timezone:/etc/timezone:ro'
-        - "/docker-nas/docker-data/sonarr:/config"
-        - "/docker-nas/home:/docker-nas/home:shared"
+        - "/lochnas/docker-data/sonarr:/config"
+        - "/lochnas/home:/lochnas/home:shared"
       # ports:
       #   - 8989:8989
       restart: unless-stopped

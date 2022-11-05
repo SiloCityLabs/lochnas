@@ -21,7 +21,7 @@ Just clone the repo and your all set. Afterwards run `./server.bin`
 ```
 sudo apt install git
 cd /
-git clone https://github.com/SiloCityLabs/docker-nas.git
+git clone https://github.com/SiloCityLabs/lochnas.git
 sudo ./server.bin -daemon install
 ```
 
@@ -92,7 +92,7 @@ Modify/create the `config.yml` and  with your settings.
 
 ### Container Docs
 
-[Request a custom container](https://github.com/SiloCityLabs/docker-nas/issues/new?assignees=&labels=App+Request&template=app-request-template.md&title=)
+[Request a custom container](https://github.com/SiloCityLabs/lochnas/issues/new?assignees=&labels=App+Request&template=app-request-template.md&title=)
 
 Containers:
  - [Nginx + SSL + Auto Renew with certbot](docker-templates/nginx/readme.md) (web proxy + ssl)

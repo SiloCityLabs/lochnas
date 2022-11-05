@@ -13,5 +13,5 @@ Edit your `.env` file and enable this container with `NGINX_ENABLED=true` and ot
 You need to use the domain argument to create SSL certificates for your nginx setup. This is highly recommended and uses Let's Encrypt for a valid certificate for free.
 
 ```
-/docker-nas/server.bin -domain add cloud.domain.com
+/lochnas/server.bin -domain add cloud.domain.com
 ```

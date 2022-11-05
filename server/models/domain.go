@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"server/util"
+	"strings"
 )
 
 var Domain DomainModel
@@ -23,13 +24,13 @@ func (a DomainModel) Init() {
 func (a DomainModel) Renew() string {
 
 	// Check if nginx container is running in docker
-	output, err := util.Command(false, Config.WorkingDirectory, nil, "docker ps -aq -f status=running -f name=nginx")
+	output, err := util.Command(true, Config.WorkingDirectory, nil, "docker ps -aq -f status=running -f name=nginx")
 	if err != nil {
 		return "Please stop nginx container in docker"
 	}
 
 	// nginx is running if the output is not empty, lets stop nginx container
-	if output != "" {
+	if strings.TrimSpace(output) != "" {
 		util.Command(false, Config.WorkingDirectory, nil, "docker container stop nginx")
 	}
 
@@ -46,7 +47,7 @@ func (a DomainModel) Renew() string {
 	if output != "" {
 		util.Command(false, Config.WorkingDirectory, nil, "docker container start nginx")
 	}
-	return ""
+	return "Domain renewal complete."
 }
 
 func (a DomainModel) Add() string {

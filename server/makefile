@@ -30,3 +30,6 @@ refresh:
 force:
 	../server.bin -ddns force
 
+renew:
+	../server.bin -domain renew
+

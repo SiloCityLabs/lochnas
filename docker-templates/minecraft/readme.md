@@ -1,6 +1,6 @@
 # Minecraft Container
 
-This is a template to add this container to your nas setup full functional with matching permissions and settings that of docker-nas repo.
+This is a template to add this container to your nas setup full functional with matching permissions and settings that of lochnas repo.
 
 Original maintainer [itzg/minecraft-server](https://hub.docker.com/r/itzg/minecraft-server)
 

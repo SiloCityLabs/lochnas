@@ -7,7 +7,7 @@ services:
       networks:
             - backend
       env_file:
-          - /docker-nas/docker-templates/radarr/.env
+          - /lochnas/docker-templates/radarr/.env
       environment:
         - PUID=${GLOBAL_UID}
         - PGID=${GLOBAL_GID}
@@ -15,8 +15,8 @@ services:
       volumes:
         - '/etc/localtime:/etc/localtime:ro'
         - '/etc/timezone:/etc/timezone:ro'
-        - "/docker-nas/docker-data/radarr:/config"
-        - "/docker-nas/home:/docker-nas/home:shared"
+        - "/lochnas/docker-data/radarr:/config"
+        - "/lochnas/home:/lochnas/home:shared"
       # ports:
       #   - 7878:7878
       restart: unless-stopped

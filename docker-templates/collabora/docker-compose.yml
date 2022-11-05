@@ -4,10 +4,10 @@ services:
     collabora:
         container_name: collabora
         build: 
-          context: /docker-nas/docker-templates/collabora/dockerimage/
+          context: /lochnas/docker-templates/collabora/dockerimage/
           dockerfile: Dockerfile
         env_file:
-            - /docker-nas/docker-templates/collabora/.env
+            - /lochnas/docker-templates/collabora/.env
         environment:
             - TZ=America/New_York
             - 'extra_params=--o:ssl.enable=false --o:net.proto=IPv4 --o:ssl.termination=true --o:net.post_allow.host[0]=172\.[0-9\.]+ --o:storage.wopi.host[0]=172\.[0-9\.]+'

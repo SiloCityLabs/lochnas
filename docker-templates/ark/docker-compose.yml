@@ -7,11 +7,11 @@ services:
         volumes:
             - '/etc/localtime:/etc/localtime:ro'
             - '/etc/timezone:/etc/timezone:ro'
-            - "/docker-nas/docker-data/ark:/ark"
+            - "/lochnas/docker-data/ark:/ark"
         network_mode: host
         image: 'turzam/ark:latest'
         env_file:
-            - /docker-nas/docker-templates/ark/.env
+            - /lochnas/docker-templates/ark/.env
         environment:
             - "UID=${GLOBAL_UID}"
             - "GID=${GLOBAL_GID}"

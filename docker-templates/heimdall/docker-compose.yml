@@ -13,9 +13,9 @@ services:
     volumes:
         - '/etc/localtime:/etc/localtime:ro'
         - '/etc/timezone:/etc/timezone:ro'
-        - "/docker-nas/docker-data/heimdall/config:/config"
+        - "/lochnas/docker-data/heimdall/config:/config"
     env_file:
-        - /docker-nas/docker-templates/heimdall/.env
+        - /lochnas/docker-templates/heimdall/.env
     # ports:
     #     - 80:80
     restart: unless-stopped

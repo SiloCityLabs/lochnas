@@ -4,7 +4,7 @@ These config files allow you to route internal network traffic via nginx. These 
 
 #### Enabling a custom site
 
-Create a `appname.conf.example` file in `/docker-nas/docker-data/nginx/templates/`.
+Create a `appname.conf.example` file in `/lochnas/docker-data/nginx/templates/`.
 
 #### Using a custom template below
 

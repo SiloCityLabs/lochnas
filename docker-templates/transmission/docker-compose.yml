@@ -8,11 +8,11 @@ services:
         volumes:
             - '/etc/localtime:/etc/localtime:ro'
             - '/etc/timezone:/etc/timezone:ro'
-            - "/docker-nas/docker-data/transmission/data:/data"
-            - "/docker-nas/docker-data/transmission/scripts:/scripts"
-            - "/docker-nas/docker-data/transmission/config:/config"
-            - "/docker-nas/docker-data/transmission/custom:/etc/openvpn/custom:ro"
-            - "/docker-nas/home:/docker-nas/home:shared"
+            - "/lochnas/docker-data/transmission/data:/data"
+            - "/lochnas/docker-data/transmission/scripts:/scripts"
+            - "/lochnas/docker-data/transmission/config:/config"
+            - "/lochnas/docker-data/transmission/custom:/etc/openvpn/custom:ro"
+            - "/lochnas/home:/lochnas/home:shared"
         restart: unless-stopped
         cap_add:
             - NET_ADMIN
@@ -24,7 +24,7 @@ services:
             - 1.1.1.1
             - 8.8.8.8
         env_file:
-            - /docker-nas/docker-templates/transmission/.env
+            - /lochnas/docker-templates/transmission/.env
         environment:
             - PUID=${GLOBAL_UID}
             - PGID=${GLOBAL_GID}

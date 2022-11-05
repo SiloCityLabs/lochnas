@@ -6,9 +6,9 @@ services:
         networks:
             - backend
         env_file:
-            - /docker-nas/docker-templates/portainer/.env
+            - /lochnas/docker-templates/portainer/.env
         volumes:
-            - "/docker-nas/docker-data/portainer:/data"
+            - "/lochnas/docker-data/portainer:/data"
             - '/var/run/docker.sock:/var/run/docker.sock'
         restart: unless-stopped
         image: 'portainer/portainer-ce:latest'

@@ -1,6 +1,6 @@
 # Plex Container
 
-This is a template to add this container to your nas setup full functional with matching permissions and settings that of docker-nas repo.
+This is a template to add this container to your nas setup full functional with matching permissions and settings that of lochnas repo.
 
 Original maintainer [plexinc/pms-docker](https://hub.docker.com/r/plexinc/pms-docker)
 
@@ -18,4 +18,4 @@ You can comment or remove the PLEX_CLAIM variable now.
 
 ### Additional Configuration
 
-`PLEX_DATA=/docker-nas/home/plex` - Path to plex media directory mounted inside plex as `/docker-nas/home`
+`PLEX_DATA=/lochnas/home/plex` - Path to plex media directory mounted inside plex as `/lochnas/home`

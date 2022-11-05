@@ -9,9 +9,9 @@ services:
         volumes:
             - '/etc/localtime:/etc/localtime:ro'
             - '/etc/timezone:/etc/timezone:ro'
-            - "/docker-nas/docker-data/minecraft-bedrock:/data"
+            - "/lochnas/docker-data/minecraft-bedrock:/data"
         env_file:
-            - /docker-nas/docker-templates/minecraft-bedrock/.env
+            - /lochnas/docker-templates/minecraft-bedrock/.env
         environment:
             REPLACE_ENV_VARIABLES: "TRUE"
         restart: unless-stopped

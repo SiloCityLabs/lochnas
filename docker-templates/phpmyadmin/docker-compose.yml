@@ -6,7 +6,7 @@ services:
         networks:
             - backend
         env_file:
-            - /docker-nas/docker-templates/phpmyadmin/.env
+            - /lochnas/docker-templates/phpmyadmin/.env
         environment:
             - PMA_HOST=mariadb
         image: 'phpmyadmin/phpmyadmin:latest'
