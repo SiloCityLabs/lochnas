@@ -1,6 +1,6 @@
 # Nextcloud
 
-This is a template to add this container to your nas setup full functional with matching permissions and settings that of docker-nas repo.
+This is a template to add this container to your nas setup full functional with matching permissions and settings that of lochnas repo.
 
 Original maintainer [Nextcloud](https://hub.docker.com/_/nextcloud), [mariadb](https://hub.docker.com/_/mariadb)
 
@@ -10,7 +10,7 @@ Edit your `.env` file and enable this container then run `./start.sh`
 
 ```
 NEXTCLOUD_ENABLED=false
-NEXTCLOUD_DATA=/docker-nas/home
+NEXTCLOUD_DATA=/lochnas/home
 MYSQL_ROOT_PASSWORD=password
 MYSQL_PASSWORD=password
 ```

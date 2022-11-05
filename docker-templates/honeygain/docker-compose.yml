@@ -4,8 +4,8 @@ services:
     honeygain:
         container_name: honeygain
         build: 
-            context: /docker-nas/docker-templates/honeygain/dockerimage/
+            context: /lochnas/docker-templates/honeygain/dockerimage/
             dockerfile: Dockerfile
         env_file:
-            - /docker-nas/docker-templates/honeygain/.env
+            - /lochnas/docker-templates/honeygain/.env
         restart: unless-stopped

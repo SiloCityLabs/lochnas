@@ -20,10 +20,16 @@ test:
 notify: 
 	../server.bin -server notify
 
+disks:
+	../server.bin -disks list
+
 ip:
 	../server.bin -ddns ip
 refresh:
 	../server.bin -ddns refresh
 force:
 	../server.bin -ddns force
+
+renew:
+	../server.bin -domain renew
 

@@ -71,7 +71,7 @@ func (c *ConfigModel) Load() error {
 		if err == os.ErrNotExist {
 			//Lets also create any folders we need for other apps.
 
-			errCopy := util.CopyFile("/docker-nas/config.example.yml", c.Path, false)
+			errCopy := util.CopyFile("/lochnas/config.example.yml", c.Path, false)
 			if errCopy != nil {
 				return errors.New("Copy over config.example.yml to config.yml and edit")
 			} else {

@@ -4,18 +4,18 @@ services:
     nextcloud:
         container_name: nextcloud
         env_file:
-            - /docker-nas/docker-templates/nextcloud/.env
+            - /lochnas/docker-templates/nextcloud/.env
         # hostname: cloud.${GLOBAL_DOMAIN} # Interferes with collabora hitting cloud.domain endpoint
         volumes:
             - '/etc/localtime:/etc/localtime:ro'
             - '/etc/timezone:/etc/timezone:ro'
-            - "/docker-nas/docker-data/nextcloud/html:/var/www/html"
-            - "/docker-nas/home:/docker-nas/home:shared"
+            - "/lochnas/docker-data/nextcloud/html:/var/www/html"
+            - "/lochnas/home:/lochnas/home:shared"
         restart: unless-stopped
         networks:
             - backend
         build: 
-          context: /docker-nas/docker-templates/nextcloud/dockerimage/
+          context: /lochnas/docker-templates/nextcloud/dockerimage/
           dockerfile: Dockerfile
         environment:
             - MYSQL_HOST=mariadb
@@ -33,11 +33,11 @@ services:
         container_name: mariadb
         command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb_read_only_compressed=OFF
         env_file:
-            - /docker-nas/docker-templates/nextcloud/.env
+            - /lochnas/docker-templates/nextcloud/.env
         volumes:
             - '/etc/localtime:/etc/localtime:ro'
             - '/etc/timezone:/etc/timezone:ro'
-            - "/docker-nas/docker-data/mariadb:/var/lib/mysql"
+            - "/lochnas/docker-data/mariadb:/var/lib/mysql"
         restart: unless-stopped
         networks:
             - backend

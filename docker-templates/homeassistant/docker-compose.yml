@@ -13,7 +13,7 @@ services:
         volumes:
             - '/etc/localtime:/etc/localtime:ro'
             - '/etc/timezone:/etc/timezone:ro'
-            - "/docker-nas/docker-data/homeassistant:/config"
+            - "/lochnas/docker-data/homeassistant:/config"
         devices:
             - ${GLOBAL_DEVICE_0}:/dev/ttyUSB0
             - ${GLOBAL_DEVICE_1}:/dev/ttyUSB1
@@ -22,4 +22,4 @@ services:
         restart: unless-stopped
         image: 'homeassistant/home-assistant:stable'
         env_file:
-            - /docker-nas/docker-templates/homeassistant/.env
+            - /lochnas/docker-templates/homeassistant/.env

@@ -4,14 +4,15 @@ services:
     samba:
         container_name: samba
         build: 
-            context: /docker-nas/docker-templates/samba/dockerimage/
+            context: /lochnas/docker-templates/samba/dockerimage/
             dockerfile: Dockerfile
         network_mode: host
         restart: unless-stopped
         volumes:
             - '/etc/localtime:/etc/localtime:ro'
             - '/etc/timezone:/etc/timezone:ro'
-            - "/docker-nas/docker-data/samba/smb.conf:/etc/samba/smb.conf"
-            - "/docker-nas/home:/docker-nas/home:shared"
+            - "/lochnas/docker-data/samba/smb.conf:/etc/samba/smb.conf"
+            - "/lochnas/home:/lochnas/home:shared"
+            - "/lochnas/docker-data/minecraft:/lochnas/docker-data/minecraft:shared"
         env_file:
-            - /docker-nas/docker-templates/samba/.env
+            - /lochnas/docker-templates/samba/.env

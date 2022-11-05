@@ -1,6 +1,6 @@
-## **/docker-nas/**
+## **/lochnas/**
 
-Path to the root of the docker-nas folder. This should live in the root folder of the server. We no longer support dynamic paths so that the containers can refference the same root paths internally and reduce user confusion.
+Path to the root of the lochnas folder. This should live in the root folder of the server. We no longer support dynamic paths so that the containers can refference the same root paths internally and reduce user confusion.
 
 Files:
  - config.yml - This contains server configuration.
@@ -8,7 +8,7 @@ Files:
 
 ### **home/**
 
-User data storage path. Also excluded from git. This directory is where apps like nextcloud and plex access stored data. You can mount additional disks and [raid](./raid.md) partitions to this folder. Example: `/docker-nas/home/4TB_HDD/`
+User data storage path. Also excluded from git. This directory is where apps like nextcloud and plex access stored data. You can mount additional disks and [raid](./raid.md) partitions to this folder. Example: `/lochnas/home/4TB_HDD/`
 
 
 ### **docker-data/**
@@ -65,8 +65,8 @@ This should have the following components to it:
 
 ### **docs/**
 
-This is miscellaneous documentation for docker-nas. App specific documentation should be in the app's folder.
+This is miscellaneous documentation for lochnas. App specific documentation should be in the app's folder.
 
 ### **server/**
 
-The source folder for the docker-nas server daemon.
+The source folder for the lochnas server daemon.

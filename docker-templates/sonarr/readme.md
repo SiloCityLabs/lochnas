@@ -1,6 +1,6 @@
 # Sonarr container
 
-This is a template to add this container to your nas setup full functional with matching permissions and settings that of docker-nas repo. This assumes you are using plex and transmission paths.
+This is a template to add this container to your nas setup full functional with matching permissions and settings that of lochnas repo. This assumes you are using plex and transmission paths.
 
 ## How to enable
 
@@ -12,7 +12,7 @@ To use web access you must have nginx auth password set
 
 #### Enable root folder
 
-Settings -> Media Management -> Root Folders -> Add Root Folder -> /docker-nas/home/path/to/TV
+Settings -> Media Management -> Root Folders -> Add Root Folder -> /lochnas/home/path/to/TV
 
 #### Enable Download clients
 

@@ -1,6 +1,6 @@
 # Collabora container
 
-This is a template to add this container to your nas setup full functional with matching permissions and settings that of docker-nas repo.
+This is a template to add this container to your nas setup full functional with matching permissions and settings that of lochnas repo.
 
 Original container [collabora/code](https://hub.docker.com/r/collabora/code)
 

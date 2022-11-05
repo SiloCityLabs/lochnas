@@ -1,6 +1,6 @@
 # Prowlarr container
 
-This is a template to add this container to your nas setup full functional with matching permissions and settings that of docker-nas repo. This assumes you are using plex and transmission paths.
+This is a template to add this container to your nas setup full functional with matching permissions and settings that of lochnas repo. This assumes you are using plex and transmission paths.
 
 ## How to enable
 

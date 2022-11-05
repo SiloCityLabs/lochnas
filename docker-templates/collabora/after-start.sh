@@ -3,7 +3,7 @@
 # Install plugin to nextcloud
 if [[ $NEXTCLOUD_ENABLED -eq "true" ]]; then
 
-    if [[ ! -d /docker-nas/docker-data/nextcloud/html/apps/richdocuments ]]; then
+    if [[ ! -d /lochnas/docker-data/nextcloud/html/apps/richdocuments ]]; then
         docker exec -u $GLOBAL_UID -it nextcloud php occ app:install richdocuments
     fi
 

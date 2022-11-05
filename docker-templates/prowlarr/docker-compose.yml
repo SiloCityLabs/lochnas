@@ -7,7 +7,7 @@ services:
       networks:
             - backend
       env_file:
-          - /docker-nas/docker-templates/prowlarr/.env
+          - /lochnas/docker-templates/prowlarr/.env
       environment:
         - PUID=${GLOBAL_UID}
         - PGID=${GLOBAL_GID}
@@ -15,8 +15,8 @@ services:
       volumes:
         - '/etc/localtime:/etc/localtime:ro'
         - '/etc/timezone:/etc/timezone:ro'
-        - "/docker-nas/docker-data/prowlarr:/config"
-        - "/docker-nas/home:/docker-nas/home:shared"
+        - "/lochnas/docker-data/prowlarr:/config"
+        - "/lochnas/home:/lochnas/home:shared"
       # ports:
       #   - 9696:9696
       restart: unless-stopped

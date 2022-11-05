@@ -1,6 +1,6 @@
 # Samba Windows File Share
 
-This is a template to add this container to your nas setup full functional with matching permissions and settings that of docker-nas repo.
+This is a template to add this container to your nas setup full functional with matching permissions and settings that of lochnas repo.
 
 
 ## How to enable

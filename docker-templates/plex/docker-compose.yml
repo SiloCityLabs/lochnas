@@ -6,13 +6,13 @@ services:
         volumes:
             - '/etc/localtime:/etc/localtime:ro'
             - '/etc/timezone:/etc/timezone:ro'
-            - "/docker-nas/docker-data/plex:/config"
+            - "/lochnas/docker-data/plex:/config"
             - '/tmp/transcode:/transcode'
-            - "/docker-nas/home:/docker-nas/home:shared"
+            - "/lochnas/home:/lochnas/home:shared"
         restart: unless-stopped
         network_mode: host
         env_file:
-            - /docker-nas/docker-templates/plex/.env
+            - /lochnas/docker-templates/plex/.env
         environment:
             - CHANGE_CONFIG_DIR_OWNERSHIP=true
             - HOME=/config

@@ -143,7 +143,7 @@ func (a AppsModel) New() (AppsModel, error) {
 
 			a = append(a, app)
 		} else {
-			log.Println("Something does not look right about this apps folder (" + tplPath + f.Name() + "/" + "), see folder structure documentation here: https://github.com/SiloCityLabs/docker-nas/blob/v3/docs/folder-structure.md")
+			log.Println("Something does not look right about this apps folder (" + tplPath + f.Name() + "/" + "), see folder structure documentation here: https://github.com/SiloCityLabs/lochnas/blob/v3/docs/folder-structure.md")
 		}
 	}
 
@@ -173,12 +173,12 @@ func (a AppsModel) Update() string {
 
 	//New updates so let the user know we have to reboot
 	if Config.Server.Updates.Notification.Enabled {
-		Config.Server.Notifications.Notify(Config.Server.Updates.Notification.Service, "New updates installed, docker-nas will now restart.")
+		Config.Server.Notifications.Notify(Config.Server.Updates.Notification.Service, "New updates installed, lochnas will now restart.")
 	}
 
 	//Restart in background
-	util.Command(false, Config.WorkingDirectory, nil, "service docker-nas restart &")
-	return "New updates installed, docker-nas will now restart."
+	util.Command(false, Config.WorkingDirectory, nil, "service lochnas restart &")
+	return "New updates installed, lochnas will now restart."
 }
 
 func (a AppsModel) params() string {

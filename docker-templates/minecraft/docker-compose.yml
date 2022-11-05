@@ -9,9 +9,11 @@ services:
         volumes:
             - '/etc/localtime:/etc/localtime:ro'
             - '/etc/timezone:/etc/timezone:ro'
-            - "/docker-nas/docker-data/minecraft:/data"
+            - "/lochnas/docker-data/minecraft:/data"
         env_file:
-            - /docker-nas/docker-templates/minecraft/.env
+            - /lochnas/docker-templates/minecraft/.env
         environment:
-            REPLACE_ENV_VARIABLES: "TRUE"
+            - REPLACE_ENV_VARIABLES="TRUE"
+            - UID=${GLOBAL_UID}
+            - GID=${GLOBAL_GID}
         restart: unless-stopped

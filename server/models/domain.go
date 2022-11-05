@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"server/util"
+	"strings"
 )
 
 var Domain DomainModel
@@ -12,7 +13,7 @@ var Domain DomainModel
 // DomainModel ...
 type DomainModel map[string]string
 
-var SSLPath string = "/docker-nas/docker-data/letsencrypt/live/"
+var SSLPath string = "/lochnas/docker-data/letsencrypt/live/"
 
 func (a DomainModel) Init() {
 	// a["ip"] = env.Get("GLOBAL_DDNS_IP")
@@ -23,19 +24,19 @@ func (a DomainModel) Init() {
 func (a DomainModel) Renew() string {
 
 	// Check if nginx container is running in docker
-	output, err := util.Command(false, Config.WorkingDirectory, nil, "docker ps -aq -f status=running -f name=nginx")
+	output, err := util.Command(true, Config.WorkingDirectory, nil, "docker ps -aq -f status=running -f name=nginx")
 	if err != nil {
 		return "Please stop nginx container in docker"
 	}
 
 	// nginx is running if the output is not empty, lets stop nginx container
-	if output != "" {
+	if strings.TrimSpace(output) != "" {
 		util.Command(false, Config.WorkingDirectory, nil, "docker container stop nginx")
 	}
 
 	renewCommand := "docker run --rm -i "
-	renewCommand += "-v \"/docker-nas/docker-data/letsencrypt:/etc/letsencrypt\" "
-	renewCommand += "-v \"/docker-nas/docker-data/certbot:/var/www/certbot\" "
+	renewCommand += "-v \"/lochnas/docker-data/letsencrypt:/etc/letsencrypt\" "
+	renewCommand += "-v \"/lochnas/docker-data/certbot:/var/www/certbot\" "
 	renewCommand += "-p 80:80 "
 	renewCommand += "-p 443:443 "
 	renewCommand += "certbot/certbot 'renew' '--standalone'"
@@ -46,7 +47,7 @@ func (a DomainModel) Renew() string {
 	if output != "" {
 		util.Command(false, Config.WorkingDirectory, nil, "docker container start nginx")
 	}
-	return ""
+	return "Domain renewal complete."
 }
 
 func (a DomainModel) Add() string {
@@ -70,8 +71,8 @@ func (a DomainModel) Add() string {
 	}
 
 	renewCommand := "docker run --rm -i "
-	renewCommand += "-v \"/docker-nas/docker-data/letsencrypt:/etc/letsencrypt\" "
-	renewCommand += "-v \"/docker-nas/docker-data/certbot:/var/www/certbot\" "
+	renewCommand += "-v \"/lochnas/docker-data/letsencrypt:/etc/letsencrypt\" "
+	renewCommand += "-v \"/lochnas/docker-data/certbot:/var/www/certbot\" "
 	renewCommand += "-p 80:80 "
 	renewCommand += "-p 443:443 "
 	renewCommand += "certbot/certbot 'certonly' '--standalone' "
@@ -90,8 +91,8 @@ func (a DomainModel) Add() string {
 func (a DomainModel) Delete() string {
 
 	renewCommand := "docker run --rm -i "
-	renewCommand += "-v \"/docker-nas/docker-data/letsencrypt:/etc/letsencrypt\" "
-	renewCommand += "-v \"/docker-nas/docker-data/certbot:/var/www/certbot\" "
+	renewCommand += "-v \"/lochnas/docker-data/letsencrypt:/etc/letsencrypt\" "
+	renewCommand += "-v \"/lochnas/docker-data/certbot:/var/www/certbot\" "
 	renewCommand += "certbot/certbot 'delete'"
 
 	util.Command(false, Config.WorkingDirectory, nil, renewCommand)

@@ -50,10 +50,10 @@ rm -f setup-plex.sh
 ### Clone repo and move new files
 
 ```bash
-git clone https://github.com/SiloCityLabs/docker-nas.git
-mv docker-nas/* ./
-mv -f docker-nas/{.,}* ./
-rm -rf docker-nas
+git clone https://github.com/SiloCityLabs/lochnas.git
+mv lochnas/* ./
+mv -f lochnas/{.,}* ./
+rm -rf lochnas
 ```
 
 ### Make a home directory
