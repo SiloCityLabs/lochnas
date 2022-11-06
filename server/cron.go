@@ -4,11 +4,11 @@ import (
 	"log"
 	"server/models"
 
-	"github.com/robfig/cron"
+	"github.com/robfig/cron/v3"
 )
 
 func startCron() {
-	c := cron.New()
+	c := cron.New(cron.WithSeconds())
 
 	//Check if ddns config is empty
 	if len(models.Config.Server.DDNS.URL) != 0 {
@@ -23,7 +23,7 @@ func startCron() {
 	//Updates enabled so lets call it
 	if models.Config.Server.Updates.Enabled {
 		//Make sure expression is valid
-		if _, err := cron.Parse(models.Config.Server.Updates.Cron); err != nil {
+		if _, err := cron.ParseStandard(models.Config.Server.Updates.Cron); err != nil {
 			log.Println("Failed to parse cron expression for updates: " + err.Error())
 		} else {
 			c.AddFunc(models.Config.Server.Updates.Cron, func() {

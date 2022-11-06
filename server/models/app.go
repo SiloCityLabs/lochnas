@@ -103,9 +103,9 @@ func (a AppsModel) New() (AppsModel, error) {
 					//Replace env variables and trim whitespace
 					app.ServerName = strings.TrimSpace(strings.Replace(out, "${GLOBAL_DOMAIN}", os.Getenv("GLOBAL_DOMAIN"), -1))
 
-					if Config.Server.Debug {
-						log.Println("Found " + app.Path + "nginx.conf: " + app.ServerName)
-					}
+					// if Config.Server.Debug {
+					// 	log.Println("Found " + app.Path + "nginx.conf: " + app.ServerName)
+					// }
 
 					//check if ssl is valid
 					// Validate the certificate
