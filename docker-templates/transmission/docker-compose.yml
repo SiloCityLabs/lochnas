@@ -33,7 +33,7 @@ services:
             - TRANSMISSION_RPC_ENABLED=true
             - TRANSMISSION_RPC_AUTHENTICATION_REQUIRED=true
             - TRANSMISSION_RPC_PORT=9091
-            # - TRANSMISSION_RPC_URL=/
+            - TRANSMISSION_RPC_URL=/
             - TRANSMISSION_UMASK=2
             - CREATE_TUN_DEVICE=true
             - LOCAL_NETWORK=172.33.0.0/24
