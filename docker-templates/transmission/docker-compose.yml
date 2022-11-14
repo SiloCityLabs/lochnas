@@ -8,21 +8,19 @@ services:
         volumes:
             - '/etc/localtime:/etc/localtime:ro'
             - '/etc/timezone:/etc/timezone:ro'
-            - "/lochnas/docker-data/transmission/data:/data"
             - "/lochnas/docker-data/transmission/scripts:/scripts"
             - "/lochnas/docker-data/transmission/config:/config"
-            - "/lochnas/docker-data/transmission/custom:/etc/openvpn/custom:ro"
+            - "/lochnas/docker-data/transmission/custom:/etc/openvpn/custom"
             - "/lochnas/home:/lochnas/home:shared"
         restart: unless-stopped
         cap_add:
             - NET_ADMIN
-        logging:
-            driver: json-file
-            options:
-                max-size: 10m
+        #This is needed by some providers
+        sysctls:
+            - "net.ipv6.conf.all.disable_ipv6=0"
         dns:
-            - 1.1.1.1
             - 8.8.8.8
+            - 1.1.1.1
         env_file:
             - /lochnas/docker-templates/transmission/.env
         environment:
@@ -31,8 +29,8 @@ services:
             - TRANSMISSION_RPC_ENABLED=true
             - TRANSMISSION_RPC_AUTHENTICATION_REQUIRED=true
             - TRANSMISSION_RPC_PORT=9091
-            - TRANSMISSION_RPC_URL=/
+            # - TRANSMISSION_RPC_URL=/
             - TRANSMISSION_UMASK=2
             - CREATE_TUN_DEVICE=true
-            - LOCAL_NETWORK=172.33.0.0/16
+            - LOCAL_NETWORK=172.33.0.0/24
         image: 'haugene/transmission-openvpn:latest'
