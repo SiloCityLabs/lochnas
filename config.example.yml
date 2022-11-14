@@ -1,11 +1,11 @@
 server:
     debug: false
     global-env:
-        - "GLOBAL_DOMAIN=domain.com"
-        - "GLOBAL_EMAIL=email@domain.com"
-        - "GLOBAL_GID=33"
-        - "GLOBAL_UID=33"
-    port: 4000
+        - GLOBAL_DOMAIN=domain.com
+        - GLOBAL_EMAIL=email@domain.com
+        - GLOBAL_GID=33
+        - GLOBAL_UID=33
+    port: "4000"
     updates:
         enabled: true
         cron: "0 0 0 * * 6"
