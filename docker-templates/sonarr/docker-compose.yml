@@ -12,6 +12,9 @@ services:
         - PUID=${GLOBAL_UID}
         - PGID=${GLOBAL_GID}
         - UMASK_SET=002
+      dns: #Force it to go out so it hits the nginx proxy
+          - 1.1.1.1
+          - 8.8.8.8
       volumes:
         - '/etc/localtime:/etc/localtime:ro'
         - '/etc/timezone:/etc/timezone:ro'

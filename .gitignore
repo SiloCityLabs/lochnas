@@ -5,3 +5,4 @@ config.yml
 lost+found
 server.bin
 .vscode
+.code-workspace
