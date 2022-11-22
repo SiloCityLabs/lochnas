@@ -6,6 +6,9 @@ build:
 run: 
 	../server.bin
 
+install:
+	../server.bin -daemon install
+
 update: 
 	../server.bin -apps update
 

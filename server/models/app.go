@@ -349,8 +349,10 @@ func (a AppsModel) Start() string {
 	a.NginxSites()
 
 	//IP Check/Update
-	DDNS.Refresh()
-
+	if Config.Server.DDNS.Enabled {
+		DDNS.Refresh()
+	}
+	
 	//SSL Check
 	Domain.Check()
 

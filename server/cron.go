@@ -11,7 +11,7 @@ func startCron() {
 	c := cron.New(cron.WithSeconds())
 
 	//Check if ddns config is empty
-	if len(models.Config.Server.DDNS.URL) != 0 {
+	if len(models.Config.Server.DDNS.URL) != 0 && models.Config.Server.DDNS.Enabled {
 		c.AddFunc("0 */5 * * * *", func() { // Every 5 mins
 			log.Println("Triggering -ddns refresh")
 			models.DDNS = make(models.DDNSModel)

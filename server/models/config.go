@@ -57,6 +57,7 @@ type ConfigModel struct {
 		} `yaml:"ssl,omitempty"`
 		DDNS struct {
 			IP           string              `yaml:"ip"`
+			Enabled      bool                `yaml:"enabled"`
 			URL          []string            `yaml:"url"`
 			Notification NotificationSetting `yaml:"notification,omitempty"`
 		} `yaml:"ddns"`

@@ -119,7 +119,7 @@ func main() {
 	models.Config.Path = *configFlag
 
 	if err := models.Config.Load(); err != nil {
-		log.Fatal("Cannot load config:", err)
+		log.Fatal("Cannot load config: ", err)
 	}
 
 	options := make(service.KeyValue)

@@ -16,6 +16,7 @@ server:
             enabled: true
     ddns:
         ip: 0.0.0.0
+        enabled: false
         url:
             - http://ddnsupdate.com
             - http://ddnsupdate.com
@@ -24,7 +25,7 @@ server:
             service: telegram
     notifications:
         subject: Docker Nas Server
-        enabled: true
+        enabled: false
         services:
             email:
                 enabled: false
