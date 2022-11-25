@@ -1,5 +1,8 @@
 #!/bin/sh
 set -e
+# This script was taken from docker and modified to work for lochnas. 
+# See original apache 2.0 license here https://github.com/docker/docker-install/blob/master/LICENSE
+# 
 # Lochnas for Linux installation script
 #
 # This script is meant for quick & easy install via:
