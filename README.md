@@ -16,14 +16,13 @@ If you have v2 see this [migration guide](docs/migrating.v3.md)
 
 #### Ubuntu/Debian
 
-Just clone the repo and your all set. Afterwards run `./server.bin`
+Run the following command below
 
 ```
-sudo apt install git
-cd /
-git clone https://github.com/SiloCityLabs/lochnas.git
-sudo ./server.bin -daemon install
+sudo curl -fsSL https://raw.githubusercontent.com/SiloCityLabs/lochnas/v3/install.sh -o install.sh && sudo sh install.sh
 ```
+
+Edit your `config.yml` then restart `service lochnas restart`
 
 #### Windows
 

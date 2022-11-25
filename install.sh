@@ -244,8 +244,8 @@ do_install() {
 			read email
 
 			# Replace domain and email in config.yml
-			sed -i "s/GLOBAL_DOMAIN=domain.com/GLOBAL_DOMAIN=$domain/" filename
-			sed -i "s/GLOBAL_EMAIL=email@domain.com/GLOBAL_EMAIL=$email/" filename
+			sed -i "s/GLOBAL_DOMAIN=domain.com/GLOBAL_DOMAIN=$domain/" /lochnas/config.yml
+			sed -i "s/GLOBAL_EMAIL=email@domain.com/GLOBAL_EMAIL=$email/" /lochnas/config.yml
 
 			cd /lochnas
             $sh_c "./server.bin -daemon install"
