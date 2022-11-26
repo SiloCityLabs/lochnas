@@ -236,7 +236,7 @@ do_install() {
             fi
 
             # Pull down LochNAS
-            $sh_c "git clone $DOWNLOAD_URL"
+            $sh_c "git clone $DOWNLOAD_URL /lochnas"
             $sh_c "cp /lochnas/config.example.yml /lochnas/config.yml"
 
 			# Ask user for domain
