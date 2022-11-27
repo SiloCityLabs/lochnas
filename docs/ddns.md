@@ -22,6 +22,12 @@ Edit _config.yml_. Go to the _ddns_ section, change _enabled_ to true, and add y
 
 ```
 
+Then run
+
+```
+service lochnas restart
+```
+
 Done! LochNAS will automatically update your DDNS every few minutes.
 
 # Alternative #1: cron 
