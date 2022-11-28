@@ -21,7 +21,7 @@ gdisk /dev/sda
     y
 ```
 
-Then you can create the RAID array with MDADM and proceed as normal
+Then you can create the RAID array
 
 ```
 # create the raid array, using parition #1 that I just created with gdisk
@@ -31,46 +31,41 @@ cat /proc/mdstat
 #repeat this command and wait for 100%. It may take hours.
 
 # verify the RAID array
+# /dev/md0 (or whatever) should exist
 mdadm --detail --scan
 
-# make partition
-mkfs.ext4 -F /dev/md0
-# mount partition
-mount /dev/md0 /docker-nas/home
-# verify
-df -h -x devtmpfs -x tmpfs
-
-#save array. Check the location of "mdadm.conf" for your Linux distro
-mdadm --detail --scan | tee -a /etc/mdadm/mdadm.conf
+# save array. Check your location of "mdadm.conf" for your Linux distro
+mdadm --detail --scan >> /etc/mdadm/mdadm.conf
 update-initramfs -u
 
-# update /etc/fstab so that it mounts on boot
-#/dev/md0 /docker-nas/home ext4 defaults,nofail,discard 0 0
-
 ```
 
-
-
-## Mount raid with fstab
-
-This will work with any existing raid for a migration as well. All you have to do is locate your raid with `mdadm --detail --scan`.
-
-Double check that the mdadm configuration file `/etc/mdadm/mdadm.conf` has the output of the scan in the file. If it does not you can add it like so
+After creating my RAID device you can make a partition on and use it
 
 ```
-mdadm --detail --scan >> /etc/mdadm/mdadm.conf
+# make partition
+mkfs.ext4 -F /dev/md0
+# mount this manually if you want to check it
 ```
 
-Now that we have located out raid drive (/dev/md0) we can mount it on every startup to `/lochnas` by adding the following to `/etc/fstab`.
+# Mount partition
 
-`nano /etc/fstab`
-```
-/dev/md0 /lochnas ext4 defaults,nofail,discard 0 0
-```
+This will work with any existing raid for a migration as well. Locate your RAID with `mdadm --detail --scan` and appemd the lines to `/etc/mdadm/mdadm.conf` like the instructions above.
 
-Last and finally make the folder and mount the drive.
+Set the partition to mount on boot. Use `nano` or `vi` to add the following line to `/etc/fstab`
 
 ```
-mkdir /lochnas
+nano
+```
+```
+/dev/md0 /lochnas/home ext4 defaults,nofail,discard 0 0
+```
+
+Make your LochNAS home directory and mount
+```
+mkdir -p /lochnas/home
 mount -a
+
+# verify
+df -h -x devtmpfs -x tmpfs
 ```
