@@ -8,7 +8,6 @@ If you have v2 see this [migration guide](docs/migrating.v3.md)
 
 ### Requires
  - Ubuntu 20 server or greater is the preffered setup used for this system.
- - Domain name [ddns docs](docs/ddns.md)
  - [Port forwarding](https://portforward.com/router.htm) 80 + 443
  - Static IP on Server, alternative is [DHCP reservation](https://portforward.com/dhcp-reservation/#how-to-make-a-dhcp-reservation-in-your-router) on router.
 
@@ -87,7 +86,8 @@ chmod -R 770 path/to/local
 
 #### Edit config
 
-Modify/create the `config.yml` and  with your settings.
+Create `config.yml` from the sample file `config.example.yml`. Edit `config.yml` to change your settings.
+ - Domain name [DDNS docs](docs/ddns.md)
 
 ### Container Docs
 
