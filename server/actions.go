@@ -9,6 +9,16 @@ import (
 
 func action(action string, param string) error {
 	switch action {
+	case "daemon": //This runs before the systemd daemon installer
+		models.Daemon = make(models.DaemonModel)
+		models.Daemon.Init()
+
+		switch param {
+		case "install":
+			log.Println(models.Daemon.Install())
+		case "uninstall":
+			log.Println(models.Daemon.Uninstall())
+		}
 	case "domain":
 		models.Domain = make(models.DomainModel)
 		models.Domain.Init()

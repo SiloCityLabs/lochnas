@@ -146,6 +146,10 @@ func main() {
 
 	//If -daemon flag is set do something
 	if len(*daemonFlag) != 0 {
+		if err := action("daemon", *daemonFlag); err != nil {
+			log.Fatal(err)
+		}
+
 		err := service.Control(s, *daemonFlag)
 		if err != nil {
 			log.Printf("Valid actions: %q\n", service.ControlAction)

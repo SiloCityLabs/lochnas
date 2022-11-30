@@ -2,6 +2,7 @@ package util
 
 import (
 	"bufio"
+	"errors"
 	"io"
 	"log"
 	"os"
@@ -107,4 +108,12 @@ func CopyFile(src, dst string, overwrite bool) error {
 	}
 
 	return nil
+}
+
+func FileExists(path string) bool {
+	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
+		return false
+	} else {
+		return true
+	}
 }
