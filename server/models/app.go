@@ -77,7 +77,7 @@ func (a AppsModel) New() (AppsModel, error) {
 					return nil, errors.New("Could not read " + app.Path + ".env: " + err.Error())
 				}
 
-				if val, ok := app.ENV[envName]; ok && val == "true" {
+				if val, ok := app.ENV[envName]; ok && strings.ToLower(val) == "true" {
 					app.Enabled = true
 
 					//Load its global_ variables
@@ -352,7 +352,7 @@ func (a AppsModel) Start() string {
 	if Config.Server.DDNS.Enabled {
 		DDNS.Refresh()
 	}
-	
+
 	//SSL Check
 	Domain.Check()
 
