@@ -15,17 +15,20 @@ services:
 #           - $HOME/Shinobi/database:/var/lib/mysql
 #           - $HOME/Shinobi/plugins:/home/Shinobi/plugins
         env_file:
-# examples have mysql.env and shinobi.env separate
+            # examples have mysql.env and shinobi.env separate
             - /lochnas/docker-templates/shinobi/.env
+        environment:
+            # hardcode this HERE so the user doesn't need to in .env
+            - MYSQL_HOST=shinobi-db
         ports:
            - 8080:8080
         links:
-            - mariadb-shinobi
+            - shinobi-db
         depends_on:
-            - mariadb-shinobi
-    mariadb-shinobi:
-        # shinobi microservice harcodes this name "db"
-        container_name: db
+            - shinobi-db
+    shinobi-db:
+        # container name must match MYSQL_HOST
+        container_name: shinobi-db
         command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb_read_only_compressed=OFF
         env_file:
             - /lochnas/docker-templates/shinobi/.env
