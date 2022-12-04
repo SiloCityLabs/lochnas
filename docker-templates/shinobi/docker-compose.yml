@@ -16,7 +16,7 @@ services:
 #           - $HOME/Shinobi/plugins:/home/Shinobi/plugins
         env_file:
 # examples have mysql.env and shinobi.env separate
-            - /lochnas/docker-templates/shinobi2/.env
+            - /lochnas/docker-templates/shinobi/.env
         ports:
            - 8080:8080
         links:
@@ -27,7 +27,7 @@ services:
         container_name: mariadb-shinobi
         command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb_read_only_compressed=OFF
         env_file:
-            - /lochnas/docker-templates/shinobi2/.env
+            - /lochnas/docker-templates/shinobi/.env
         volumes:
             - '/etc/localtime:/etc/localtime:ro'
             - '/etc/timezone:/etc/timezone:ro'
