@@ -24,7 +24,8 @@ services:
         depends_on:
             - mariadb-shinobi
     mariadb-shinobi:
-        container_name: mariadb-shinobi
+        # shinobi microservice harcodes this name "db"
+        container_name: db
         command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb_read_only_compressed=OFF
         env_file:
             - /lochnas/docker-templates/shinobi/.env
