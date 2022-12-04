@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -12,6 +13,7 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
+	"github.com/kardianos/service"
 )
 
 var Apps AppsModel
@@ -150,7 +152,20 @@ func (a AppsModel) New() (AppsModel, error) {
 	return a, nil
 }
 
+func (a AppsModel) List() string {
+	fmt.Println("App Name | Status")
+
+	//List apps and their enabled status
+	for _, app := range a {
+		fmt.Println(app.Name + " | " + fmt.Sprintf("%t", app.Enabled))
+	}
+
+	return ""
+}
+
 func (a AppsModel) Test() string {
+
+	fmt.Println(string(service.Status))
 
 	return ""
 }
@@ -228,7 +243,23 @@ func (a AppsModel) NginxSites() error {
 }
 
 func (a AppsModel) Stop() string {
-	params := a.params()
+	var params string //Parameters to use to stop docker-compose
+
+	//Check to see if run file exists, If it does use params from run file
+	// if util.FileExists(".running") { //params storage
+	// 	//TODO: Grab the file contents
+
+	// 	//TODO: check if service installed and restart
+
+	// 	//TODO: If not service run, find process and send kill command
+
+	// 	service.StatusRunning
+
+	// } else {
+	// 	//Not detected running so lets just try to fetch new params
+	// 	params = a.params()
+	// }
+
 	if Config.Server.Debug {
 		log.Println("docker-compose -f docker-compose.yml " + params + " stop")
 	}

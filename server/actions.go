@@ -61,6 +61,8 @@ func action(action string, param string) error {
 			log.Println(models.Apps.Stop())
 		case "test":
 			log.Println(models.Apps.Test())
+		case "list":
+			log.Println(models.Apps.List())
 		case "update":
 			log.Println(models.Apps.Update())
 		default:
