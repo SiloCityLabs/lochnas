@@ -1,0 +1,39 @@
+version: '3.7'
+
+services:
+    shinobi:
+        container_name: shinobi
+        image: migoller/shinobidocker:microservice-debian
+#        network_mode: host
+        restart: unless-stopped
+        volumes:
+            - '/etc/localtime:/etc/localtime:ro'
+            - '/etc/timezone:/etc/timezone:ro'
+            - "/lochnas/docker-data/shinobi/config:/config"
+            - "/lochnas/docker-data/shinobi/videos:/opt/shinobi/videos"
+            - "/dev/shm/shinobiDockerTemp:/dev/shm/streams"
+#           - $HOME/Shinobi/database:/var/lib/mysql
+#           - $HOME/Shinobi/plugins:/home/Shinobi/plugins
+        env_file:
+# examples have mysql.env and shinobi.env separate
+            - /lochnas/docker-templates/shinobi2/.env
+        ports:
+           - 8080:8080
+        links:
+            - mariadb-shinobi
+        depends_on:
+            - mariadb-shinobi
+    mariadb-shinobi:
+        container_name: mariadb-shinobi
+        command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb_read_only_compressed=OFF
+        env_file:
+            - /lochnas/docker-templates/shinobi2/.env
+        volumes:
+            - '/etc/localtime:/etc/localtime:ro'
+            - '/etc/timezone:/etc/timezone:ro'
+            - "/lochnas/docker-data/shinobi/mariadb:/var/lib/mysql"
+        restart: unless-stopped
+#        networks:
+#            - backend
+        image: 'mariadb:10.7'
+        #10.8.3 or latest seems to have issues. Lets pin this version
