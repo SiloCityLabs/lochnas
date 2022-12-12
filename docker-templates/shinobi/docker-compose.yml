@@ -20,8 +20,11 @@ services:
         environment:
             # hardcode this HERE so the user doesn't need to in .env
             - MYSQL_HOST=shinobi-db
-        ports:
-           - 8080:8080
+        networks:
+            - backend
+#        ports:
+#           - 80:80
+#           - 443:443
         links:
             - shinobi-db
         depends_on:
@@ -37,7 +40,7 @@ services:
             - '/etc/timezone:/etc/timezone:ro'
             - "/lochnas/docker-data/shinobi/mariadb:/var/lib/mysql"
         restart: unless-stopped
-#        networks:
-#            - backend
+        networks:
+            - backend
         image: 'mariadb:10.7'
         #10.8.3 or latest seems to have issues. Lets pin this version
