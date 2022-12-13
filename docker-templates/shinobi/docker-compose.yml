@@ -18,6 +18,7 @@ services:
         environment:
             # hardcode this HERE so the user doesn't need to in .env
             - MYSQL_HOST=shinobi-db
+            - EMBEDDEDDB=false
         networks:
             - backend
         links:
