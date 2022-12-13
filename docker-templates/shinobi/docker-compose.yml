@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+    shinobi:
+        container_name: shinobi
+        image: migoller/shinobidocker:latest
+        restart: unless-stopped
+        # command: /opt/shinobi/docker-entrypoint.sh
+        volumes:
+            - '/etc/localtime:/etc/localtime:ro'
+            - '/etc/timezone:/etc/timezone:ro'
+            - "/lochnas/docker-data/shinobi/config:/config"
+            - "/lochnas/docker-data/shinobi/videos:/opt/shinobi/videos:shared"
+            - "/dev/shm/shinobiDockerTemp:/dev/shm/streams"
+        env_file:
+            # examples have mysql.env and shinobi.env separate
+            - /lochnas/docker-templates/shinobi/.env
+        environment:
+            # hardcode this HERE so the user doesn't need to in .env
+            - MYSQL_HOST=shinobi-db
+            - EMBEDDEDDB=false
+        networks:
+            - backend
+        links:
+            - shinobi-db
+        depends_on:
+            - shinobi-db
+    shinobi-db:
+        # container name must match MYSQL_HOST
+        container_name: shinobi-db
+        command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb_read_only_compressed=OFF
+        env_file:
+            - /lochnas/docker-templates/shinobi/.env
+        volumes:
+            - '/etc/localtime:/etc/localtime:ro'
+            - '/etc/timezone:/etc/timezone:ro'
+            - "/lochnas/docker-data/shinobi/mariadb:/var/lib/mysql"
+        restart: unless-stopped
+        networks:
+            - backend
+        image: 'mariadb:latest'
