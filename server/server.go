@@ -125,7 +125,7 @@ func main() {
 		log.Fatal("Cannot load config: ", err)
 	}
 
-	if models.Config.Statistics {
+	if models.Config.Server.Statistics {
 		//Config telemetry
 		nrApp, _ = newrelic.NewApplication(
 			newrelic.ConfigAppName("LochNAS"),
