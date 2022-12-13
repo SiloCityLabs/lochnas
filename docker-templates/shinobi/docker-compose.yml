@@ -22,9 +22,8 @@ services:
             - MYSQL_HOST=shinobi-db
         networks:
             - backend
-#        ports:
-#           - 80:80
-#           - 443:443
+        ports:
+           - 8080:80
         links:
             - shinobi-db
         depends_on:
