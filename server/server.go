@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/gin-contrib/gzip"
+	"github.com/newrelic/go-agent/v3/newrelic"
 
 	"server/models"
 	"server/util"
@@ -15,6 +16,8 @@ import (
 
 	"github.com/kardianos/service"
 )
+
+var nrApp *newrelic.Application
 
 // Program structures.
 //
@@ -120,6 +123,15 @@ func main() {
 
 	if err := models.Config.Load(); err != nil {
 		log.Fatal("Cannot load config: ", err)
+	}
+
+	if models.Config.Statistics {
+		//Config telemetry
+		nrApp, _ = newrelic.NewApplication(
+			newrelic.ConfigAppName("LochNAS"),
+			newrelic.ConfigLicense("14912ac1b20fe65509f5fc2a938c43d24e8fd554"),
+			newrelic.ConfigAppLogForwardingEnabled(true),
+		)
 	}
 
 	options := make(service.KeyValue)

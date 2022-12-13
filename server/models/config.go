@@ -19,6 +19,7 @@ var Config ConfigModel
 // Config struct for webapp config
 type ConfigModel struct {
 	// Path to where config.yml is stored
+	Statistics       bool   `yaml:"statistics"`
 	Path             string `yaml:"-"`
 	WorkingDirectory string `yaml:"-"`
 	Server           struct {
