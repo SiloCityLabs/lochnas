@@ -44,5 +44,4 @@ services:
         environment:
             - MYSQL_DATABASE=nextcloud
             - MYSQL_USER=nextcloud
-        image: 'mariadb:10.7'
-        #10.8.3 or latest seems to have issues. Lets pin this version
+        image: 'mariadb:latest'

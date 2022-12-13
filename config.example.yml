@@ -1,4 +1,5 @@
 server:
+    statistics: true
     debug: false
     global-env:
         - GLOBAL_DOMAIN=domain.com

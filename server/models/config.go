@@ -22,6 +22,7 @@ type ConfigModel struct {
 	Path             string `yaml:"-"`
 	WorkingDirectory string `yaml:"-"`
 	Server           struct {
+		Statistics bool `yaml:"statistics"`
 		// ENV variables used globally for many containers
 		GlobalENV []string `yaml:"global-env"`
 
