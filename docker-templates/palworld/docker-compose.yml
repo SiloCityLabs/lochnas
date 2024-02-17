@@ -15,6 +15,3 @@ services:
         environment:
             - "PUID=${GLOBAL_UID}"
             - "PGID=${GLOBAL_GID}"
-        ports:
-            - "8211:8211/udp"
-            - "25575:25575/tcp"
