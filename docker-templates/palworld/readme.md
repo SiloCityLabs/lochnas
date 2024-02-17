@@ -1,0 +1,1 @@
+[Docs](https://lochnas.com/apps/palworld/)

@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+    palworld:
+        container_name: palworld
+        restart: unless-stopped
+        volumes:
+            - '/etc/localtime:/etc/localtime:ro'
+            - '/etc/timezone:/etc/timezone:ro'
+            - "/lochnas/docker-data/palworld:/palworld"
+        network_mode: host
+        image: 'jammsen/palworld-dedicated-server:latest'
+        env_file:
+            - /lochnas/docker-templates/palworld/.env
+        environment:
+            - "PUID=${GLOBAL_UID}"
+            - "PGID=${GLOBAL_GID}"
+        ports:
+            - "8211:8211/udp"
+            - "25575:25575/tcp"
