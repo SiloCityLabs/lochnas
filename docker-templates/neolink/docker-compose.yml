@@ -1,0 +1,11 @@
+
+services:
+    neolink:
+        container_name: neolink
+        image: thirtythreeforty/neolink
+        network_mode: host
+        restart: unless-stopped
+        volumes:
+            - '/etc/localtime:/etc/localtime:ro'
+            - '/etc/timezone:/etc/timezone:ro'
+            - /lochnas/docker-data/neolink/neolink.toml:/etc/neolink.toml

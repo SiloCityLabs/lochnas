@@ -1,5 +1,3 @@
-# # version: '3.7'
-
 # nzbget:
 #     image: linuxserver/nzbget
 #     container_name: nzbget

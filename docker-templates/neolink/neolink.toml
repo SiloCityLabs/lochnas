@@ -1,0 +1,16 @@
+#https://github.com/thirtythreeforty/neolink/blob/master/sample_config.toml
+
+bind = "0.0.0.0"
+bind_port = 8554
+# certificate = "/path/to/pem/with/cert/and/key"
+# tls_client_auth = "required"
+
+[[users]]
+name = "admin"
+pass = "password"
+
+[[cameras]]
+name = "garage"
+username = "admin"
+password = "password"
+address = "192.168.1.213:9000"

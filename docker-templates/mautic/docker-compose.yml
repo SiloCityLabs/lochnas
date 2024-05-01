@@ -1,0 +1,83 @@
+
+x-mautic-volumes:
+  &mautic-volumes
+  - '/etc/localtime:/etc/localtime:ro'
+  - '/etc/timezone:/etc/timezone:ro'
+  - '/lochnas/docker-data/mautic/apache/000-default.conf:/etc/apache2/sites-available/000-default.conf:ro'
+  - /lochnas/docker-data/mautic/config:/var/www/html/config:z
+  - /lochnas/docker-data/mautic/logs:/var/www/html/var/logs:z
+  - /lochnas/docker-data/mautic/media/files:/var/www/html/docroot/media/files:z
+  - /lochnas/docker-data/mautic/media/images:/var/www/html/docroot/media/images:z
+  - /lochnas/docker-data/mautic/cron:/opt/mautic/cron:z
+
+services:
+  mautic_db:
+    container_name: mautic_db
+    image: mysql:8.0
+    env_file:
+      - /lochnas/docker-templates/mautic/.env
+    volumes:
+      - /lochnas/docker-data/mautic/mysql:/var/lib/mysql
+    healthcheck:
+      test: mysqladmin --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD ping
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - backend
+
+  mautic_web:
+    container_name: mautic_web
+    image: mautic/mautic:5-apache
+    # build: 
+    #   context: /lochnas/docker-templates/mautic/dockerimage
+    #   dockerfile: apache/Dockerfile
+    links:
+      - mautic_db
+    ports:
+      - 8001:80
+    volumes: *mautic-volumes
+    environment:
+      - DOCKER_MAUTIC_LOAD_TEST_DATA=false
+      - DOCKER_MAUTIC_RUN_MIGRATIONS=false
+    env_file:
+      - /lochnas/docker-templates/mautic/.env
+    depends_on:
+      mautic_db:
+        condition: service_healthy
+    networks:
+      - backend
+
+  mautic_cron:
+    container_name: mautic_cron
+    image: mautic/mautic:5-apache
+    links:
+      - mautic_db
+    volumes: *mautic-volumes
+    environment:
+      - DOCKER_MAUTIC_ROLE=mautic_cron
+    env_file:
+      - /lochnas/docker-templates/mautic/.env
+    depends_on:
+      - mautic_web
+    networks:
+      - backend
+
+  mautic_worker:
+    container_name: mautic_worker
+    image: mautic/mautic:5-apache
+    links:
+      - mautic_db
+    volumes: *mautic-volumes
+    environment:
+      - DOCKER_MAUTIC_ROLE=mautic_worker
+    env_file:
+      - /lochnas/docker-templates/mautic/.env
+    depends_on:
+      - mautic_web
+    networks:
+      - backend
+
+volumes:
+  mysql-data:

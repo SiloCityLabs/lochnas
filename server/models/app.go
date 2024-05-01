@@ -230,10 +230,10 @@ func (a AppsModel) NginxSites() error {
 func (a AppsModel) Stop() string {
 	params := a.params()
 	if Config.Server.Debug {
-		log.Println("docker-compose -f docker-compose.yml " + params + " stop")
+		log.Println("docker compose -f docker-compose.yml " + params + " stop")
 	}
 
-	util.Command(false, Config.WorkingDirectory, nil, "docker-compose -f docker-compose.yml "+params+" stop")
+	util.Command(false, Config.WorkingDirectory, nil, "docker compose -f docker-compose.yml "+params+" stop")
 	return "App Stopped"
 }
 
@@ -363,10 +363,10 @@ func (a AppsModel) Start() string {
 	a.DomainIPCheck()
 
 	//Check for container updates
-	util.Command(false, Config.WorkingDirectory, nil, "docker-compose -f docker-compose.yml "+params+" pull")
+	util.Command(false, Config.WorkingDirectory, nil, "docker compose -f docker-compose.yml "+params+" pull")
 
 	//Run
-	util.Command(false, Config.WorkingDirectory, nil, "docker-compose -f docker-compose.yml "+params+" up -d --build --remove-orphans --force-recreate")
+	util.Command(false, Config.WorkingDirectory, nil, "docker compose -f docker-compose.yml "+params+" up -d --build --remove-orphans --force-recreate")
 
 	//Remove old container data
 	util.Command(false, Config.WorkingDirectory, nil, "docker image prune -f")

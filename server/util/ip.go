@@ -40,9 +40,21 @@ func DomainIP(domain string, ip string) error {
 		return errors.New("No IPs found")
 	}
 
-	if len(entries) > 1 {
-		return errors.New("Multiple IPs found. Docker nas is not a clusterable application yet ;)")
-	}
+	//TODO: This fails for CNAMES
+	// if len(entries) > 1 {
+	// 	//Before throwing error make sure the multiple entries is not a CNAME
+	// 	count := 0
+	// 	for _, entry := range entries {
+	// 		log.Printf("Entry: %v\n", entry.Type)
+	// 		if entry.Type != "CNAME" {
+	// 			count++
+	// 		}
+	// 	}
+
+	// 	if count > 1 {
+	// 		return errors.New("Multiple IPs found. Docker nas is not a clusterable application yet ;)")
+	// 	}
+	// }
 
 	// log.Println("Found Domain:", domain)
 	// log.Println("Found IP:", entries[0])
