@@ -1,7 +1,6 @@
 build:
-	go build -buildvcs=false -o ../server.bin server && \
-	cd ../ && \
-	chmod +x server.bin
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags netgo -ldflags '-w -extldflags "-static"' -buildvcs=false -o ../server.bin server
+	cd ../ && chmod +x server.bin
 
 run: 
 	../server.bin
