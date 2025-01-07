@@ -1,0 +1,28 @@
+
+services:
+    tandoor:
+      image: linuxserver/tandoor
+      container_name: tandoor
+      networks:
+            - backend
+      deploy:
+          resources:
+              limits:
+                  memory: 4G #Cap it to 4GB of ram usage. This wont affect systems under 4GB
+      env_file:
+          - /lochnas/docker-templates/tandoor/.env
+      environment:
+        - PUID=${GLOBAL_UID}
+        - PGID=${GLOBAL_GID}
+        - UMASK_SET=002
+      dns: #Force it to go out so it hits the nginx proxy
+          - 1.1.1.1
+          - 8.8.8.8
+      volumes:
+        - '/etc/localtime:/etc/localtime:ro'
+        - '/etc/timezone:/etc/timezone:ro'
+        - "/lochnas/docker-data/tandoor:/config"
+        - "/lochnas/home:/lochnas/home:shared"
+      # ports:
+      #   - 7878:7878
+      restart: unless-stopped
